@@ -1,8 +1,6 @@
 class AppStrings {
-  static const String appName = 'Sajelha';
-  static const String contactEmail = 'sajelha.sa@gmail.com';
-  static const String conatctPhone = '966504490078+';
-  //static const String currency = 'Rial';
+  static const String user = 'user';
+  static const String family = 'family';
 }
 
 class PrefKeys {

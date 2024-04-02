@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:families/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,8 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   Brightness? _theme;
   Size? _size;
   bool _autoDarkMode = false;
+  late PageController pageController;
+  int pageIndex = 0;
 
   AppSettingsProvider() {
     WidgetsBinding.instance.addObserver(this);
@@ -19,6 +22,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> initializeAsync() async {
     _prefs = await SharedPreferences.getInstance();
+    pageController = PageController(initialPage: 0);
     _initializeLocale();
     _initializeTheme();
     _initializeSize();
@@ -29,6 +33,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    pageController.dispose();
     super.dispose();
   }
 
@@ -89,6 +94,23 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     _size = view.physicalSize / view.devicePixelRatio;
   }
 
+  // double fontSize(double fontSize) {
+  //   double scaleFactor = getScaleFactor();
+  //   double responsiveFontSize = fontSize * scaleFactor;
+  //   double lowerLimit = fontSize * .8;
+  //   double upperLimit = fontSize * 1.2;
+  //   return responsiveFontSize.clamp(lowerLimit, upperLimit);
+  // }
+
+  double getScaleFactor() {
+    double width = _size?.width ?? 550;
+    if (width < 600) {
+      return width / 400;
+    } else {
+      return width / 700;
+    }
+  }
+
   void toggleLocale(Locale newLocale) {
     if (!AppLocalizations.supportedLocales.contains(newLocale)) return;
     if (newLocale != _locale) {
@@ -118,9 +140,14 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     Future.delayed(
       const Duration(seconds: 2),
       () {
-        //NavigationService.navigateToAndReplace(AppRoutes.preLogin); //TODO go to onbording
+        NavigationService.navigateToAndReplace(AppRoutes.selectLang);
       },
     );
+  }
+
+  void getPageIndex(int index) {
+    pageIndex = index;
+    notifyListeners();
   }
 
   ////////////////////////////////////////////

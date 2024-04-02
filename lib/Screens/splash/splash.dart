@@ -1,7 +1,7 @@
-import 'package:families/Constants/app_colors.dart';
+import 'package:families/Constants/app_images.dart';
+import 'package:families/Constants/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Constants/app_images.dart';
 import '../../Providers/app_settings_provider.dart';
 import '../../Widgets/custom_backgound.dart';
 
@@ -18,15 +18,17 @@ class SplashScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  AppImages.logo,
-                  width: appSettings.width * 0.8,
+                SizedBox(
+                  width: appSettings.width * 0.7,
+                  height: appSettings.width * 0.7,
+                  child: Image.asset(
+                    AppImages.logo,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 Text(
                   'مأكول',
-                  style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: appSettings.width * 0.13),
+                  style: AppStyles.styleExtraBold(context, 52),
                 ),
               ],
             ),

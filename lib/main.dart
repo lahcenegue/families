@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:device_preview/device_preview.dart';
+import 'package:families/Providers/login_register_manager.dart';
 import 'package:families/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -10,8 +12,11 @@ import 'Providers/app_settings_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-
   runApp(const MyApp());
+  // runApp(DevicePreview(
+  //   enabled: true,
+  //   builder: (context) => const MyApp(),
+  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
+        ChangeNotifierProvider(create: (_) => LoginAndRegisterManager()),
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, appSettings, _) {
@@ -36,6 +42,7 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             locale: appSettings.locale,
+            //builder: DevicePreview.appBuilder,
             theme: theme,
             routes: AppRoutes.define(),
           );
