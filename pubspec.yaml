@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.6
-  device_preview: ^1.1.0
   flutter:
     sdk: flutter
   flutter_localization: ^0.2.0
@@ -26,11 +25,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# flutter_launcher_icons:
-#   android: true
-#   ios: true
-#   image_path: "assets/images/icon.png"
-#   remove_alpha_ios: true
+
 flutter:
   generate: true
   uses-material-design: true

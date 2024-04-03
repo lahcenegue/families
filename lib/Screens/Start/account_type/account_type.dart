@@ -7,8 +7,8 @@ import 'package:families/Widgets/custom_backgound.dart';
 import 'package:families/Widgets/custom_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Providers/login_register_manager.dart';
-import '../../Widgets/custom_container.dart';
+import '../../../Providers/login_register_manager.dart';
+import '../../../Widgets/custom_container.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

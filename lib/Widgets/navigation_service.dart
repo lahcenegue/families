@@ -1,11 +1,11 @@
-import 'package:families/Screens/Login/login_screen.dart';
-import 'package:families/Screens/Register/family_register_screen.dart';
-import 'package:families/Screens/Register/register_screen.dart';
-import 'package:families/Screens/account_type/account_type.dart';
-import 'package:families/Screens/lang/select_language.dart';
-import 'package:families/Screens/onbording/onbording_screen.dart';
+import 'package:families/Screens/Start/Login/login_screen.dart';
+import 'package:families/Screens/Start/Register/family_register_screen.dart';
+import 'package:families/Screens/Start/Register/register_screen.dart';
+import 'package:families/Screens/Start/account_type/account_type.dart';
+import 'package:families/Screens/Start/lang/select_language.dart';
+import 'package:families/Screens/Start/onbording/onbording_screen.dart';
 import 'package:flutter/material.dart';
-import '../Screens/splash/splash.dart';
+import '../Screens/Start/splash/splash.dart';
 
 class AppRoutes {
   static const String splash = '/';

@@ -2,8 +2,8 @@ import 'package:families/Constants/app_images.dart';
 import 'package:families/Constants/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Providers/app_settings_provider.dart';
-import '../../Widgets/custom_backgound.dart';
+import '../../../Providers/app_settings_provider.dart';
+import '../../../Widgets/custom_backgound.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
