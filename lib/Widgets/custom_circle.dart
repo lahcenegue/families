@@ -15,9 +15,9 @@ class CustomCircle extends StatelessWidget {
     return Consumer<AppSettingsProvider>(
       builder: (context, appSettings, child) {
         return Container(
-          width: appSettings.width * 0.15,
-          height: appSettings.width * 0.15,
-          padding: EdgeInsets.all(appSettings.width * 0.03),
+          width: appSettings.width * 0.12,
+          height: appSettings.width * 0.12,
+          padding: EdgeInsets.all(appSettings.width * 0.02),
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,

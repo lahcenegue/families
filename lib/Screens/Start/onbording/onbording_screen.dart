@@ -46,69 +46,73 @@ class OnBordingScreen extends StatelessWidget {
         return Scaffold(
           body: CustomBackground(
             child: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: appsettings.pageController,
-                      itemCount: demoData.length,
-                      onPageChanged: (index) {
-                        appsettings.getPageIndex(index);
-                      },
-                      itemBuilder: (context, index) => OnBoardContent(
-                        image: demoData[index].image,
-                        title: demoData[index].title,
-                        descrition: demoData[index].description,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: appsettings.height * 0.05),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ...List.generate(
-                        demoData.length,
-                        (index) => Padding(
-                          padding:
-                              EdgeInsets.only(right: appsettings.width * 0.03),
-                          child: DotIndicator(
-                              isActive: index == appsettings.pageIndex),
+              child: Padding(
+                padding: EdgeInsets.all(appsettings.width * 0.05),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: PageView.builder(
+                        controller: appsettings.pageController,
+                        itemCount: demoData.length,
+                        onPageChanged: (index) {
+                          appsettings.getPageIndex(index);
+                        },
+                        itemBuilder: (context, index) => OnBoardContent(
+                          image: demoData[index].image,
+                          title: demoData[index].title,
+                          descrition: demoData[index].description,
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: appsettings.height * 0.05),
-                  ElevatedButton(
-                    onPressed: () {
-                      appsettings.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                      if (appsettings.pageIndex == demoData.length - 1) {
-                        NavigationService.navigateTo(AppRoutes.accountType);
-                      }
-                    },
-                    child: Text(
-                      appsettings.pageIndex == demoData.length - 1
-                          ? AppLocalizations.of(context)!.get_started
-                          : AppLocalizations.of(context)!.next,
                     ),
-                  ),
-                  SizedBox(
-                    child: TextButton(
+                    SizedBox(height: appsettings.height * 0.05),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ...List.generate(
+                          demoData.length,
+                          (index) => Padding(
+                            padding: EdgeInsets.only(
+                                right: appsettings.width * 0.03),
+                            child: DotIndicator(
+                                isActive: index == appsettings.pageIndex),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: appsettings.height * 0.05),
+                    ElevatedButton(
                       onPressed: () {
-                        NavigationService.navigateTo(AppRoutes.accountType);
+                        appsettings.pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                        if (appsettings.pageIndex == demoData.length - 1) {
+                          NavigationService.navigateTo(AppRoutes.accountType);
+                        }
                       },
-                      child: Text(AppLocalizations.of(context)!.skip,
-                          style: AppStyles.styleRegular(context, 16).copyWith(
-                            color: appsettings.pageIndex == demoData.length - 1
-                                ? Colors.transparent
-                                : Colors.white.withOpacity(0.7),
-                          )),
+                      child: Text(
+                        appsettings.pageIndex == demoData.length - 1
+                            ? AppLocalizations.of(context)!.get_started
+                            : AppLocalizations.of(context)!.next,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: appsettings.height * 0.02),
-                ],
+                    SizedBox(
+                      child: TextButton(
+                        onPressed: () {
+                          NavigationService.navigateTo(AppRoutes.accountType);
+                        },
+                        child: Text(AppLocalizations.of(context)!.skip,
+                            style: AppStyles.styleRegular(context, 16).copyWith(
+                              color:
+                                  appsettings.pageIndex == demoData.length - 1
+                                      ? Colors.transparent
+                                      : Colors.white.withOpacity(0.7),
+                            )),
+                      ),
+                    ),
+                    SizedBox(height: appsettings.height * 0.02),
+                  ],
+                ),
               ),
             ),
           ),

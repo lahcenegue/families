@@ -18,7 +18,7 @@ class CustomContainer extends StatelessWidget {
           width: appSettings.width,
           margin: EdgeInsets.symmetric(horizontal: appSettings.width * 0.03),
           padding: EdgeInsets.symmetric(
-            vertical: appSettings.width * 0.04,
+            vertical: appSettings.width * 0.02,
             horizontal: appSettings.width * 0.05,
           ),
           decoration: BoxDecoration(

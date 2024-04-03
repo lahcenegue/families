@@ -38,7 +38,9 @@ class LoginScreen extends StatelessWidget {
                   Container(
                     width: appsettings.width,
                     height: appsettings.height * 0.6,
-                    padding: const EdgeInsets.all(22),
+                    padding: EdgeInsets.all(
+                      appsettings.width * 0.06,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -154,7 +156,6 @@ class LoginScreen extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(height: 10),
                             ],
                           ),
                         ),
