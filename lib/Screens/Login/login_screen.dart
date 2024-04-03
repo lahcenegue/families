@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
             child: SafeArea(
               child: ListView(
                 children: [
-                  SizedBox(height: appsettings.height * 0.13),
+                  SizedBox(height: appsettings.height * 0.15),
                   Text(
                     AppLocalizations.of(context)!.login,
                     textAlign: TextAlign.center,
@@ -33,10 +33,10 @@ class LoginScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: AppStyles.styleRegular(context, 16),
                   ),
-                  SizedBox(height: appsettings.height * 0.06),
+                  SizedBox(height: appsettings.height * 0.15),
                   Container(
                     width: appsettings.width,
-                    height: appsettings.height * 0.7,
+                    height: appsettings.height * 0.6,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -137,15 +137,6 @@ class LoginScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: appsettings.height * 0.02),
-                        Text(
-                          AppLocalizations.of(context)!.or,
-                          textAlign: TextAlign.center,
-                          style: AppStyles.styleRegular(context, 16).copyWith(
-                            color: AppColors.fillColor,
-                          ),
-                        ),
-                        SizedBox(height: appsettings.height * 0.02),
-                        Row(),
                       ],
                     ),
                   ),

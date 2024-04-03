@@ -38,8 +38,8 @@ abstract class AppStyles {
 double getFontSize(context, double fontSize) {
   double scaleFactor = getScaleFactor(context);
   double responsiveFontSize = fontSize * scaleFactor;
-  double lowerLimit = fontSize * .8;
-  double upperLimit = fontSize * 1.2;
+  double lowerLimit = fontSize * 0.8;
+  double upperLimit = fontSize * 1.4;
   return responsiveFontSize.clamp(lowerLimit, upperLimit);
 }
 
@@ -48,6 +48,6 @@ double getScaleFactor(context) {
   if (width < 600) {
     return width / 400;
   } else {
-    return width / 700;
+    return width / 600;
   }
 }
