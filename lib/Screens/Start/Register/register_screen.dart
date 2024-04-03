@@ -38,7 +38,7 @@ class RegisterScreen extends StatelessWidget {
                   Container(
                     width: appsettings.width,
                     height: appsettings.height * 0.75,
-                    padding: const EdgeInsets.all(22),
+                    padding: EdgeInsets.all(appsettings.width * 0.06),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -164,7 +164,6 @@ class RegisterScreen extends StatelessWidget {
                                       : AppLocalizations.of(context)!.sign_up,
                                 ),
                               ),
-                              const SizedBox(height: 20),
                             ],
                           ),
                         ),

@@ -57,15 +57,15 @@ class LoginAndRegisterManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImageFromCamera() async {
-    final ImagePicker picker = ImagePicker();
-    XFile? image = await picker.pickImage(source: ImageSource.camera);
+  // Future<void> pickImageFromCamera() async {
+  //   final ImagePicker picker = ImagePicker();
+  //   XFile? image = await picker.pickImage(source: ImageSource.camera);
 
-    storeImage = File(image!.path);
-    Uint8List storeImagebytes = storeImage!.readAsBytesSync();
-    storeImageBase64 = base64Encode(storeImagebytes);
-    notifyListeners();
-  }
+  //   storeImage = File(image!.path);
+  //   Uint8List storeImagebytes = storeImage!.readAsBytesSync();
+  //   storeImageBase64 = base64Encode(storeImagebytes);
+  //   notifyListeners();
+  // }
 
   Future<void> pickImageFromGallery() async {
     final ImagePicker picker = ImagePicker();

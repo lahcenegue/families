@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import '../../../Constants/app_colors.dart';
 import '../../../Constants/app_styles.dart';
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
@@ -36,7 +39,7 @@ class RegisterFamilyScreen extends StatelessWidget {
                   Container(
                     width: appsettings.width,
                     height: appsettings.height * 0.75,
-                    padding: const EdgeInsets.all(22),
+                    padding: EdgeInsets.all(appsettings.width * 0.06),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -105,12 +108,56 @@ class RegisterFamilyScreen extends StatelessWidget {
 
                         //Store photo
                         SliverToBoxAdapter(
-                          child: CustomTextField(
-                            title: 'Upload photo for store',
-                            hintText: 'Upload photo',
-                            onChanged: (value) {},
-                            suffixIcon: Icons.cloud_upload,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Text(
+                                  'Upload photo for store',
+                                  textAlign: TextAlign.start,
+                                  style: AppStyles.styleRegular(context, 13)
+                                      .copyWith(color: const Color(0xFF32343E)),
+                                ),
+                              ),
+                              Container(
+                                width: appsettings.width,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: AppColors.fieldFillColor,
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: appsettings.width * 0.6,
+                                      child: registerManager.storeImage == null
+                                          ? Text('Upload an image from Gallery')
+                                          : Image.file(
+                                              registerManager.storeImage!),
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                      onPressed: () {
+                                        registerManager.pickImageFromGallery();
+                                      },
+                                      icon: Icon(
+                                        Icons.cloud_upload,
+                                        color: AppColors.hintColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
+                          // child: CustomTextField(
+                          //   title: 'Upload photo for store',
+                          //   hintText: 'Upload photo',
+                          //   onChanged: (value) {},
+                          //   suffixIcon: Icons.cloud_upload,
+                          // ),
                         ),
                         SliverToBoxAdapter(
                             child: SizedBox(height: appsettings.height * 0.03)),
@@ -150,7 +197,6 @@ class RegisterFamilyScreen extends StatelessWidget {
                                   AppLocalizations.of(context)!.sign_up,
                                 ),
                               ),
-                              const SizedBox(height: 20),
                             ],
                           ),
                         ),
