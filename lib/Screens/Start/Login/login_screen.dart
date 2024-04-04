@@ -1,4 +1,5 @@
 import 'package:families/Constants/app_colors.dart';
+import 'package:families/Constants/app_strings.dart';
 import 'package:families/Constants/app_styles.dart';
 import 'package:families/Providers/app_settings_provider.dart';
 import 'package:families/Widgets/custom_backgound.dart';
@@ -129,7 +130,16 @@ class LoginScreen extends StatelessWidget {
                                   child: SizedBox(
                                       height: appsettings.height * 0.05)),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (loginManager.accountType ==
+                                      AppStrings.user) {
+                                    NavigationService.navigateToAndReplace(
+                                        AppRoutes.userHomeScreen);
+                                  } else {
+                                    NavigationService.navigateToAndReplace(
+                                        AppRoutes.familyHomeScreen);
+                                  }
+                                },
                                 child:
                                     Text(AppLocalizations.of(context)!.login),
                               ),

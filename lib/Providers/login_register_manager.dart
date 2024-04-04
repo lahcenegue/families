@@ -77,24 +77,24 @@ class LoginAndRegisterManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> uploadImages() async {
-    final pickedFile = await ImagePicker().pickMultiImage();
-    List<XFile> xfilePick = pickedFile;
+  // Future<void> uploadImages() async {
+  //   final pickedFile = await ImagePicker().pickMultiImage();
+  //   List<XFile> xfilePick = pickedFile;
 
-    if (xfilePick.isNotEmpty) {
-      for (var i = 0; i < xfilePick.length; i++) {
-        selectedImages.add(File(xfilePick[i].path));
-      }
+  //   if (xfilePick.isNotEmpty) {
+  //     for (var i = 0; i < xfilePick.length; i++) {
+  //       selectedImages.add(File(xfilePick[i].path));
+  //     }
 
-      Uint8List imagebytes = selectedImages[mainImage].readAsBytesSync();
+  //     Uint8List imagebytes = selectedImages[mainImage].readAsBytesSync();
 
-      mainImageBase64 = base64Encode(imagebytes);
-      // addAdsRequest.image = mainImageBase64;
-      notifyListeners();
-    } else {
-      //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
-    }
-  }
+  //     mainImageBase64 = base64Encode(imagebytes);
+  //     // addAdsRequest.image = mainImageBase64;
+  //     notifyListeners();
+  //   } else {
+  //     //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
+  //   }
+  // }
 
   bool validateAndSave(String formKey) {
     final FormState? form = formKey == 'register'

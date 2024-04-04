@@ -7,6 +7,12 @@ ThemeData theme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: AppColors.backgroundColor,
 
+  // appBar
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Colors.transparent,
+    elevation: 0.0,
+  ),
+
   // text form feiled
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(

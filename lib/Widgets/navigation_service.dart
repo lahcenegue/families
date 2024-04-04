@@ -1,31 +1,40 @@
+import 'package:families/Screens/Family/family_home_screen.dart';
 import 'package:families/Screens/Start/Login/login_screen.dart';
 import 'package:families/Screens/Start/Register/family_register_screen.dart';
 import 'package:families/Screens/Start/Register/register_screen.dart';
 import 'package:families/Screens/Start/account_type/account_type.dart';
 import 'package:families/Screens/Start/lang/select_language.dart';
 import 'package:families/Screens/Start/onbording/onbording_screen.dart';
+import 'package:families/Screens/User/product_details.dart';
+import 'package:families/Screens/User/user_home_screen.dart';
 import 'package:flutter/material.dart';
 import '../Screens/Start/splash/splash.dart';
 
 class AppRoutes {
-  static const String splash = '/';
-  static const String selectLang = '/selectLang';
+  static const String splashScreen = '/';
+  static const String selectLangScreen = '/selectLang';
   static const String onBordingScreen = '/onBordingScreen';
-  static const String accountType = '/accountType';
+  static const String accountTypeScreen = '/accountType';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
   static const String registerFamilyScreen = '/registerFamilyScreen';
+  static const String userHomeScreen = '/userHomeScreen';
+  static const String familyHomeScreen = '/familyHomeScreen';
+  static const String productDetails = '/productsDetails';
 
   static Map<String, WidgetBuilder> define() {
     return {
-      splash: (BuildContext context) => const SplashScreen(),
-      selectLang: (BuildContext context) => const SelectLanguage(),
+      splashScreen: (BuildContext context) => const SplashScreen(),
+      selectLangScreen: (BuildContext context) => const SelectLanguage(),
       onBordingScreen: (BuildContext context) => const OnBordingScreen(),
-      accountType: (BuildContext context) => const AccountType(),
+      accountTypeScreen: (BuildContext context) => const AccountType(),
       loginScreen: (BuildContext context) => const LoginScreen(),
       registerScreen: (BuildContext context) => const RegisterScreen(),
       registerFamilyScreen: (BuildContext context) =>
           const RegisterFamilyScreen(),
+      userHomeScreen: (BuildContext context) => const UserHomeScreen(),
+      familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
+      productDetails: (BuildContext context) => const ProductDetails()
     };
   }
 }

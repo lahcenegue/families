@@ -9,4 +9,7 @@ class AppImages {
   static const String food2 = "assets/images/food2.svg";
   static const String food3 = "assets/images/food3.svg";
   static const String food4 = "assets/images/food4.svg";
+  static const String userProfile = 'assets/images/user-profil.png';
+  static const String banner1 = 'assets/images/banner1.png';
+  static const String pizza = 'assets/images/pizza.png';
 }

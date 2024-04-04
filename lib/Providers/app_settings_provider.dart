@@ -140,7 +140,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     Future.delayed(
       const Duration(seconds: 2),
       () {
-        NavigationService.navigateToAndReplace(AppRoutes.selectLang);
+        NavigationService.navigateToAndReplace(AppRoutes.selectLangScreen);
       },
     );
   }

@@ -7,6 +7,7 @@ class AppColors {
   static Color fillColor = const Color(0xFF262931);
   static Color hintColor = const Color(0xFFA0A5BA);
   static Color fieldFillColor = const Color(0xFFF0F5FA);
+  static Color greyTextColors = const Color(0xFF9C9BA6);
 }
 
 class MaterialColorGenerator {

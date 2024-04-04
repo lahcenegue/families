@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../Widgets/dot_indicator.dart';
+
 class OnBordingScreen extends StatelessWidget {
   const OnBordingScreen({super.key});
 
@@ -87,7 +89,8 @@ class OnBordingScreen extends StatelessWidget {
                           curve: Curves.ease,
                         );
                         if (appsettings.pageIndex == demoData.length - 1) {
-                          NavigationService.navigateTo(AppRoutes.accountType);
+                          NavigationService.navigateTo(
+                              AppRoutes.accountTypeScreen);
                         }
                       },
                       child: Text(
@@ -99,7 +102,8 @@ class OnBordingScreen extends StatelessWidget {
                     SizedBox(
                       child: TextButton(
                         onPressed: () {
-                          NavigationService.navigateTo(AppRoutes.accountType);
+                          NavigationService.navigateTo(
+                              AppRoutes.accountTypeScreen);
                         },
                         child: Text(AppLocalizations.of(context)!.skip,
                             style: AppStyles.styleRegular(context, 16).copyWith(
@@ -118,27 +122,6 @@ class OnBordingScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class DotIndicator extends StatelessWidget {
-  final bool isActive;
-  const DotIndicator({
-    super.key,
-    this.isActive = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      height: 10,
-      width: 10,
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.primaryColor : Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
     );
   }
 }
