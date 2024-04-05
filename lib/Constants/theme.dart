@@ -11,6 +11,9 @@ ThemeData theme = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
     elevation: 0.0,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
   ),
 
   // text form feiled

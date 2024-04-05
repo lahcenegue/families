@@ -137,10 +137,11 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void goToNextScreen() {
+    print('========== Go to Next Screen ===============');
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
       () {
-        NavigationService.navigateToAndReplace(AppRoutes.selectLangScreen);
+        NavigationService.navigateToAndReplace(AppRoutes.productDetails);
       },
     );
   }

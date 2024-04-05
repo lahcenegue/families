@@ -1,4 +1,4 @@
-class AppImages {
+abstract class AppImages {
   static const String logo = 'assets/images/icon.png';
   static const String cloud = "assets/images/cloud2.svg";
   static const String arabicFlag = 'assets/images/flag-saudi.png';
@@ -12,4 +12,6 @@ class AppImages {
   static const String userProfile = 'assets/images/user-profil.png';
   static const String banner1 = 'assets/images/banner1.png';
   static const String pizza = 'assets/images/pizza.png';
+  static const String plat = 'assets/images/plat2.png';
+  static const String salade = 'assets/images/salade.png';
 }
