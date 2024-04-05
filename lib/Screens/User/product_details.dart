@@ -35,9 +35,9 @@ class ProductDetails extends StatelessWidget {
                     clipper: MyClipper(),
                     child: Container(
                       width: appSettings.width,
-                      height: appSettings.height * 0.85,
+                      height: appSettings.height * 0.8,
                       padding: EdgeInsets.only(
-                        top: appSettings.height * 0.14,
+                        top: appSettings.height * 0.1,
                         left: appSettings.width * 0.05,
                         right: appSettings.width * 0.05,
                       ),
@@ -174,8 +174,8 @@ class ProductDetails extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
-                    padding: EdgeInsets.only(top: appSettings.height * 0.1),
-                    width: appSettings.width * 0.6,
+                    padding: EdgeInsets.only(top: appSettings.height * 0.12),
+                    width: appSettings.width * 0.5,
                     child: Stack(
                       children: [
                         Image.asset(
