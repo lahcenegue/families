@@ -49,9 +49,8 @@ class ProductDetails extends StatelessWidget {
                                 padding: const EdgeInsets.all(12),
                                 child: Column(
                                   children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                          height: appSettings.height * 0.15),
+                                    const Expanded(
+                                      child: SizedBox(height: 120),
                                     ),
                                     Text(
                                       (appSettings.height * 0.11).toString(),
