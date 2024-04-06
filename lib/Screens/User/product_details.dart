@@ -49,12 +49,10 @@ class ProductDetails extends StatelessWidget {
                                 padding: const EdgeInsets.all(12),
                                 child: Column(
                                   children: [
-                                    Expanded(
-                                      child: SizedBox(
-                                          height: appSettings.height < 850
-                                              ? appSettings.height * 0.15
-                                              : appSettings.height * 0.1),
-                                    ),
+                                    SizedBox(
+                                        height: appSettings.height < 850
+                                            ? appSettings.height * 0.15
+                                            : appSettings.height * 0.25),
                                     Text(
                                       'Fried Shrimp',
                                       textAlign: TextAlign.center,
