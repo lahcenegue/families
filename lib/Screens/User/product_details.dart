@@ -51,7 +51,11 @@ class ProductDetails extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: SizedBox(
-                                          height: appSettings.width * 0.28),
+                                          height: appSettings.height * 0.15),
+                                    ),
+                                    Text(
+                                      (appSettings.height * 0.11).toString(),
+                                      style: AppStyles.styleBold(context, 20),
                                     ),
                                     Text(
                                       'Fried Shrimp',
