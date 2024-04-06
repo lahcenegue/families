@@ -1,13 +1,15 @@
 import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_images.dart';
 import 'package:families/Constants/app_styles.dart';
+import 'package:families/Models/ingridient_model.dart';
 import 'package:families/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Providers/app_settings_provider.dart';
 import '../../Widgets/custom_backgound.dart';
-import '../../Widgets/ingridients_box.dart';
+import '../../Widgets/ingridients_list.dart';
+import '../../Widgets/product_background.dart';
+import '../../Widgets/product_counter.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});
@@ -29,243 +31,165 @@ class ProductDetails extends StatelessWidget {
           body: CustomBackground(
             child: Padding(
               padding: EdgeInsets.only(top: appSettings.height * 0.1),
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 0,
-                    child: ClipPath(
-                      clipper: MyClipper(),
-                      child: Container(
-                        width: appSettings.width,
-                        height: appSettings.height * 0.8,
-                        decoration: BoxDecoration(
-                          color: AppColors.fillColor,
+              child: ProductBackground(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          appSettings.width < 600 ? 12 : 25,
                         ),
-                        child: CustomScrollView(
-                          slivers: [
-                            SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                  appSettings.width < 600 ? 12 : 25,
-                                ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                        height: appSettings.width < 600
-                                            ? appSettings.height * 0.16
-                                            : appSettings.height * 0.25),
-                                    Text(
-                                      appSettings.width.toString(),
-                                      style: AppStyles.styleBold(context, 20),
-                                    ),
-                                    Text(
-                                      'Fried Shrimp',
-                                      textAlign: TextAlign.center,
-                                      style: AppStyles.styleBold(context, 20),
-                                    ),
-                                    Text(
-                                      'This is my kind of breakfast egg sandwich and it takes under  5 minutes to make',
-                                      textAlign: TextAlign.center,
-                                      style: AppStyles.styleMedium(context, 13)
-                                          .copyWith(
-                                        color: AppColors.greyTextColors,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.star_border_rounded,
-                                          color: AppColors.greyTextColors,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '4.8(163)',
-                                          style:
-                                              AppStyles.styleBold(context, 12)
-                                                  .copyWith(
-                                            color: AppColors.greyTextColors,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Icon(
-                                          Icons.timer_outlined,
-                                          color: AppColors.greyTextColors,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          '20 min',
-                                          style:
-                                              AppStyles.styleBold(context, 12)
-                                                  .copyWith(
-                                            color: AppColors.greyTextColors,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 40),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Ingrigients',
-                                          style:
-                                              AppStyles.styleBold(context, 15),
-                                        ),
-                                        Text(
-                                          '7 items',
-                                          style:
-                                              AppStyles.styleMedium(context, 13)
-                                                  .copyWith(
-                                            color: AppColors.greyTextColors,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Container(
-                                      width: appSettings.width,
-                                      height: 140,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      // color: Colors.white,
-                                      child: ListView.separated(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: 7,
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(width: 10),
-                                        itemBuilder: (context, index) {
-                                          return const IngridientsBox(
-                                            image: 'assets/images/brocoli.png',
-                                            title: 'Brocoli',
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(height: 40),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          child: Image.asset(
-                                              'assets/images/41.png'),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Product family ',
-                                              style: AppStyles.styleMedium(
-                                                  context, 20),
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Color(0xffFDB022),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 40),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Size',
-                                          style: AppStyles.styleRegular(
-                                              context, 15),
-                                        ),
-                                      ],
-                                    ),
-                                    //const SizedBox(height: 40),
-                                  ],
-                                ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                                height: appSettings.width < 600
+                                    ? appSettings.height * 0.16
+                                    : appSettings.height * 0.25),
+                            Text(
+                              'Fried Shrimp',
+                              textAlign: TextAlign.center,
+                              style: AppStyles.styleBold(context, 20),
+                            ),
+                            Text(
+                              'This is my kind of breakfast egg sandwich and it takes under  5 minutes to make',
+                              textAlign: TextAlign.center,
+                              style:
+                                  AppStyles.styleMedium(context, 13).copyWith(
+                                color: AppColors.greyTextColors,
                               ),
                             ),
-                            SliverToBoxAdapter(
-                              child: Container(
-                                padding: EdgeInsets.all(
-                                  appSettings.width < 600 ? 12 : 25,
+                            const SizedBox(height: 15),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.star_border_rounded,
+                                  color: AppColors.greyTextColors,
                                 ),
-                                height: appSettings.height * 0.25,
-                                width: appSettings.width,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF161616),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30),
-                                    topRight: Radius.circular(30),
+                                const SizedBox(width: 5),
+                                Text(
+                                  '4.8(163)',
+                                  style:
+                                      AppStyles.styleBold(context, 12).copyWith(
+                                    color: AppColors.greyTextColors,
                                   ),
                                 ),
-                              ),
-                            )
+                                const SizedBox(width: 20),
+                                Icon(
+                                  Icons.timer_outlined,
+                                  color: AppColors.greyTextColors,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  '20 min',
+                                  style:
+                                      AppStyles.styleBold(context, 12).copyWith(
+                                    color: AppColors.greyTextColors,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 40),
+                            const IngridientsList(
+                              items: [
+                                IngridientModel(
+                                    image: 'assets/images/brocoli.png',
+                                    title: 'Broccoli'),
+                                IngridientModel(
+                                    image: 'assets/images/chili.png',
+                                    title: 'Chili'),
+                                IngridientModel(
+                                    image: 'assets/images/corn.png',
+                                    title: 'Corn'),
+                                IngridientModel(
+                                    image: 'assets/images/carrot.png',
+                                    title: 'Carrot'),
+                              ],
+                            ),
+                            const SizedBox(height: 40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  child: Image.asset('assets/images/41.png'),
+                                ),
+                                const SizedBox(width: 10),
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Product family ',
+                                      style: AppStyles.styleMedium(context, 20),
+                                    ),
+                                    const Icon(
+                                      Icons.star,
+                                      color: Color(0xffFDB022),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 40),
+                            Row(
+                              children: [
+                                Text(
+                                  'Size',
+                                  style: AppStyles.styleRegular(context, 15),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      width: appSettings.width * 0.6,
-                      //color: Colors.white,
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Stack(
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: appSettings.width < 600 ? 12 : 25,
+                          vertical: 20,
+                        ),
+                        //height: appSettings.height * 0.25,
+                        width: appSettings.width,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF161616),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: Image.asset(
-                                AppImages.salade,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  r'$32',
+                                  style: AppStyles.styleRegular(context, 28),
+                                ),
+                                const ProductCounter(),
+                              ],
                             ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Image.asset(
-                                AppImages.plat,
-                                width: appSettings.width * 0.5,
-                              ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text('ADD TO CART'),
                             ),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         );
       },
     );
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-
-    path.moveTo(0, size.height * 0.1);
-
-    path.quadraticBezierTo(size.width / 2, 0, size.width, size.height * 0.1);
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
