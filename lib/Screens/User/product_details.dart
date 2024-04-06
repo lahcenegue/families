@@ -51,7 +51,7 @@ class ProductDetails extends StatelessWidget {
                                   children: [
                                     SizedBox(
                                         height: appSettings.height < 850
-                                            ? appSettings.height * 0.15
+                                            ? appSettings.height * 0.16
                                             : appSettings.height * 0.25),
                                     Text(
                                       'Fried Shrimp',
@@ -178,7 +178,7 @@ class ProductDetails extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 40),
+                                    //const SizedBox(height: 40),
                                   ],
                                 ),
                               ),
@@ -186,7 +186,7 @@ class ProductDetails extends StatelessWidget {
                             SliverToBoxAdapter(
                               child: Container(
                                 padding: const EdgeInsets.all(12),
-                                height: appSettings.height * 0.3,
+                                height: appSettings.height * 0.25,
                                 width: appSettings.width,
                                 decoration: const BoxDecoration(
                                   color: Color(0xFF161616),
