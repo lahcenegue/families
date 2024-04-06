@@ -39,12 +39,12 @@ class IngridientsList extends StatelessWidget {
             SizedBox(
               width: appSettings.width,
               height: appSettings.width < 600
-                  ? appSettings.height * 0.2
-                  : appSettings.height * 0.15,
+                  ? appSettings.height * 0.16
+                  : appSettings.height * 0.14,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: items.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 10),
+                separatorBuilder: (context, index) => const SizedBox(width: 15),
                 itemBuilder: (context, index) {
                   return IngridientsBox(ingridientModel: items[index]);
                 },

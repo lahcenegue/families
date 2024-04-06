@@ -16,14 +16,9 @@ class IngridientsBox extends StatelessWidget {
     return Consumer<AppSettingsProvider>(
       builder: (context, appSettings, _) {
         return Container(
-          width: appSettings.width < 600
-              ? appSettings.height * 0.12
-              : appSettings.height * 0.08,
-          height: appSettings.width < 600
-              ? appSettings.height * 0.2
-              : appSettings.height * 0.15,
+          width: appSettings.height * 0.12,
           padding: const EdgeInsets.symmetric(
-            vertical: 15,
+            vertical: 10,
             horizontal: 5,
           ),
           decoration: BoxDecoration(
