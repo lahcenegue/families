@@ -47,12 +47,12 @@ class ProductDetails extends StatelessWidget {
                               hasScrollBody: false,
                               child: Padding(
                                 padding: EdgeInsets.all(
-                                  appSettings.width < 420 ? 12 : 25,
+                                  appSettings.width < 600 ? 12 : 25,
                                 ),
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                        height: appSettings.height < 850
+                                        height: appSettings.width < 600
                                             ? appSettings.height * 0.16
                                             : appSettings.height * 0.25),
                                     Text(
@@ -191,7 +191,9 @@ class ProductDetails extends StatelessWidget {
                             ),
                             SliverToBoxAdapter(
                               child: Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(
+                                  appSettings.width < 600 ? 12 : 25,
+                                ),
                                 height: appSettings.height * 0.25,
                                 width: appSettings.width,
                                 decoration: const BoxDecoration(
