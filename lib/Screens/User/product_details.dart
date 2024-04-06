@@ -46,13 +46,19 @@ class ProductDetails extends StatelessWidget {
                             SliverFillRemaining(
                               hasScrollBody: false,
                               child: Padding(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(
+                                  appSettings.width < 420 ? 12 : 25,
+                                ),
                                 child: Column(
                                   children: [
                                     SizedBox(
                                         height: appSettings.height < 850
                                             ? appSettings.height * 0.16
                                             : appSettings.height * 0.25),
+                                    Text(
+                                      appSettings.width.toString(),
+                                      style: AppStyles.styleBold(context, 20),
+                                    ),
                                     Text(
                                       'Fried Shrimp',
                                       textAlign: TextAlign.center,
