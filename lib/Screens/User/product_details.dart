@@ -53,7 +53,7 @@ class ProductDetails extends StatelessWidget {
                                       child: SizedBox(height: 120),
                                     ),
                                     Text(
-                                      (appSettings.height * 0.11).toString(),
+                                      (appSettings.height).toString(),
                                       style: AppStyles.styleBold(context, 20),
                                     ),
                                     Text(
