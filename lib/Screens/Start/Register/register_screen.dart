@@ -1,14 +1,16 @@
-import 'package:families/Constants/app_strings.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Widgets/custom_backgound.dart';
-import 'package:families/Widgets/custom_text_field.dart';
-import 'package:families/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
+import '../../../Utils/Constants/app_strings.dart';
+import '../../../Utils/Constants/app_styles.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../Utils/Widgets/custom_backgound.dart';
+import '../../../Utils/Widgets/custom_text_field.dart';
+import '../../../Utils/Widgets/navigation_service.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -27,7 +29,7 @@ class RegisterScreen extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.sign_up,
                     textAlign: TextAlign.center,
-                    style: AppStyles.styleBold(context, 30),
+                    style: AppStyles.styleBold(30, context),
                   ),
                   Text(
                     AppLocalizations.of(context)!.please_signup,

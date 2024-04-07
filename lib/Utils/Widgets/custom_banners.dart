@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Constants/app_images.dart';
-import '../Providers/app_settings_provider.dart';
+import '../Constants/app_size.dart';
 import 'dot_indicator.dart';
+
+import '../../../Providers/app_settings_provider.dart';
+import '../Constants/app_images.dart';
 
 class CustomBanners extends StatelessWidget {
   const CustomBanners({
@@ -14,7 +16,7 @@ class CustomBanners extends StatelessWidget {
     return Consumer<AppSettingsProvider>(
       builder: (context, appsettings, _) {
         return SizedBox(
-          width: appsettings.width,
+          width: AppSize.width(context),
           height: appsettings.width * .6,
           child: Column(
             children: [
@@ -22,7 +24,7 @@ class CustomBanners extends StatelessWidget {
                 child: PageView.builder(
                   itemCount: 3,
                   itemBuilder: (context, index) => Container(
-                    width: appsettings.width,
+                    width: AppSize.width(context),
                     height: appsettings.width * 0.6,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(22),

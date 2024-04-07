@@ -1,9 +1,10 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_images.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Providers/app_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../Providers/app_settings_provider.dart';
+import '../Constants/app_colors.dart';
+import '../Constants/app_images.dart';
+import '../Constants/app_styles.dart';
 
 class FamilyProducts extends StatelessWidget {
   final Function()? onTap;
@@ -42,7 +43,7 @@ class FamilyProducts extends StatelessWidget {
                       children: [
                         Text(
                           'Name',
-                          style: AppStyles.styleBold(context, 18),
+                          style: AppStyles.styleBold(18, context),
                         ),
                         Row(
                           children: [
@@ -76,8 +77,10 @@ class FamilyProducts extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       // color: Colors.white,
-                      image:
-                          DecorationImage(image: AssetImage(AppImages.pizza)),
+                      image: DecorationImage(
+                          image: AssetImage(
+                        AppImages.pizza,
+                      )),
                     ),
                   ),
                 ),

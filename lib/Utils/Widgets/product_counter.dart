@@ -1,5 +1,6 @@
-import 'package:families/Constants/app_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../Constants/app_styles.dart';
 
 class ProductCounter extends StatelessWidget {
   const ProductCounter({super.key});
@@ -16,7 +17,7 @@ class ProductCounter extends StatelessWidget {
             )),
         Text(
           '1',
-          style: AppStyles.styleBold(context, 16),
+          style: AppStyles.styleBold(16, context),
         ),
         IconButton(
           onPressed: () {},

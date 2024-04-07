@@ -1,4 +1,5 @@
 import 'package:families/Providers/app_settings_provider.dart';
+import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,8 +20,8 @@ class ProductBackground extends StatelessWidget {
     return Consumer<AppSettingsProvider>(
       builder: (context, appSettings, _) {
         return SizedBox(
-          width: appSettings.width,
-          height: appSettings.height,
+          width: AppSize.width(context),
+          height: AppSize.height(context),
           child: Stack(
             children: [
               Align(
@@ -28,7 +29,7 @@ class ProductBackground extends StatelessWidget {
                 child: ClipPath(
                   clipper: MyClipper(),
                   child: Container(
-                    width: appSettings.width,
+                    width: AppSize.width(context),
                     height: appSettings.height * 0.82,
                     decoration: BoxDecoration(
                       color: AppColors.fillColor,

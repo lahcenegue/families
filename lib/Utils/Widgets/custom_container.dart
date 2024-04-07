@@ -1,7 +1,9 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Providers/app_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../Providers/app_settings_provider.dart';
+import '../Constants/app_colors.dart';
+import '../Constants/app_size.dart';
 
 class CustomContainer extends StatelessWidget {
   final Widget child;
@@ -15,7 +17,7 @@ class CustomContainer extends StatelessWidget {
     return Consumer<AppSettingsProvider>(
       builder: (context, appSettings, _) {
         return Container(
-          width: appSettings.width,
+          width: AppSize.width(context),
           margin: EdgeInsets.symmetric(horizontal: appSettings.width * 0.03),
           padding: EdgeInsets.symmetric(
             vertical: appSettings.width * 0.02,

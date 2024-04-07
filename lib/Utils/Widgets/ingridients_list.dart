@@ -1,11 +1,12 @@
 import 'package:families/Providers/app_settings_provider.dart';
-import 'package:families/Widgets/ingridients_box.dart';
+import 'package:families/Utils/Widgets/ingridients_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Models/ingridient_model.dart';
 import '../Constants/app_colors.dart';
+import '../Constants/app_size.dart';
 import '../Constants/app_styles.dart';
-import '../Models/ingridient_model.dart';
 
 class IngridientsList extends StatelessWidget {
   final List<IngridientModel> items;
@@ -25,7 +26,7 @@ class IngridientsList extends StatelessWidget {
               children: [
                 Text(
                   'Ingrigients',
-                  style: AppStyles.styleBold(context, 15),
+                  style: AppStyles.styleBold(15, context),
                 ),
                 Text(
                   '${items.length} items',
@@ -37,7 +38,7 @@ class IngridientsList extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             SizedBox(
-              width: appSettings.width,
+              width: AppSize.width(context),
               height: appSettings.width < 600
                   ? appSettings.height * 0.16
                   : appSettings.height * 0.14,

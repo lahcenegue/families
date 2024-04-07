@@ -1,15 +1,15 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Models/ingridient_model.dart';
-import 'package:families/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/ingridient_model.dart';
 import '../../Providers/app_settings_provider.dart';
-import '../../Widgets/custom_backgound.dart';
-import '../../Widgets/ingridients_list.dart';
-import '../../Widgets/product_background.dart';
-import '../../Widgets/product_counter.dart';
+import '../../Utils/Constants/app_colors.dart';
+import '../../Utils/Constants/app_styles.dart';
+import '../../Utils/Widgets/custom_backgound.dart';
+import '../../Utils/Widgets/ingridients_list.dart';
+import '../../Utils/Widgets/navigation_service.dart';
+import '../../Utils/Widgets/product_background.dart';
+import '../../Utils/Widgets/product_counter.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});
@@ -49,7 +49,7 @@ class ProductDetails extends StatelessWidget {
                             Text(
                               'Fried Shrimp',
                               textAlign: TextAlign.center,
-                              style: AppStyles.styleBold(context, 20),
+                              style: AppStyles.styleBold(20, context),
                             ),
                             Text(
                               'This is my kind of breakfast egg sandwich and it takes under  5 minutes to make',
@@ -71,7 +71,7 @@ class ProductDetails extends StatelessWidget {
                                 Text(
                                   '4.8(163)',
                                   style:
-                                      AppStyles.styleBold(context, 12).copyWith(
+                                      AppStyles.styleBold(12, context).copyWith(
                                     color: AppColors.greyTextColors,
                                   ),
                                 ),
@@ -84,7 +84,7 @@ class ProductDetails extends StatelessWidget {
                                 Text(
                                   '20 min',
                                   style:
-                                      AppStyles.styleBold(context, 12).copyWith(
+                                      AppStyles.styleBold(12, context).copyWith(
                                     color: AppColors.greyTextColors,
                                   ),
                                 ),

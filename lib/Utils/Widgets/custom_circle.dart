@@ -1,7 +1,8 @@
-import 'package:families/Constants/app_colors.dart';
 import 'package:families/Providers/app_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../Constants/app_colors.dart';
 
 class CustomCircle extends StatelessWidget {
   final String image;

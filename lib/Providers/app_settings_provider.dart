@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:families/Widgets/navigation_service.dart';
+import 'package:families/Utils/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Constants/app_strings.dart';
+import '../Utils/Constants/app_strings.dart';
 
 class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   SharedPreferences? _prefs;
@@ -141,7 +141,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     Future.delayed(
       const Duration(seconds: 1),
       () {
-        NavigationService.navigateToAndReplace(AppRoutes.productDetails);
+        NavigationService.navigateToAndReplace(AppRoutes.selectLangScreen);
       },
     );
   }

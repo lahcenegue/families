@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:families/Constants/app_strings.dart';
-import 'package:families/Widgets/navigation_service.dart';
+
+import 'package:families/Utils/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Utils/Constants/app_strings.dart';
 
 class LoginAndRegisterManager extends ChangeNotifier {
   SharedPreferences? _prefs;

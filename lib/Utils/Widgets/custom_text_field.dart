@@ -1,6 +1,7 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../Constants/app_colors.dart';
+import '../Constants/app_styles.dart';
 
 class CustomTextField extends StatelessWidget {
   final IconData? suffixIcon;

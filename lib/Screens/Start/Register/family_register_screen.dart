@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../../../Constants/app_colors.dart';
-import '../../../Constants/app_styles.dart';
+
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
-import '../../../Widgets/custom_backgound.dart';
-import '../../../Widgets/custom_text_field.dart';
+import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/custom_backgound.dart';
+import '../../../Utils/Widgets/custom_text_field.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,7 +27,7 @@ class RegisterFamilyScreen extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.sign_up,
                     textAlign: TextAlign.center,
-                    style: AppStyles.styleBold(context, 30),
+                    style: AppStyles.styleBold(30, context),
                   ),
                   Text(
                     AppLocalizations.of(context)!.please_signup,

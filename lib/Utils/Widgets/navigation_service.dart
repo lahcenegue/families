@@ -8,7 +8,7 @@ import 'package:families/Screens/Start/onbording/onbording_screen.dart';
 import 'package:families/Screens/User/product_details.dart';
 import 'package:families/Screens/User/user_home_screen.dart';
 import 'package:flutter/material.dart';
-import '../Screens/Start/splash/splash.dart';
+import '../../../Screens/Start/splash/splash.dart';
 
 class AppRoutes {
   static const String splashScreen = '/';

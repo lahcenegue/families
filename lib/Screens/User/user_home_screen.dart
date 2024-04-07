@@ -1,14 +1,14 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_images.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Widgets/navigation_service.dart';
+import 'package:families/Utils/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Providers/app_settings_provider.dart';
-import '../../Widgets/custom_backgound.dart';
-import '../../Widgets/custom_banners.dart';
-import '../../Widgets/family_products.dart';
+import '../../Utils/Constants/app_colors.dart';
+import '../../Utils/Constants/app_images.dart';
+import '../../Utils/Constants/app_styles.dart';
+import '../../Utils/Widgets/custom_backgound.dart';
+import '../../Utils/Widgets/custom_banners.dart';
+import '../../Utils/Widgets/family_products.dart';
 
 class UserHomeScreen extends StatelessWidget {
   const UserHomeScreen({super.key});
@@ -25,13 +25,13 @@ class UserHomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Good morning',
-                  style: AppStyles.styleBold(context, 14).copyWith(
+                  style: AppStyles.styleBold(14, context).copyWith(
                     color: AppColors.greyTextColors,
                   ),
                 ),
                 Text(
                   'User Name',
-                  style: AppStyles.styleBold(context, 20),
+                  style: AppStyles.styleBold(20, context),
                 ),
               ],
             ),

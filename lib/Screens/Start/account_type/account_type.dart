@@ -1,14 +1,16 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_images.dart';
-import 'package:families/Constants/app_strings.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Providers/app_settings_provider.dart';
-import 'package:families/Widgets/custom_backgound.dart';
-import 'package:families/Widgets/custom_circle.dart';
+import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
-import '../../../Widgets/custom_container.dart';
+import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_strings.dart';
+import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/custom_backgound.dart';
+import '../../../Utils/Widgets/custom_circle.dart';
+import '../../../Utils/Widgets/custom_container.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,21 +27,23 @@ class AccountType extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: appSettings.width * 0.2,
-                  height: appSettings.width * 0.2,
-                  child: Image.asset(
-                    AppImages.logo,
-                    fit: BoxFit.fill,
+                  width: AppSize.widthSize(100, context),
+                  child: AspectRatio(
+                    aspectRatio: 0.82,
+                    child: Image.asset(
+                      AppImages.logo,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
-                SizedBox(height: appSettings.height * 0.05),
+                SizedBox(height: AppSize.heightSize(30, context)),
                 Text(
                   AppLocalizations.of(context)!.choose_you,
-                  style: AppStyles.styleBold(context, 38).copyWith(
+                  style: AppStyles.styleBold(38, context).copyWith(
                     color: AppColors.primaryColor,
                   ),
                 ),
-                SizedBox(height: appSettings.height * 0.1),
+                SizedBox(height: AppSize.heightSize(70, context)),
                 accountTypeBox(
                   appSettings: appSettings,
                   context: context,
@@ -49,7 +53,7 @@ class AccountType extends StatelessWidget {
                   image: AppImages.personsIcon,
                   title: AppLocalizations.of(context)!.productive_family,
                 ),
-                SizedBox(height: appSettings.height * 0.05),
+                SizedBox(height: AppSize.heightSize(30, context)),
                 accountTypeBox(
                   appSettings: appSettings,
                   context: context,
@@ -82,7 +86,7 @@ class AccountType extends StatelessWidget {
             CustomCircle(
               image: image,
             ),
-            SizedBox(width: appSettings.width * 0.03),
+            SizedBox(width: AppSize.widthSize(10, context)),
             Text(
               title,
               style: AppStyles.styleRegular(context, 15),

@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:families/Providers/login_register_manager.dart';
-import 'package:families/Widgets/navigation_service.dart';
+import 'package:families/Utils/Widgets/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'Constants/theme.dart';
 import 'Providers/app_settings_provider.dart';
+import 'Utils/Constants/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

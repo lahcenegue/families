@@ -1,8 +1,9 @@
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Models/ingridient_model.dart';
-import 'package:families/Providers/app_settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../Models/ingridient_model.dart';
+import '../../Providers/app_settings_provider.dart';
+import '../Constants/app_styles.dart';
 
 class IngridientsBox extends StatelessWidget {
   final IngridientModel ingridientModel;

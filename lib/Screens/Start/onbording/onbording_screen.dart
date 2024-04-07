@@ -1,16 +1,16 @@
-import 'package:families/Constants/app_colors.dart';
-import 'package:families/Constants/app_images.dart';
-import 'package:families/Constants/app_styles.dart';
-import 'package:families/Providers/app_settings_provider.dart';
-import 'package:families/Widgets/custom_backgound.dart';
-import 'package:families/Widgets/navigation_service.dart';
+import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../Providers/app_settings_provider.dart';
+import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/custom_backgound.dart';
+import '../../../Utils/Widgets/dot_indicator.dart';
+import '../../../Utils/Widgets/navigation_service.dart';
 
-import '../../../Widgets/dot_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBordingScreen extends StatelessWidget {
   const OnBordingScreen({super.key});
@@ -49,7 +49,7 @@ class OnBordingScreen extends StatelessWidget {
           body: CustomBackground(
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(appsettings.width * 0.05),
+                padding: EdgeInsets.all(AppSize.widthSize(20, context)),
                 child: Column(
                   children: [
                     Expanded(
@@ -66,7 +66,7 @@ class OnBordingScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: appsettings.height * 0.05),
+                    SizedBox(height: AppSize.heightSize(20, context)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -74,14 +74,14 @@ class OnBordingScreen extends StatelessWidget {
                           demoData.length,
                           (index) => Padding(
                             padding: EdgeInsets.only(
-                                right: appsettings.width * 0.03),
+                                right: AppSize.widthSize(10, context)),
                             child: DotIndicator(
                                 isActive: index == appsettings.pageIndex),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: appsettings.height * 0.05),
+                    SizedBox(height: AppSize.heightSize(50, context)),
                     ElevatedButton(
                       onPressed: () {
                         appsettings.pageController.nextPage(
@@ -114,7 +114,7 @@ class OnBordingScreen extends StatelessWidget {
                             )),
                       ),
                     ),
-                    SizedBox(height: appsettings.height * 0.02),
+                    SizedBox(height: AppSize.heightSize(10, context)),
                   ],
                 ),
               ),
@@ -152,18 +152,20 @@ class OnBoardContent extends StatelessWidget {
         children: [
           const Spacer(),
           SizedBox(
-            width: appSettings.width * 0.6,
-            height: appSettings.width * 0.73,
-            child: SvgPicture.asset(
-              image,
-              fit: BoxFit.fill,
+            width: AppSize.widthSize(240, context),
+            child: AspectRatio(
+              aspectRatio: .82,
+              child: SvgPicture.asset(
+                image,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           const Spacer(),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppStyles.styleBold(context, 24),
+            style: AppStyles.styleBold(24, context),
           ),
           const SizedBox(height: 16),
           Text(
