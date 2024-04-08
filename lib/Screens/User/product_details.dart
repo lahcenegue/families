@@ -7,7 +7,7 @@ import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/Constants/app_styles.dart';
 import '../../Utils/Widgets/custom_backgound.dart';
 import '../../Utils/Widgets/ingridients_list.dart';
-import '../../Utils/Widgets/navigation_service.dart';
+import '../../Utils/Helprs/navigation_service.dart';
 import '../../Utils/Widgets/product_background.dart';
 import '../../Utils/Widgets/product_counter.dart';
 

@@ -10,7 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../Utils/Widgets/custom_backgound.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
-import '../../../Utils/Widgets/navigation_service.dart';
+import '../../../Utils/Helprs/navigation_service.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});

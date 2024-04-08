@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:families/Utils/Widgets/navigation_service.dart';
+import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -141,7 +141,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     Future.delayed(
       const Duration(seconds: 1),
       () {
-        NavigationService.navigateToAndReplace(AppRoutes.selectLangScreen);
+        NavigationService.navigateToAndReplace(AppRoutes.ordersDetails);
       },
     );
   }

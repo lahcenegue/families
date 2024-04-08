@@ -8,7 +8,7 @@ import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/custom_backgound.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
-import '../../../Utils/Widgets/navigation_service.dart';
+import '../../../Utils/Helprs/navigation_service.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

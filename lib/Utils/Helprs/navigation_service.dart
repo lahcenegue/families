@@ -5,6 +5,7 @@ import 'package:families/Screens/Start/Register/register_screen.dart';
 import 'package:families/Screens/Start/account_type/account_type.dart';
 import 'package:families/Screens/Start/lang/select_language.dart';
 import 'package:families/Screens/Start/onbording/onbording_screen.dart';
+import 'package:families/Screens/User/orders_details.dart';
 import 'package:families/Screens/User/product_details.dart';
 import 'package:families/Screens/User/user_home_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String userHomeScreen = '/userHomeScreen';
   static const String familyHomeScreen = '/familyHomeScreen';
   static const String productDetails = '/productsDetails';
+  static const String ordersDetails = '/ordersDetails';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -34,7 +36,8 @@ class AppRoutes {
           const RegisterFamilyScreen(),
       userHomeScreen: (BuildContext context) => const UserHomeScreen(),
       familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
-      productDetails: (BuildContext context) => const ProductDetails()
+      productDetails: (BuildContext context) => const ProductDetails(),
+      ordersDetails: (BuildContext context) => const OrdersDetails(),
     };
   }
 }
