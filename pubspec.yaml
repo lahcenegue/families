@@ -13,7 +13,6 @@ dependencies:
   flutter_localization: ^0.2.0
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^2.0.10+1
   http: ^1.2.0
   image_picker: ^1.0.7
   intl: ^0.18.1
@@ -30,9 +29,13 @@ flutter:
   generate: true
   uses-material-design: true
   fonts:
-    - family: Tajawal
+    - family: UniqueLight
       fonts:
-        - asset: assets/fonts/Tajawal-Regular.ttf
+        - asset: assets/fonts/UniqueLight.otf
+        
+    - family: UniqueBold
+      fonts:
+        - asset: assets/fonts/UniqueBold.otf
 
   assets:
     - assets/images/

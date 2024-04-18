@@ -30,7 +30,7 @@ class IngridientsList extends StatelessWidget {
                 ),
                 Text(
                   '${items.length} items',
-                  style: AppStyles.styleMedium(context, 13).copyWith(
+                  style: AppStyles.styleMedium(13, context).copyWith(
                     color: AppColors.greyTextColors,
                   ),
                 )

@@ -51,7 +51,11 @@ class LoginAndRegisterManager extends ChangeNotifier {
   void toggleAccountType(String type) {
     accountType = type;
     notifyListeners();
-    NavigationService.navigateTo(AppRoutes.loginScreen);
+    if (_prefs!.getString(PrefKeys.onBording) == null) {
+      NavigationService.navigateTo(AppRoutes.onBordingScreen);
+    } else {
+      NavigationService.navigateTo(AppRoutes.loginScreen);
+    }
   }
 
   void togglePasswordVisibility() {

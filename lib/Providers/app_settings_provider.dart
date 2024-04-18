@@ -141,7 +141,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     Future.delayed(
       const Duration(seconds: 1),
       () {
-        NavigationService.navigateToAndReplace(AppRoutes.ordersDetails);
+        NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
       },
     );
   }

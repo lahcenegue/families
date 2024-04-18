@@ -1,8 +1,6 @@
 {
-  "all_favorite": "جميع ما تفضل",
+  "app_name": "مأكول",
   "arabic": "العربية",
-  "choose_lang": "اختر لغتك المفضلة",
-  "choose_you": "اختر من أنت",
   "continu": "استمر",
   "dont_haveAccount": "ليس لديك حساب؟",
   "email": "البريد الإلكتروني",
@@ -12,10 +10,11 @@
   "get_started": "البدء",
   "location_entryPrompt": "الرجاء إدخال موقعك",
   "login": "تسجيل الدخول",
+  "login_user": "تسجيل الدخول كعميل",
+  "logn_family": "تسجيل الدخول كأسرة منتجة",
   "name": "الاسم",
   "name_entryPrompt": "الرجاء إدخال اسمك",
   "next": "التالي",
-  "order_fromshef": "الطلب من الشيف المختار",
   "password": "كلمة المرور",
   "password_entryPrompt": "الرجاء إدخال كلمة المرور.",
   "please_signin": "يرجى تسجيل الدخول إلى حسابك الحالي",
@@ -28,5 +27,5 @@
   "skip": "تخطي",
   "storeName_entryPrompt": "الرجاء إدخال اسم المحل",
   "time_entryPrompt": "الرجاء إدخال الوقت المتوقع",
-  "user": "مستخدم"
+  "user": "عميل"
 }

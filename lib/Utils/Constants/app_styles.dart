@@ -6,31 +6,33 @@ import 'app_colors.dart';
 abstract class AppStyles {
   static TextStyle styleBold(double fontSize, context) {
     return TextStyle(
+      fontFamily: 'UniqueBold',
       color: Colors.white,
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w700,
     );
   }
 
-  static TextStyle styleExtraBold(context, double fontSize) {
+  static TextStyle styleExtraBold(double fontSize, context) {
     return TextStyle(
+      fontFamily: 'UniqueBold',
       color: AppColors.primaryColor,
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w900,
     );
   }
 
-  static TextStyle styleRegular(context, double fontSize) {
+  static TextStyle styleRegular(double fontSize, context) {
     return TextStyle(
-      color: Colors.white,
+      fontFamily: 'UniqueLight',
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w400,
     );
   }
 
-  static TextStyle styleMedium(context, double fontSize) {
+  static TextStyle styleMedium(double fontSize, context) {
     return TextStyle(
-      color: Colors.white,
+      fontFamily: 'UniqueLight',
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w500,
     );

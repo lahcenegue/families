@@ -8,6 +8,7 @@ class PrefKeys {
   static String lang = 'lang';
   static String isDark = 'isDark';
   static String autoDarkMode = 'autoDark';
+  static String onBording = 'onBording';
 
   //User data keys
 }

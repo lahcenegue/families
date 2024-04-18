@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Widgets/custom_backgound.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,7 +10,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomBackground(
+      body: SizedBox(
+        width: AppSize.width(context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,7 +29,7 @@ class SplashScreen extends StatelessWidget {
             ),
             Text(
               'مأكول',
-              style: AppStyles.styleExtraBold(context, 52),
+              style: AppStyles.styleExtraBold(52, context),
             ),
           ],
         ),

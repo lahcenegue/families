@@ -8,7 +8,6 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Widgets/custom_backgound.dart';
 import '../../../Utils/Widgets/custom_circle.dart';
 import '../../../Utils/Widgets/custom_container.dart';
 
@@ -22,83 +21,79 @@ class AccountType extends StatelessWidget {
     return Consumer2<AppSettingsProvider, LoginAndRegisterManager>(
       builder: (context, appSettings, loginManager, _) {
         return Scaffold(
-          body: CustomBackground(
+          body: Container(
+            width: AppSize.width(context),
+            padding: EdgeInsets.all(AppSize.widthSize(25, context)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: AppSize.widthSize(100, context),
+                  width: AppSize.widthSize(120, context),
                   child: AspectRatio(
                     aspectRatio: 0.82,
                     child: Image.asset(
-                      AppImages.logo,
+                      AppImages.accountTypeImage,
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                SizedBox(height: AppSize.heightSize(30, context)),
+
                 Text(
-                  AppLocalizations.of(context)!.choose_you,
-                  style: AppStyles.styleBold(38, context).copyWith(
+                  AppLocalizations.of(context)!.app_name,
+                  style: AppStyles.styleBold(24, context).copyWith(
                     color: AppColors.primaryColor,
                   ),
                 ),
+                SizedBox(height: AppSize.heightSize(40, context)),
+                Text(
+                  'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى،',
+                  textAlign: TextAlign.center,
+                  style: AppStyles.styleRegular(14, context),
+                ),
                 SizedBox(height: AppSize.heightSize(70, context)),
-                accountTypeBox(
-                  appSettings: appSettings,
-                  context: context,
-                  onTap: () {
+                ElevatedButton(
+                  onPressed: () {
                     loginManager.toggleAccountType(AppStrings.family);
                   },
-                  image: AppImages.personsIcon,
-                  title: AppLocalizations.of(context)!.productive_family,
+                  child: Text(
+                    AppLocalizations.of(context)!.login_user,
+                    style: AppStyles.styleBold(14, context),
+                  ),
                 ),
-                SizedBox(height: AppSize.heightSize(30, context)),
-                accountTypeBox(
-                  appSettings: appSettings,
-                  context: context,
-                  onTap: () {
+
+                SizedBox(height: AppSize.heightSize(20, context)),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AppColors.primaryColor),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
                     loginManager.toggleAccountType(AppStrings.user);
                   },
-                  image: AppImages.personIcon,
-                  title: AppLocalizations.of(context)!.user,
+                  child: Text(
+                    AppLocalizations.of(context)!.logn_family,
+                    style: AppStyles.styleBold(14, context).copyWith(
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
                 ),
+                // accountTypeBox(
+                //   appSettings: appSettings,
+                //   context: context,
+                //   onTap: () {
+                //     loginManager.toggleAccountType(AppStrings.user);
+                //   },
+                //   image: AppImages.personIcon,
+                //   title: AppLocalizations.of(context)!.user,
+                // ),
               ],
             ),
           ),
         );
       },
-    );
-  }
-
-  InkWell accountTypeBox({
-    required AppSettingsProvider appSettings,
-    required BuildContext context,
-    required Function() onTap,
-    required String image,
-    required String title,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: CustomContainer(
-        child: Row(
-          children: [
-            CustomCircle(
-              image: image,
-            ),
-            SizedBox(width: AppSize.widthSize(10, context)),
-            Text(
-              title,
-              style: AppStyles.styleRegular(context, 15),
-            ),
-            const Spacer(),
-            const Icon(
-              Icons.arrow_forward_ios_rounded,
-              color: Colors.white,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -37,7 +37,7 @@ class CustomTextField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             title!,
-            style: AppStyles.styleRegular(context, 13)
+            style: AppStyles.styleRegular(13, context)
                 .copyWith(color: const Color(0xFF32343E)),
           ),
         ),

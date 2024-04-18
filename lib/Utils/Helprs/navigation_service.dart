@@ -27,17 +27,19 @@ class AppRoutes {
   static Map<String, WidgetBuilder> define() {
     return {
       splashScreen: (BuildContext context) => const SplashScreen(),
-      selectLangScreen: (BuildContext context) => const SelectLanguage(),
-      onBordingScreen: (BuildContext context) => const OnBordingScreen(),
       accountTypeScreen: (BuildContext context) => const AccountType(),
-      loginScreen: (BuildContext context) => const LoginScreen(),
-      registerScreen: (BuildContext context) => const RegisterScreen(),
-      registerFamilyScreen: (BuildContext context) =>
-          const RegisterFamilyScreen(),
-      userHomeScreen: (BuildContext context) => const UserHomeScreen(),
+      onBordingScreen: (BuildContext context) => const OnBordingScreen(),
+      ///////////
+      // selectLangScreen: (BuildContext context) => const SelectLanguage(),
+
+      // loginScreen: (BuildContext context) => const LoginScreen(),
+      // registerScreen: (BuildContext context) => const RegisterScreen(),
+      // registerFamilyScreen: (BuildContext context) =>
+      //     const RegisterFamilyScreen(),
+      // userHomeScreen: (BuildContext context) => const UserHomeScreen(),
       familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
-      productDetails: (BuildContext context) => const ProductDetails(),
-      ordersDetails: (BuildContext context) => const OrdersDetails(),
+      // productDetails: (BuildContext context) => const ProductDetails(),
+      // ordersDetails: (BuildContext context) => const OrdersDetails(),
     };
   }
 }

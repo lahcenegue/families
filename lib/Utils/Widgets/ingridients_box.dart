@@ -33,7 +33,7 @@ class IngridientsBox extends StatelessWidget {
                 Image.asset(ingridientModel.image),
                 Text(
                   ingridientModel.title,
-                  style: AppStyles.styleMedium(context, 12),
+                  style: AppStyles.styleMedium(12, context),
                 )
               ],
             ),
