@@ -7,7 +7,6 @@ abstract class AppStyles {
   static TextStyle styleBold(double fontSize, context) {
     return TextStyle(
       fontFamily: 'UniqueBold',
-      color: Colors.white,
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w700,
     );

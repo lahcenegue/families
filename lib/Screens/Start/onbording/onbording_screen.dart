@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../Models/onbording_model.dart';
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/dot_indicator.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
@@ -68,6 +69,8 @@ class OnBordingScreen extends StatelessWidget {
                         visible: appsettings.pageIndex != demoData.length - 1,
                         child: TextButton(
                           onPressed: () {
+                            appsettings.saveData(
+                                key: PrefKeys.onBording, value: 'watched');
                             NavigationService.navigateTo(
                                 AppRoutes.accountTypeScreen);
                           },
@@ -133,6 +136,8 @@ class OnBordingScreen extends StatelessWidget {
                           );
                           if (appsettings.pageIndex == demoData.length - 1) {
                             NavigationService.navigateTo(AppRoutes.loginScreen);
+                            appsettings.saveData(
+                                key: PrefKeys.onBording, value: 'watched');
                           }
                         },
                         child: Container(

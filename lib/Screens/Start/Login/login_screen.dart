@@ -1,9 +1,10 @@
+import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../Providers/app_settings_provider.dart';
-import '../../../Providers/login_register_manager.dart';
 
+import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
@@ -16,41 +17,54 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppSettingsProvider, LoginAndRegisterManager>(
-      builder: (context, appsettings, loginManager, _) {
+    return Consumer<LoginAndRegisterManager>(
+      builder: (context, loginManager, _) {
         return Scaffold(
           body: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: appsettings.height * 0.12),
-                Text(
-                  AppLocalizations.of(context)!.login,
-                  textAlign: TextAlign.center,
-                  style: AppStyles.styleBold(30, context),
-                ),
-                Text(
-                  AppLocalizations.of(context)!.please_signin,
-                  textAlign: TextAlign.center,
-                  style: AppStyles.styleRegular(16, context),
-                ),
-                const Expanded(child: SizedBox(height: 20)),
-                Container(
-                  width: appsettings.width,
-                  height: appsettings.height * 0.6,
-                  padding: EdgeInsets.all(appsettings.width * 0.06),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(appsettings.width * 0.1),
-                      topRight: Radius.circular(appsettings.width * 0.1),
+            child: Padding(
+              padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: AppSize.widthSize(120, context),
+                          child: AspectRatio(
+                            aspectRatio: 0.82,
+                            child: Image.asset(
+                              AppImages.accountTypeImage,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.app_name,
+                          style: AppStyles.styleBold(24, context).copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: CustomScrollView(
-                    slivers: [
-                      //Email
-                      SliverToBoxAdapter(
-                        child: CustomTextField(
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: AppSize.heightSize(20, context)),
+                        Text(
+                          AppLocalizations.of(context)!.login,
+                          style: AppStyles.styleBold(24, context),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.please_signin,
+                          textAlign: TextAlign.center,
+                          style: AppStyles.styleRegular(16, context),
+                        ),
+                        SizedBox(height: AppSize.heightSize(30, context)),
+                        //Phone
+                        CustomTextField(
                           title: AppLocalizations.of(context)!.email,
                           hintText: 'example@gmail.com',
                           onChanged: (value) {},
@@ -63,13 +77,10 @@ class LoginScreen extends StatelessWidget {
                           },
                           keyboardType: TextInputType.emailAddress,
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                          child: SizedBox(height: appsettings.height * 0.03)),
+                        SizedBox(height: AppSize.heightSize(20, context)),
 
-                      //Password
-                      SliverToBoxAdapter(
-                        child: CustomTextField(
+                        //Password
+                        CustomTextField(
                           title: AppLocalizations.of(context)!.password,
                           hintText: '*********',
                           onChanged: (value) {
@@ -91,83 +102,67 @@ class LoginScreen extends StatelessWidget {
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: !loginManager.isVisible,
                         ),
-                      ),
-
-                      SliverToBoxAdapter(
-                        child: Row(
+                        Row(
                           children: [
-                            Checkbox(
-                              value: false,
-                              onChanged: (value) {},
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.remember_me,
-                              style:
-                                  AppStyles.styleRegular(13, context).copyWith(
-                                color: AppColors.fillColor,
-                              ),
-                            ),
                             const Spacer(),
                             TextButton(
                               onPressed: () {},
                               child: Text(
                                 AppLocalizations.of(context)!.forgot_password,
-                                style: AppStyles.styleRegular(14, context)
-                                    .copyWith(
-                                  color: AppColors.primaryColor,
-                                ),
+                                style: AppStyles.styleRegular(14, context),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Column(
+                      ],
+                    ),
+                  ),
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: SizedBox(
+                                height: AppSize.heightSize(20, context))),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (loginManager.accountType == AppStrings.user) {
+                              NavigationService.navigateToAndReplace(
+                                  AppRoutes.userHomeScreen);
+                            } else {
+                              NavigationService.navigateToAndReplace(
+                                  AppRoutes.familyHomeScreen);
+                            }
+                          },
+                          child: Text(AppLocalizations.of(context)!.login),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                                child: SizedBox(
-                                    height: appsettings.height * 0.05)),
-                            ElevatedButton(
+                            Text(
+                              AppLocalizations.of(context)!.dont_haveAccount,
+                              style: AppStyles.styleMedium(13, context),
+                            ),
+                            TextButton(
                               onPressed: () {
-                                if (loginManager.accountType ==
-                                    AppStrings.user) {
-                                  NavigationService.navigateToAndReplace(
-                                      AppRoutes.userHomeScreen);
-                                } else {
-                                  NavigationService.navigateToAndReplace(
-                                      AppRoutes.familyHomeScreen);
-                                }
+                                NavigationService.navigateTo(
+                                    AppRoutes.registerScreen);
                               },
-                              child: Text(AppLocalizations.of(context)!.login),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(AppLocalizations.of(context)!
-                                    .dont_haveAccount),
-                                TextButton(
-                                  onPressed: () {
-                                    NavigationService.navigateTo(
-                                        AppRoutes.registerScreen);
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.sign_up,
-                                    style: AppStyles.styleBold(14, context)
-                                        .copyWith(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              child: Text(
+                                AppLocalizations.of(context)!.sign_up,
+                                style:
+                                    AppStyles.styleMedium(13, context).copyWith(
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

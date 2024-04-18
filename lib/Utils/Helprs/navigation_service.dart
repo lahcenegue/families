@@ -3,7 +3,6 @@ import 'package:families/Screens/Start/Login/login_screen.dart';
 import 'package:families/Screens/Start/Register/family_register_screen.dart';
 import 'package:families/Screens/Start/Register/register_screen.dart';
 import 'package:families/Screens/Start/account_type/account_type.dart';
-import 'package:families/Screens/Start/lang/select_language.dart';
 import 'package:families/Screens/Start/onbording/onbording_screen.dart';
 import 'package:families/Screens/User/orders_details.dart';
 import 'package:families/Screens/User/product_details.dart';
@@ -29,15 +28,16 @@ class AppRoutes {
       splashScreen: (BuildContext context) => const SplashScreen(),
       accountTypeScreen: (BuildContext context) => const AccountType(),
       onBordingScreen: (BuildContext context) => const OnBordingScreen(),
-      ///////////
-      // selectLangScreen: (BuildContext context) => const SelectLanguage(),
+      loginScreen: (BuildContext context) => const LoginScreen(),
 
-      // loginScreen: (BuildContext context) => const LoginScreen(),
+      ///////////
+      ///
+      // selectLangScreen: (BuildContext context) => const SelectLanguage(),
       // registerScreen: (BuildContext context) => const RegisterScreen(),
       // registerFamilyScreen: (BuildContext context) =>
       //     const RegisterFamilyScreen(),
       // userHomeScreen: (BuildContext context) => const UserHomeScreen(),
-      familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
+      // familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
       // productDetails: (BuildContext context) => const ProductDetails(),
       // ordersDetails: (BuildContext context) => const OrdersDetails(),
     };

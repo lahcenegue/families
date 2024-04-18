@@ -10,7 +10,6 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   SharedPreferences? _prefs;
   Locale? _locale;
   Brightness? _theme;
-  Size? _size;
   bool _autoDarkMode = false;
   late PageController pageController;
   int pageIndex = 0;
@@ -25,7 +24,6 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     pageController = PageController(initialPage: 0);
     _initializeLocale();
     _initializeTheme();
-    _initializeSize();
     goToNextScreen();
     notifyListeners();
   }
@@ -44,19 +42,10 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  @override
-  void didChangeMetrics() {
-    _updateSize();
-    notifyListeners();
-  }
-
   Locale get locale => _locale ?? Locale(Intl.systemLocale);
   Brightness get theme => _theme ?? Brightness.light;
   bool get isDark => _theme == Brightness.dark;
   bool get autoDarkMode => _autoDarkMode;
-
-  double get width => _size?.width ?? 0;
-  double get height => _size?.height ?? 0;
 
   void _initializeLocale() async {
     String? savedLocaleCode = getData(key: PrefKeys.lang);
@@ -81,33 +70,6 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
       } else {
         _theme = Brightness.light;
       }
-    }
-  }
-
-  void _initializeSize() {
-    _updateSize();
-  }
-
-  void _updateSize() {
-    final FlutterView view =
-        WidgetsBinding.instance.platformDispatcher.views.first;
-    _size = view.physicalSize / view.devicePixelRatio;
-  }
-
-  // double fontSize(double fontSize) {
-  //   double scaleFactor = getScaleFactor();
-  //   double responsiveFontSize = fontSize * scaleFactor;
-  //   double lowerLimit = fontSize * .8;
-  //   double upperLimit = fontSize * 1.2;
-  //   return responsiveFontSize.clamp(lowerLimit, upperLimit);
-  // }
-
-  double getScaleFactor() {
-    double width = _size?.width ?? 550;
-    if (width < 600) {
-      return width / 400;
-    } else {
-      return width / 700;
     }
   }
 

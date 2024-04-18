@@ -39,7 +39,7 @@ ThemeData theme = ThemeData(
         const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
       ),
-      foregroundColor: MaterialStateProperty.all(Colors.white),
+      foregroundColor: MaterialStateProperty.all(Colors.black),
       textStyle: MaterialStateProperty.all(
         const TextStyle(
           color: Colors.white,
@@ -57,7 +57,7 @@ ThemeData theme = ThemeData(
         if (states.contains(MaterialState.disabled)) {
           return AppColors.primaryColor.withOpacity(0.6);
         }
-        return Colors.white;
+        return Colors.black;
       }),
     ),
   ),

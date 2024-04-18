@@ -8,8 +8,6 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Widgets/custom_circle.dart';
-import '../../../Utils/Widgets/custom_container.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,7 +35,6 @@ class AccountType extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Text(
                   AppLocalizations.of(context)!.app_name,
                   style: AppStyles.styleBold(24, context).copyWith(
@@ -60,7 +57,6 @@ class AccountType extends StatelessWidget {
                     style: AppStyles.styleBold(14, context),
                   ),
                 ),
-
                 SizedBox(height: AppSize.heightSize(20, context)),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -80,15 +76,6 @@ class AccountType extends StatelessWidget {
                     ),
                   ),
                 ),
-                // accountTypeBox(
-                //   appSettings: appSettings,
-                //   context: context,
-                //   onTap: () {
-                //     loginManager.toggleAccountType(AppStrings.user);
-                //   },
-                //   image: AppImages.personIcon,
-                //   title: AppLocalizations.of(context)!.user,
-                // ),
               ],
             ),
           ),
