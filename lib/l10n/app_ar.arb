@@ -1,4 +1,5 @@
 {
+  "agree_terms_conditions": "من خلال إنشاء حساب فإنك توافق على الشروط والأحكام الخاصة بنا",
   "app_name": "مأكول",
   "arabic": "العربية",
   "continu": "استمر",
@@ -8,6 +9,7 @@
   "forgot_password": "نسيت كلمة المرور؟",
   "free_delivery": "عروض التوصيل المجاني",
   "get_started": "البدء",
+  "have_account": "تملك حساب؟",
   "location_entryPrompt": "الرجاء إدخال موقعك",
   "login": "تسجيل الدخول",
   "login_user": "تسجيل الدخول كعميل",
@@ -17,6 +19,7 @@
   "next": "التالي",
   "password": "كلمة المرور",
   "password_entryPrompt": "الرجاء إدخال كلمة المرور.",
+  "phone": "رقم الهاتف",
   "please_signin": "يرجى تسجيل الدخول إلى حسابك الحالي",
   "please_signup": "يرجى التسجيل للبدء",
   "productive_family": "الأسرة المنتجة",

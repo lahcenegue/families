@@ -1,4 +1,5 @@
 {
+  "agree_terms_conditions": "By creating an account you agree to our terms and conditions",
   "app_name": "MACOOL",
   "arabic": "Arabic",
   "continu": "Continue",
@@ -8,6 +9,7 @@
   "forgot_password": "Forgot password?",
   "free_delivery": "Free delivery offers",
   "get_started": "GET STARTED",
+  "have_account": "Do you have an account?",
   "location_entryPrompt": "Please enter your location",
   "login": "LOG IN",
   "login_user": "Log in as a customer",
@@ -17,6 +19,7 @@
   "next": "NEXT",
   "password": "Password",
   "password_entryPrompt": "Please enter your password.",
+  "phone": "Phone number",
   "please_signin": "Please sign in to your existing account",
   "please_signup": "Please sign up to get started",
   "productive_family": "Productive family",

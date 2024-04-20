@@ -1,178 +1,198 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:families/Utils/Constants/app_size.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-// import '../../../Providers/app_settings_provider.dart';
-// import '../../../Providers/login_register_manager.dart';
-// import '../../../Utils/Constants/app_strings.dart';
-// import '../../../Utils/Constants/app_styles.dart';
+import '../../../Providers/login_register_manager.dart';
+import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/custom_text_field.dart';
+import '../../../Utils/Helprs/navigation_service.dart';
 
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// import '../../../Utils/Widgets/custom_text_field.dart';
-// import '../../../Utils/Helprs/navigation_service.dart';
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
-// class RegisterScreen extends StatelessWidget {
-//   const RegisterScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LoginAndRegisterManager>(
+      builder: (context, registerManager, _) {
+        return Scaffold(
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.widthSize(25, context)),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: AppSize.widthSize(30, context)),
+                        SizedBox(
+                          width: AppSize.widthSize(100, context),
+                          child: AspectRatio(
+                            aspectRatio: 0.82,
+                            child: Image.asset(
+                              AppImages.accountTypeImage,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.app_name,
+                          style: AppStyles.styleBold(24, context).copyWith(
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: AppSize.heightSize(50, context)),
+                        Text(
+                          AppLocalizations.of(context)!.sign_up,
+                          style: AppStyles.styleBold(24, context),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.please_signup,
+                          textAlign: TextAlign.center,
+                          style: AppStyles.styleRegular(16, context),
+                        ),
+                        SizedBox(height: AppSize.heightSize(30, context)),
+                        //Phone
+                        CustomTextField(
+                          title: AppLocalizations.of(context)!.phone,
+                          hintText: '050 505 505',
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(context)!
+                                  .password_entryPrompt;
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.phone,
+                        ),
+                        SizedBox(height: AppSize.heightSize(20, context)),
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer2<AppSettingsProvider, LoginAndRegisterManager>(
-//       builder: (context, appsettings, registerManager, _) {
-//         return Scaffold(
-//           body: SafeArea(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 SizedBox(height: appsettings.height * 0.1),
-//                 Text(
-//                   AppLocalizations.of(context)!.sign_up,
-//                   textAlign: TextAlign.center,
-//                   style: AppStyles.styleBold(30, context),
-//                 ),
-//                 Text(
-//                   AppLocalizations.of(context)!.please_signup,
-//                   textAlign: TextAlign.center,
-//                   style: AppStyles.styleRegular(16, context),
-//                 ),
-//                 const Expanded(child: SizedBox(height: 20)),
-//                 Container(
-//                   width: appsettings.width,
-//                   height: appsettings.height * 0.75,
-//                   padding: EdgeInsets.all(appsettings.width * 0.06),
-//                   decoration: BoxDecoration(
-//                     color: Colors.white,
-//                     borderRadius: BorderRadius.only(
-//                       topLeft: Radius.circular(appsettings.width * 0.1),
-//                       topRight: Radius.circular(appsettings.width * 0.1),
-//                     ),
-//                   ),
-//                   child: CustomScrollView(
-//                     slivers: [
-//                       //Name
-//                       SliverToBoxAdapter(
-//                         child: CustomTextField(
-//                           title: AppLocalizations.of(context)!.name,
-//                           hintText: AppLocalizations.of(context)!.name,
-//                           onChanged: (value) {},
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                               return AppLocalizations.of(context)!
-//                                   .password_entryPrompt; //TODO name
-//                             }
-//                             return null;
-//                           },
-//                           keyboardType: TextInputType.text,
-//                         ),
-//                       ),
-//                       SliverToBoxAdapter(
-//                           child: SizedBox(height: appsettings.height * 0.03)),
+                        //Password
+                        CustomTextField(
+                          title: AppLocalizations.of(context)!.password,
+                          hintText: '*********',
+                          onChanged: (value) {
+                            //loginManager.loginRequestModel.password = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(context)!
+                                  .password_entryPrompt;
+                            }
+                            return null;
+                          },
+                          suffixIcon: registerManager.isVisible == true
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          suffixChanged: () {
+                            registerManager.togglePasswordVisibility();
+                          },
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !registerManager.isVisible,
+                        ),
 
-//                       //Email
-//                       SliverToBoxAdapter(
-//                         child: CustomTextField(
-//                           title: AppLocalizations.of(context)!.email,
-//                           hintText: 'example@gmail.com',
-//                           onChanged: (value) {},
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                               return AppLocalizations.of(context)!
-//                                   .password_entryPrompt; // TODO email
-//                             }
-//                             return null;
-//                           },
-//                           keyboardType: TextInputType.emailAddress,
-//                         ),
-//                       ),
-//                       SliverToBoxAdapter(
-//                           child: SizedBox(height: appsettings.height * 0.03)),
-//                       //Password
-//                       SliverToBoxAdapter(
-//                         child: CustomTextField(
-//                           title: AppLocalizations.of(context)!.password,
-//                           hintText: '******',
-//                           onChanged: (value) {
-//                             //registerManager.loginRequestModel.password = value;
-//                           },
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                               return AppLocalizations.of(context)!
-//                                   .password_entryPrompt;
-//                             }
-//                             return null;
-//                           },
-//                           suffixIcon: registerManager.isVisible == true
-//                               ? Icons.visibility_off
-//                               : Icons.visibility,
-//                           suffixChanged: () {
-//                             registerManager.togglePasswordVisibility();
-//                           },
-//                           keyboardType: TextInputType.visiblePassword,
-//                           obscureText: !registerManager.isVisible,
-//                         ),
-//                       ),
-//                       SliverToBoxAdapter(
-//                           child: SizedBox(height: appsettings.height * 0.03)),
-
-//                       //Retype password
-//                       SliverToBoxAdapter(
-//                         child: CustomTextField(
-//                           title: AppLocalizations.of(context)!.retype_password,
-//                           hintText: '******',
-//                           onChanged: (value) {
-//                             //registerManager.loginRequestModel.password = value;
-//                           },
-//                           validator: (value) {
-//                             if (value == null || value.isEmpty) {
-//                               return AppLocalizations.of(context)!
-//                                   .password_entryPrompt;
-//                             }
-//                             return null;
-//                           },
-//                           suffixIcon: registerManager.isVisible == true
-//                               ? Icons.visibility_off
-//                               : Icons.visibility,
-//                           suffixChanged: () {
-//                             registerManager.togglePasswordVisibility();
-//                           },
-//                           keyboardType: TextInputType.visiblePassword,
-//                           obscureText: !registerManager.isVisible,
-//                         ),
-//                       ),
-
-//                       SliverFillRemaining(
-//                         hasScrollBody: false,
-//                         child: Column(
-//                           children: [
-//                             Expanded(
-//                                 child: SizedBox(
-//                                     height: appsettings.height * 0.05)),
-//                             ElevatedButton(
-//                               onPressed: () {
-//                                 if (registerManager.accountType ==
-//                                     AppStrings.family) {
-//                                   NavigationService.navigateTo(
-//                                       AppRoutes.registerFamilyScreen);
-//                                 } else {
-//                                   //TODO register
-//                                 }
-//                               },
-//                               child: Text(
-//                                 registerManager.accountType == AppStrings.family
-//                                     ? AppLocalizations.of(context)!.continu
-//                                     : AppLocalizations.of(context)!.sign_up,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
+                        SizedBox(height: AppSize.heightSize(20, context)),
+                        //Retype password
+                        CustomTextField(
+                          title: AppLocalizations.of(context)!.retype_password,
+                          hintText: '*********',
+                          onChanged: (value) {
+                            //loginManager.loginRequestModel.password = value;
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(context)!
+                                  .password_entryPrompt;
+                            }
+                            return null;
+                          },
+                          suffixIcon: registerManager.isVisible == true
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          suffixChanged: () {
+                            registerManager.togglePassword2Visibility();
+                          },
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !registerManager.isVisible2,
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: registerManager.isAgree,
+                              onChanged: (value) {
+                                registerManager.toggleIsAgree(value!);
+                              },
+                            ),
+                            SizedBox(
+                              width: AppSize.widthSize(240, context),
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .agree_terms_conditions,
+                                style: AppStyles.styleRegular(12, context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: SizedBox(
+                                height: AppSize.heightSize(50, context))),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text(
+                            AppLocalizations.of(context)!.sign_up,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.have_account,
+                              style: AppStyles.styleMedium(13, context),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                NavigationService.goBack();
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.login,
+                                style:
+                                    AppStyles.styleMedium(13, context).copyWith(
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: AppSize.heightSize(50, context))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

@@ -25,6 +25,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
   //
   String accountType = AppStrings.user;
   bool isVisible = false;
+  bool isVisible2 = false;
+  bool isAgree = false;
 
   // pick Image
   List<File> selectedImages = [];
@@ -60,6 +62,16 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
   void togglePasswordVisibility() {
     isVisible = !isVisible;
+    notifyListeners();
+  }
+
+  void togglePassword2Visibility() {
+    isVisible2 = !isVisible2;
+    notifyListeners();
+  }
+
+  void toggleIsAgree(bool value) {
+    isAgree = value;
     notifyListeners();
   }
 

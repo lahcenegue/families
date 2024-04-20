@@ -29,11 +29,11 @@ class AppRoutes {
       accountTypeScreen: (BuildContext context) => const AccountType(),
       onBordingScreen: (BuildContext context) => const OnBordingScreen(),
       loginScreen: (BuildContext context) => const LoginScreen(),
+      registerScreen: (BuildContext context) => const RegisterScreen(),
 
       ///////////
       ///
       // selectLangScreen: (BuildContext context) => const SelectLanguage(),
-      // registerScreen: (BuildContext context) => const RegisterScreen(),
       // registerFamilyScreen: (BuildContext context) =>
       //     const RegisterFamilyScreen(),
       // userHomeScreen: (BuildContext context) => const UserHomeScreen(),

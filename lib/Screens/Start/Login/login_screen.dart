@@ -65,8 +65,8 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: AppSize.heightSize(30, context)),
                         //Phone
                         CustomTextField(
-                          title: AppLocalizations.of(context)!.email,
-                          hintText: 'example@gmail.com',
+                          title: AppLocalizations.of(context)!.phone,
+                          hintText: '050 505 505',
                           onChanged: (value) {},
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                             }
                             return null;
                           },
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.phone,
                         ),
                         SizedBox(height: AppSize.heightSize(20, context)),
 
@@ -123,7 +123,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Expanded(
                             child: SizedBox(
-                                height: AppSize.heightSize(20, context))),
+                                height: AppSize.heightSize(50, context))),
                         ElevatedButton(
                           onPressed: () {
                             if (loginManager.accountType == AppStrings.user) {
@@ -158,6 +158,7 @@ class LoginScreen extends StatelessWidget {
                             )
                           ],
                         ),
+                        SizedBox(height: AppSize.heightSize(50, context))
                       ],
                     ),
                   ),
