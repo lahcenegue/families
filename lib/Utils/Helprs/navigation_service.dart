@@ -4,6 +4,7 @@ import 'package:families/Screens/Start/Register/family_register_screen.dart';
 import 'package:families/Screens/Start/Register/register_screen.dart';
 import 'package:families/Screens/Start/account_type/account_type.dart';
 import 'package:families/Screens/Start/onbording/onbording_screen.dart';
+import 'package:families/Screens/Start/otp_screen.dart';
 import 'package:families/Screens/User/orders_details.dart';
 import 'package:families/Screens/User/product_details.dart';
 import 'package:families/Screens/User/user_home_screen.dart';
@@ -12,12 +13,15 @@ import '../../../Screens/Start/splash/splash.dart';
 
 class AppRoutes {
   static const String splashScreen = '/';
-  static const String selectLangScreen = '/selectLang';
-  static const String onBordingScreen = '/onBordingScreen';
   static const String accountTypeScreen = '/accountType';
+  static const String onBordingScreen = '/onBordingScreen';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
   static const String registerFamilyScreen = '/registerFamilyScreen';
+  static const String otpScreen = '/otpScreen';
+
+  //
+
   static const String userHomeScreen = '/userHomeScreen';
   static const String familyHomeScreen = '/familyHomeScreen';
   static const String productDetails = '/productsDetails';
@@ -30,6 +34,7 @@ class AppRoutes {
       onBordingScreen: (BuildContext context) => const OnBordingScreen(),
       loginScreen: (BuildContext context) => const LoginScreen(),
       registerScreen: (BuildContext context) => const RegisterScreen(),
+      otpScreen: (BuildContext context) => const OtpScreen(),
 
       ///////////
       ///

@@ -27,6 +27,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   bool isVisible = false;
   bool isVisible2 = false;
   bool isAgree = false;
+  int _seconds = 60;
 
   // pick Image
   List<File> selectedImages = [];
@@ -49,6 +50,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     notifyListeners();
   }
+
+  int get seconds => _seconds;
 
   void toggleAccountType(String type) {
     accountType = type;
@@ -113,6 +116,18 @@ class LoginAndRegisterManager extends ChangeNotifier {
   //     //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
   //   }
   // }
+
+  void startTimer() {
+    _seconds = 60;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_seconds > 0) {
+        _seconds--;
+        notifyListeners();
+      } else {
+        _timer.cancel(); // Stop the timer when it reaches 0 seconds
+      }
+    });
+  }
 
   bool validateAndSave(String formKey) {
     final FormState? form = formKey == 'register'

@@ -146,7 +146,7 @@ class LoginScreen extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 NavigationService.navigateTo(
-                                    AppRoutes.registerScreen);
+                                    AppRoutes.otpScreen);
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.sign_up,
