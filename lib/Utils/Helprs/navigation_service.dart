@@ -10,6 +10,8 @@ import 'package:families/Screens/User/product_details.dart';
 import 'package:families/Screens/User/user_home_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../Screens/Start/splash/splash.dart';
+import '../../Screens/Start/congratulations_screen.dart';
+import '../../Screens/Start/reste_password.dart';
 
 class AppRoutes {
   static const String splashScreen = '/';
@@ -19,6 +21,8 @@ class AppRoutes {
   static const String registerScreen = '/registerScreen';
   static const String registerFamilyScreen = '/registerFamilyScreen';
   static const String otpScreen = '/otpScreen';
+  static const String resetPasswordScreen = '/resetPasswordScreen';
+  static const String congratulationsScreen = '/congratulationsScreen';
 
   //
 
@@ -35,6 +39,10 @@ class AppRoutes {
       loginScreen: (BuildContext context) => const LoginScreen(),
       registerScreen: (BuildContext context) => const RegisterScreen(),
       otpScreen: (BuildContext context) => const OtpScreen(),
+      resetPasswordScreen: (BuildContext context) =>
+          const ResetPasswordScreen(),
+      congratulationsScreen: (BuildContext context) =>
+          const CongratulationsScreen(),
 
       ///////////
       ///
