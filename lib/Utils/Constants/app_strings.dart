@@ -1,6 +1,6 @@
 class AppStrings {
-  static const String user = 'user';
-  static const String family = 'family';
+  static const String user = 'Customer';
+  static const String family = 'Store';
 }
 
 class PrefKeys {
@@ -11,4 +11,8 @@ class PrefKeys {
   static String onBording = 'onBording';
 
   //User data keys
+  static String phoneNumber = 'phoneNumber';
+  static String userName = 'userName';
+  static String email = 'email';
+  static String token = 'token';
 }

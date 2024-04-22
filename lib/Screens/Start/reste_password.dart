@@ -54,7 +54,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           ? Icons.visibility_off
                           : Icons.visibility,
                       suffixChanged: () {
-                        resteManager.togglePasswordVisibility();
+                        resteManager.toggleVisibility(fieldIndex: 1);
                       },
                       keyboardType: TextInputType.visiblePassword,
                       hintText: AppLocalizations.of(context)!.password,
@@ -79,7 +79,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           ? Icons.visibility_off
                           : Icons.visibility,
                       suffixChanged: () {
-                        resteManager.togglePassword2Visibility();
+                        resteManager.toggleVisibility(fieldIndex: 2);
                       },
                       keyboardType: TextInputType.visiblePassword,
                       hintText: AppLocalizations.of(context)!.password,

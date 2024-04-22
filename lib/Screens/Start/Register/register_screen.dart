@@ -98,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                               ? Icons.visibility_off
                               : Icons.visibility,
                           suffixChanged: () {
-                            registerManager.togglePasswordVisibility();
+                            registerManager.toggleVisibility(fieldIndex: 1);
                           },
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: !registerManager.isVisible,
@@ -119,11 +119,11 @@ class RegisterScreen extends StatelessWidget {
                             }
                             return null;
                           },
-                          suffixIcon: registerManager.isVisible == true
+                          suffixIcon: registerManager.isVisible2 == true
                               ? Icons.visibility_off
                               : Icons.visibility,
                           suffixChanged: () {
-                            registerManager.togglePassword2Visibility();
+                            registerManager.toggleVisibility(fieldIndex: 2);
                           },
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: !registerManager.isVisible2,

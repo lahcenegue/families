@@ -43,13 +43,14 @@ class AppRoutes {
           const ResetPasswordScreen(),
       congratulationsScreen: (BuildContext context) =>
           const CongratulationsScreen(),
+      userHomeScreen: (BuildContext context) => const UserHomeScreen(),
 
       ///////////
       ///
       // selectLangScreen: (BuildContext context) => const SelectLanguage(),
       // registerFamilyScreen: (BuildContext context) =>
       //     const RegisterFamilyScreen(),
-      // userHomeScreen: (BuildContext context) => const UserHomeScreen(),
+      //
       // familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
       // productDetails: (BuildContext context) => const ProductDetails(),
       // ordersDetails: (BuildContext context) => const OrdersDetails(),

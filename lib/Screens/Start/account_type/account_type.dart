@@ -50,7 +50,7 @@ class AccountType extends StatelessWidget {
                 SizedBox(height: AppSize.heightSize(70, context)),
                 ElevatedButton(
                   onPressed: () {
-                    loginManager.toggleAccountType(AppStrings.family);
+                    loginManager.toggleAccountType(AppStrings.user);
                   },
                   child: Text(
                     AppLocalizations.of(context)!.login_user,
@@ -67,7 +67,7 @@ class AccountType extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    loginManager.toggleAccountType(AppStrings.user);
+                    loginManager.toggleAccountType(AppStrings.family);
                   },
                   child: Text(
                     AppLocalizations.of(context)!.logn_family,

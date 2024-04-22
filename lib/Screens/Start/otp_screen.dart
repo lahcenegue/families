@@ -29,16 +29,13 @@ class OtpScreen extends StatelessWidget {
                     style: AppStyles.styleBold(24, context),
                   ),
                   Text(
-                    '${AppLocalizations.of(context)!.sent_code_to} ${otpManager.phoneController.text}',
+                    '${AppLocalizations.of(context)!.sent_code_to} ${otpManager.otpRequestModel.phoneNumber}',
                     style: AppStyles.styleRegular(14, context),
                   ),
                   SizedBox(height: AppSize.widthSize(50, context)),
 
                   Pinput(
                     length: 6,
-                    onChanged: (value) {
-                      //otpManager.getOtp(int.parse(value));
-                    },
                     onCompleted: (value) async {
                       //otpManager.getOtp(int.parse(value));
 
@@ -97,17 +94,8 @@ class OtpScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Visibility(
-                visible: otpManager.isApiCallProcess,
-                child: Stack(
-                  children: [
-                    ModalBarrier(
-                      color: Colors.white.withOpacity(0.6),
-                      dismissible: true,
-                    ),
-                    const CustomLoadingIndicator(),
-                  ],
-                ),
+              CustomLoadingIndicator(
+                isVisible: otpManager.isApiCallProcess,
               ),
             ],
           ),
