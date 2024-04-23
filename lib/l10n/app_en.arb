@@ -35,5 +35,14 @@
   "skip": "Skip",
   "user": "User",
   "verified_successfully": "Verified successfully",
-  "verify": "Verification ..."
+  "verify": "Verification ...",
+  "missing_data": "Missing request data",
+  "record_conflict": "Record doesn't exist/Already exists",
+  "incomplete_data": "Incomplete request data",
+  "wrong_credentials": "Wrong credentials",
+  "token_expired": "Token expired",
+  "unauthenticated": "Unauthenticated",
+  "otp_delay": "Must wait 3 minutes before resending OTP",
+  "wrong_format": "Wrong image format",
+  "upload_error": "Error uploading image"
 }

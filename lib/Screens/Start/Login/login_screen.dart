@@ -1,6 +1,5 @@
 import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Providers/login_register_manager.dart';
@@ -12,6 +11,8 @@ import '../../../Utils/Widgets/custom_text_field.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../Utils/Widgets/error_show.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -142,8 +143,9 @@ class LoginScreen extends StatelessWidget {
                                       height: AppSize.heightSize(50, context))),
                               ElevatedButton(
                                 onPressed: () async {
-                                  await loginManager.login().then((value) =>
-                                      _handleLoginResult(context, value));
+                                  await loginManager.login().then((value) {
+                                    errorMessagesShow(context, value);
+                                  });
                                 },
                                 child:
                                     Text(AppLocalizations.of(context)!.login),
@@ -188,14 +190,6 @@ class LoginScreen extends StatelessWidget {
         );
       },
     );
-  }
-
-  void _handleLoginResult(BuildContext context, String? result) {
-    if (result == 'error') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.login_failed)),
-      );
-    }
   }
 
   void _forgotPasswordShow(

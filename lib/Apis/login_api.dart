@@ -20,16 +20,15 @@ Future<LoginResponseModel> loginApi({
       },
       body: convert.jsonEncode(loginRequestModel.toJson()),
     );
+    print(response.body);
+    print(response.statusCode);
 
-    if (response.statusCode == 200) {
-      var body = convert.json.decode(response.body);
+    var body = convert.json.decode(response.body);
 
-      loginResponse = LoginResponseModel.fromJson(body);
+    loginResponse = LoginResponseModel.fromJson(body);
 
-      return loginResponse;
-    }
+    return loginResponse;
   } catch (e) {
     throw Exception(e);
   }
-  return loginResponse;
 }

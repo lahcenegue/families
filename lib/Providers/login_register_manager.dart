@@ -15,6 +15,7 @@ import '../Apis/base_api.dart';
 import '../Models/base_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/app_strings.dart';
+import '../Utils/Widgets/error_messages.dart';
 
 enum AccountType { user, admin }
 
@@ -69,7 +70,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   int get seconds => _seconds;
 
   //Login function
-  Future<String?> login() async {
+  Future<int?> login() async {
     if (!validateAndSave(ApiMethods.login)) return null;
     isApiCallProcess = true;
     notifyListeners();
@@ -87,20 +88,16 @@ class LoginAndRegisterManager extends ChangeNotifier {
         notifyListeners();
         await saveUserData(value);
         NavigationService.navigateTo(AppRoutes.userHomeScreen);
-        return 'succes';
+        return null;
       } else {
         isApiCallProcess = false;
         notifyListeners();
-        return 'error';
+        return value.errorCode;
       }
     } catch (e) {
       isApiCallProcess = false;
       notifyListeners();
-    } finally {
-      if (!isApiCallProcess) {
-        isApiCallProcess = false;
-        notifyListeners();
-      }
+      return -1;
     }
   }
 
@@ -216,6 +213,10 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
     return false;
   }
+
+  //////
+  ///
+  ///
 }
 
   // Future<void> pickImageFromCamera() async {

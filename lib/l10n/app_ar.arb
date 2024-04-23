@@ -35,5 +35,14 @@
   "skip": "تخطي",
   "user": "عميل",
   "verified_successfully": "تم التحقق بنجاح",
-  "verify": "التحقق ..."
+  "verify": "التحقق ...",
+  "missing_data": "بيانات الطلب مفقودة",
+  "record_conflict": "السجل غير موجود/موجود بالفعل",
+  "incomplete_data": "بيانات الطلب غير كاملة",
+  "wrong_credentials": "بيانات الاعتماد خاطئة",
+  "token_expired": "انتهت صلاحية الرمز",
+  "unauthenticated": "غير مصدق",
+  "otp_delay": "يجب الانتظار 3 دقائق قبل إعادة إرسال كلمة المرور لمرة واحدة",
+  "wrong_format": "تنسيق الصورة خاطئ",
+  "upload_error": "خطأ في تحميل الصورة"
 }
