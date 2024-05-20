@@ -6,6 +6,7 @@ import 'app_colors.dart';
 abstract class AppStyles {
   static TextStyle styleBold(double fontSize, context) {
     return TextStyle(
+      color: Theme.of(context).primaryColor,
       fontFamily: 'UniqueBold',
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w700,
@@ -23,6 +24,7 @@ abstract class AppStyles {
 
   static TextStyle styleRegular(double fontSize, context) {
     return TextStyle(
+      color: Theme.of(context).primaryColor,
       fontFamily: 'UniqueLight',
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w400,
@@ -31,6 +33,7 @@ abstract class AppStyles {
 
   static TextStyle styleMedium(double fontSize, context) {
     return TextStyle(
+      color: Theme.of(context).primaryColor,
       fontFamily: 'UniqueLight',
       fontSize: AppSize.fontSize(fontSize, context),
       fontWeight: FontWeight.w500,

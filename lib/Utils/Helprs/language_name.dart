@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-
-languageName(String val) {
+String languageName(String val) {
   switch (val) {
     case 'en':
-      return const Text('English');
+      return 'English';
     case 'ar':
-      return const Text('العربية');
+      return 'العربية';
+    default:
+      return 'English';
   }
 }

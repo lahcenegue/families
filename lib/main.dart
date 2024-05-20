@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:families/Providers/login_register_manager.dart';
+import 'package:families/Providers/user_manager_provider.dart';
 import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
         ChangeNotifierProvider(create: (_) => LoginAndRegisterManager()),
+        ChangeNotifierProvider(create: (_) => UserManagerProvider()),
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, appSettings, _) {
@@ -37,7 +39,8 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             locale: appSettings.locale,
-            theme: theme,
+            theme:
+                appSettings.isDark ? AppThemes.darkTheme : AppThemes.lightTheme,
             routes: AppRoutes.define(),
           );
         },

@@ -1,17 +1,16 @@
-import 'package:families/Screens/Family/family_home_screen.dart';
-import 'package:families/Screens/Start/Login/login_screen.dart';
-import 'package:families/Screens/Start/Register/family_register_screen.dart';
-import 'package:families/Screens/Start/Register/register_screen.dart';
-import 'package:families/Screens/Start/account_type/account_type.dart';
-import 'package:families/Screens/Start/onbording/onbording_screen.dart';
-import 'package:families/Screens/Start/otp_screen.dart';
-import 'package:families/Screens/User/orders_details.dart';
-import 'package:families/Screens/User/product_details.dart';
-import 'package:families/Screens/User/user_home_screen.dart';
 import 'package:flutter/material.dart';
-import '../../../Screens/Start/splash/splash.dart';
-import '../../Screens/Start/congratulations_screen.dart';
-import '../../Screens/Start/reste_password.dart';
+
+import '../../Screens/Start/Splash/splash.dart';
+import '../../Screens/Start/Login/login_screen.dart';
+import '../../Screens/Start/Otp/otp_screen.dart';
+import '../../Screens/Start/Register/register_screen.dart';
+import '../../Screens/Start/Account_type/account_type.dart';
+import '../../Screens/Start/Congratulations/congratulations_screen.dart';
+import '../../Screens/Start/Onbording/onbording_screen.dart';
+import '../../Screens/Start/Reset_password/reset_password.dart';
+import '../../Screens/User/Screens/dishe_view.dart';
+import '../../Screens/User/Screens/store_view.dart';
+import '../../Screens/User/Screens/user_home_screen.dart';
 
 class AppRoutes {
   static const String splashScreen = '/';
@@ -19,17 +18,13 @@ class AppRoutes {
   static const String onBordingScreen = '/onBordingScreen';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
-  static const String registerFamilyScreen = '/registerFamilyScreen';
   static const String otpScreen = '/otpScreen';
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String congratulationsScreen = '/congratulationsScreen';
-
-  //
-
   static const String userHomeScreen = '/userHomeScreen';
+  static const String storeView = '/storeView';
+  static const String disheView = '/disheView';
   static const String familyHomeScreen = '/familyHomeScreen';
-  static const String productDetails = '/productsDetails';
-  static const String ordersDetails = '/ordersDetails';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -44,36 +39,40 @@ class AppRoutes {
       congratulationsScreen: (BuildContext context) =>
           const CongratulationsScreen(),
       userHomeScreen: (BuildContext context) => const UserHomeScreen(),
-
-      ///////////
-      ///
-      // selectLangScreen: (BuildContext context) => const SelectLanguage(),
-      // registerFamilyScreen: (BuildContext context) =>
-      //     const RegisterFamilyScreen(),
-      //
-      // familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
-      // productDetails: (BuildContext context) => const ProductDetails(),
-      // ordersDetails: (BuildContext context) => const OrdersDetails(),
+      storeView: (BuildContext context) => const StoreView(),
+      disheView: (BuildContext context) => const DisheView(),
     };
   }
 }
-
-/////////
 
 class NavigationService {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
   static Future<dynamic> navigateTo(String routeName) {
-    return navigatorKey.currentState!.pushNamed(routeName);
+    try {
+      return navigatorKey.currentState!.pushNamed(routeName);
+    } catch (e) {
+      print("Navigation error: $e");
+      return Future.value(null);
+    }
   }
 
   static Future<dynamic> navigateToAndReplace(String routeName) {
-    return navigatorKey.currentState!
-        .pushNamedAndRemoveUntil(routeName, (route) => false);
+    try {
+      return navigatorKey.currentState!
+          .pushNamedAndRemoveUntil(routeName, (route) => false);
+    } catch (e) {
+      print("Navigation error: $e");
+      return Future.value(null);
+    }
   }
 
   static void goBack() {
-    navigatorKey.currentState!.pop();
+    if (navigatorKey.currentState!.canPop()) {
+      navigatorKey.currentState!.pop();
+    } else {
+      print("Cannot go back");
+    }
   }
 }

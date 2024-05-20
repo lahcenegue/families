@@ -19,12 +19,14 @@ class LoginUserData {
   String? userName;
   String? email;
   String? token;
+  String? accountType;
 
   LoginUserData({
     this.token,
     this.userName,
     this.email,
     this.phoneNumber,
+    this.accountType,
   });
 
   factory LoginUserData.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class LoginUserData {
       userName: json['UserName'].toString(),
       email: json['Email'].toString(),
       token: json['Token'].toString(),
+      accountType: json['AccountType'].toString(),
     );
   }
 }

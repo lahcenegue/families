@@ -9,10 +9,10 @@ class PrefKeys {
   static String isDark = 'isDark';
   static String autoDarkMode = 'autoDark';
   static String onBording = 'onBording';
+  static String accountType = 'accountType';
 
   //User data keys
   static String phoneNumber = 'phoneNumber';
   static String userName = 'userName';
-  static String email = 'email';
   static String token = 'token';
 }

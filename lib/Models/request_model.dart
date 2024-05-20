@@ -8,6 +8,9 @@ class RequestModel {
   String? storeName;
   String? location;
   String? storeImage;
+  String? otpToken;
+  int? otp;
+  String? resetToken;
 
   RequestModel({
     this.method,
@@ -19,6 +22,9 @@ class RequestModel {
     this.storeName,
     this.location,
     this.storeImage,
+    this.otpToken,
+    this.otp,
+    this.resetToken,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,6 +38,9 @@ class RequestModel {
       if (userName != null) 'UserName': userName!.trim(),
       if (location != null) 'Location': location!.trim(),
       if (storeImage != null) 'Image': storeImage!.trim(),
+      if (otpToken != null) 'OtpToken': otpToken!.trim(),
+      if (otp != null) 'Otp': otp!,
+      if (resetToken != null) 'ResetToken': resetToken!.trim(),
 
       // if (purchaseId != null) 'purchase_id': purchaseId,
       // if (dueDate != null) 'due_date': dueDate!.trim(),
@@ -42,7 +51,6 @@ class RequestModel {
       // if (storeId != null) 'store_id': storeId,
       // if (startDate != null) 'starting_date': startDate!.trim(),
       // if (amount != null) 'amount': amount!,
-      // if (otp != null) 'otp': otp!,
     };
   }
 }

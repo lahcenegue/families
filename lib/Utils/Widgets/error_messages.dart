@@ -52,6 +52,11 @@ String errorMessages(BuildContext context, int errorCode) {
         errorMessage = AppLocalizations.of(context)!.upload_error;
       }
       break;
+    case 10:
+      {
+        errorMessage = AppLocalizations.of(context)!.agree_terms_conditions;
+      }
+      break;
 
     default:
       {

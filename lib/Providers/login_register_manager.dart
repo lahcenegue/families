@@ -3,19 +3,22 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:families/Apis/login_api.dart';
-import 'package:families/Models/login_response_model.dart';
-import 'package:families/Utils/Constants/api_methods.dart';
-import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apis/base_api.dart';
+import '../Apis/get_rest_token_api.dart';
+import '../Apis/login_api.dart';
+import '../Apis/register_api.dart';
 import '../Models/base_model.dart';
+import '../Models/get_reset_token_model.dart';
+import '../Models/login_response_model.dart';
+import '../Models/register_model.dart';
 import '../Models/request_model.dart';
+import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
-import '../Utils/Widgets/error_messages.dart';
+import '../Utils/Helprs/navigation_service.dart';
 
 enum AccountType { user, admin }
 
@@ -34,6 +37,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
   String accountType = AppStrings.user;
   OTPType otpType = OTPType.confirm;
+  String? otpToken;
   int _seconds = 60;
 
   // pick Image
@@ -46,7 +50,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
   final GlobalKey<FormState> resetFormKey = GlobalKey<FormState>();
 
   RequestModel loginRequestModel = RequestModel();
+  RequestModel registerRequestModel = RequestModel();
   RequestModel otpRequestModel = RequestModel();
+  RequestModel resetRequestModel = RequestModel();
 
   //
 
@@ -56,24 +62,22 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
   @override
   void dispose() {
-    if (_timer?.isActive ?? false) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
     super.dispose();
   }
+
+  int get seconds => _seconds;
+  bool get isPrefsInitialized => _prefs != null;
 
   Future<void> _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
     notifyListeners();
   }
 
-  int get seconds => _seconds;
-
   //Login function
   Future<int?> login() async {
-    if (!validateAndSave(ApiMethods.login)) return null;
-    isApiCallProcess = true;
-    notifyListeners();
+    if (!validateAndSave(loginFormKey)) return null;
+    await _setApiCallProcess(true);
 
     try {
       loginRequestModel.method = ApiMethods.login;
@@ -83,75 +87,198 @@ class LoginAndRegisterManager extends ChangeNotifier {
           await loginApi(loginRequestModel: loginRequestModel);
 
       if (value.status == 'success') {
-        isApiCallProcess = false;
-        loginRequestModel = RequestModel();
-        notifyListeners();
-        await saveUserData(value);
-        NavigationService.navigateTo(AppRoutes.userHomeScreen);
+        await _handleSuccessfulLogin(value);
         return null;
       } else {
-        isApiCallProcess = false;
-        notifyListeners();
         return value.errorCode;
       }
     } catch (e) {
-      isApiCallProcess = false;
-      notifyListeners();
       return -1;
+    } finally {
+      await _setApiCallProcess(false);
+    }
+  }
+
+  Future<int?> register() async {
+    if (!isAgree) return 10;
+    if (!validateAndSave(registerFormKey)) return null;
+
+    print('register function');
+    await _setApiCallProcess(true);
+
+    try {
+      registerRequestModel.method = ApiMethods.register;
+      registerRequestModel.accountType = accountType;
+      registerRequestModel.email = 'test@test.com'; //TODO delete
+
+      RegisterResponseModel value =
+          await registerApi(registerRequestModel: registerRequestModel);
+
+      if (value.status == 'success') {
+        otpToken = value.userData!.otpToken;
+        NavigationService.navigateTo(AppRoutes.otpScreen);
+        startTimer();
+        await sendOtpForCreateAccount();
+        return null;
+      } else {
+        return value.errorCode;
+      }
+    } catch (e) {
+      return -1;
+    } finally {
+      await _setApiCallProcess(false);
+    }
+  }
+
+  Future<void> lougOut() async {
+    if (!isPrefsInitialized) {
+      await _initPrefs();
+    }
+
+    if (_prefs != null) {
+      await _prefs!.remove(PrefKeys.accountType);
+      await _prefs!.remove(PrefKeys.token);
+      await _prefs!.remove(PrefKeys.userName);
+      await _prefs!.remove(PrefKeys.phoneNumber);
+      NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+    } else {
+      print('Error: SharedPreferences _prefs is null.');
+    }
+  }
+
+  // send otp for create account
+  Future<int?> sendOtpForCreateAccount() async {
+    print('send otp code ======');
+    otpType = OTPType.confirm;
+    await _setApiCallProcess(true);
+
+    try {
+      otpRequestModel.method = ApiMethods.sedOtp;
+      otpRequestModel.otpToken = otpToken;
+
+      BaseModel value = await baseApi(requestModel: otpRequestModel);
+
+      if (value.status == 'success') {
+        otpRequestModel = RequestModel();
+        startTimer();
+        return null;
+      } else {
+        return value.errorCode;
+      }
+    } catch (e) {
+      return -1;
+    } finally {
+      await _setApiCallProcess(false);
+    }
+  }
+
+  // Confirem OTP code
+  Future<int?> confirmOTP() async {
+    await _setApiCallProcess(true);
+
+    try {
+      otpRequestModel.method = ApiMethods.confirmOtp;
+      otpRequestModel.otpToken = otpToken!;
+
+      LoginResponseModel value =
+          await loginApi(loginRequestModel: otpRequestModel);
+
+      if (value.status == 'success') {
+        await _handleSuccessfulLogin(value);
+        NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
+        return null;
+      } else {
+        return value.errorCode;
+      }
+    } catch (e) {
+      return -1;
+    } finally {
+      await _setApiCallProcess(false);
     }
   }
 
   //Send OTP for reset password
   Future<void> sendOTPForResetPassword() async {
-    isApiCallProcess = true;
+    await _setApiCallProcess(true);
     otpType = OTPType.reset;
-    notifyListeners();
+
     try {
       otpRequestModel.method = ApiMethods.restPasswordOtp;
       otpRequestModel.accountType = accountType;
-      BaseModel value = await baseApi(requestModel: otpRequestModel);
-      if (value.status == 'success') {
-        otpRequestModel = RequestModel();
 
-        isApiCallProcess = false;
-        notifyListeners();
+      BaseModel value = await baseApi(requestModel: otpRequestModel);
+
+      if (value.status == 'success') {
         NavigationService.navigateTo(AppRoutes.otpScreen);
         startTimer();
-      } else {
-        isApiCallProcess = false;
-        notifyListeners();
       }
     } catch (e) {
-      isApiCallProcess = false;
-      notifyListeners();
+      // handle error
     } finally {
-      if (!isApiCallProcess) {
-        isApiCallProcess = false;
-        notifyListeners();
-      }
+      await _setApiCallProcess(false);
     }
   }
 
-  // Confirem OTP code
-  Future<void> confirmOTP() async {
-    isApiCallProcess = true;
-    notifyListeners();
+  //Send OTP for reset password
+  Future<void> getResetToken() async {
+    await _setApiCallProcess(true);
+
     try {
-      otpRequestModel.method = ApiMethods.confirmOtp;
-    } catch (e) {
-      isApiCallProcess = false;
-      notifyListeners();
-    } finally {
-      if (!isApiCallProcess) {
-        isApiCallProcess = false;
-        notifyListeners();
+      otpRequestModel.method = ApiMethods.getResetToken;
+      otpRequestModel.accountType = accountType;
+
+      ResetTokenResponseModel value =
+          await getResetTokenApi(requestModel: otpRequestModel);
+
+      if (value.status == 'success') {
+        otpRequestModel = RequestModel();
+        resetRequestModel.resetToken = value.data!.resetToken;
+        NavigationService.navigateTo(AppRoutes.resetPasswordScreen);
       }
+    } catch (e) {
+      // handle error
+    } finally {
+      await _setApiCallProcess(false);
+    }
+  }
+
+  //Reset password
+  Future<int?> resetPassword() async {
+    if (!validateAndSave(resetFormKey)) return null;
+    await _setApiCallProcess(true);
+
+    try {
+      resetRequestModel.method = ApiMethods.resetPassword;
+
+      LoginResponseModel value =
+          await loginApi(loginRequestModel: resetRequestModel);
+
+      if (value.status == 'success') {
+        resetRequestModel = RequestModel();
+        await _handleSuccessfulLogin(value);
+        if (value.userData!.accountType == AppStrings.user) {
+          await NavigationService.navigateToAndReplace(
+              AppRoutes.userHomeScreen);
+        } else {
+          await NavigationService.navigateToAndReplace(
+              AppRoutes.familyHomeScreen);
+        }
+        return null;
+      } else {
+        return value.errorCode;
+      }
+    } catch (e) {
+      return -1;
+    } finally {
+      await _setApiCallProcess(false);
     }
   }
 
   void toggleAccountType(String type) {
     accountType = type;
     notifyListeners();
+    _prefs!.setString(PrefKeys.accountType, type);
+
     if (_prefs!.getString(PrefKeys.onBording) == null) {
       NavigationService.navigateTo(AppRoutes.onBordingScreen);
     } else {
@@ -187,7 +314,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
   Future<void> saveUserData(dynamic value) async {
     await _prefs!.setString(PrefKeys.token, value.userData.token!);
     await _prefs!.setString(PrefKeys.userName, value.userData.userName!);
-    await _prefs!.setString(PrefKeys.email, value.userData.email!);
     await _prefs!.setString(PrefKeys.phoneNumber, value.userData.phoneNumber!);
   }
 
@@ -203,10 +329,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
     });
   }
 
-  bool validateAndSave(String formKey) {
-    final FormState? form = formKey == ApiMethods.register
-        ? registerFormKey.currentState
-        : loginFormKey.currentState;
+  bool validateAndSave(GlobalKey<FormState> formKey) {
+    final FormState? form = formKey.currentState;
+
     if (form != null && form.validate()) {
       form.save();
       return true;
@@ -214,36 +339,45 @@ class LoginAndRegisterManager extends ChangeNotifier {
     return false;
   }
 
-  //////
-  ///
-  ///
+  Future<void> _setApiCallProcess(bool value) async {
+    isApiCallProcess = value;
+    notifyListeners();
+  }
+
+  Future<void> _handleSuccessfulLogin(LoginResponseModel value) async {
+    isApiCallProcess = false;
+    loginRequestModel = RequestModel();
+    notifyListeners();
+    await saveUserData(value);
+    NavigationService.navigateTo(AppRoutes.userHomeScreen);
+  }
 }
 
-  // Future<void> pickImageFromCamera() async {
-  //   final ImagePicker picker = ImagePicker();
-  //   XFile? image = await picker.pickImage(source: ImageSource.camera);
+// Future<void> pickImageFromCamera() async {
+//   final ImagePicker picker = ImagePicker();
+//   XFile? image = await picker.pickImage(source: ImageSource.camera);
 
-  //   storeImage = File(image!.path);
-  //   Uint8List storeImagebytes = storeImage!.readAsBytesSync();
-  //   storeImageBase64 = base64Encode(storeImagebytes);
-  //   notifyListeners();
-  // }
+//   storeImage = File(image!.path);
+//   Uint8List storeImagebytes = storeImage!.readAsBytesSync();
+//   storeImageBase64 = base64Encode(storeImagebytes);
+//   notifyListeners();
+// }
 
-  // Future<void> uploadImages() async {
-  //   final pickedFile = await ImagePicker().pickMultiImage();
-  //   List<XFile> xfilePick = pickedFile;
+// Future<void> uploadImages() async {
+//   final pickedFile = await ImagePicker().pickMultiImage();
+//   List<XFile> xfilePick = pickedFile;
 
-  //   if (xfilePick.isNotEmpty) {
-  //     for (var i = 0; i < xfilePick.length; i++) {
-  //       selectedImages.add(File(xfilePick[i].path));
-  //     }
+//   if (xfilePick.isNotEmpty) {
+//     for (var i = 0; i < xfilePick.length; i++) {
+//       selectedImages.add(File(xfilePick[i].path));
+//     }
 
-  //     Uint8List imagebytes = selectedImages[mainImage].readAsBytesSync();
+//     Uint8List imagebytes = selectedImages[mainImage].readAsBytesSync();
 
-  //     mainImageBase64 = base64Encode(imagebytes);
-  //     // addAdsRequest.image = mainImageBase64;
-  //     notifyListeners();
-  //   } else {
-  //     //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
-  //   }
-  // }
+//     mainImageBase64 = base64Encode(imagebytes);
+//     // addAdsRequest.image = mainImageBase64;
+//     notifyListeners();
+//   } else {
+//     //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
+//   }
+// }

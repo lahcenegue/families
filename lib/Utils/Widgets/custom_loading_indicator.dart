@@ -14,7 +14,7 @@ class CustomLoadingIndicator extends StatelessWidget {
       child: Stack(
         children: [
           ModalBarrier(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withOpacity(0.4),
             dismissible: true,
           ),
           const Center(
