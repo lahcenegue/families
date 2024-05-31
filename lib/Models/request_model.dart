@@ -11,6 +11,9 @@ class RequestModel {
   String? otpToken;
   int? otp;
   String? resetToken;
+  String? query;
+  int? storeId;
+  String? token;
 
   RequestModel({
     this.method,
@@ -25,6 +28,9 @@ class RequestModel {
     this.otpToken,
     this.otp,
     this.resetToken,
+    this.query,
+    this.storeId,
+    this.token,
   });
 
   Map<String, dynamic> toJson() {
@@ -41,16 +47,9 @@ class RequestModel {
       if (otpToken != null) 'OtpToken': otpToken!.trim(),
       if (otp != null) 'Otp': otp!,
       if (resetToken != null) 'ResetToken': resetToken!.trim(),
-
-      // if (purchaseId != null) 'purchase_id': purchaseId,
-      // if (dueDate != null) 'due_date': dueDate!.trim(),
-      // if (itemName != null) 'item_name': itemName!.trim(),
-      // if (itemPrice != null) 'item_price': itemPrice,
-      // if (customerId != null) 'customer_id': customerId,
-      // if (name != null) 'name': name!.trim(),
-      // if (storeId != null) 'store_id': storeId,
-      // if (startDate != null) 'starting_date': startDate!.trim(),
-      // if (amount != null) 'amount': amount!,
+      if (query != null) 'query': query!.trim(),
+      if (storeId != null) 'StoreId': storeId!,
+      if (token != null) 'Token': token!.trim(),
     };
   }
 }

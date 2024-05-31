@@ -10,6 +10,7 @@ class PrefKeys {
   static String autoDarkMode = 'autoDark';
   static String onBording = 'onBording';
   static String accountType = 'accountType';
+  static String searchHistory = 'searchHistory';
 
   //User data keys
   static String phoneNumber = 'phoneNumber';

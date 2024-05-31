@@ -1,13 +1,18 @@
-import 'package:families/Providers/app_settings_provider.dart';
-import 'package:families/Utils/Constants/app_images.dart';
-import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../Providers/app_settings_provider.dart';
+import '../../../Providers/user_manager_provider.dart';
 import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/custom_loading_indicator.dart';
+import '../../../Utils/Widgets/error_desplay.dart';
 import 'all_families_store.dart';
 import 'my_account_screen.dart';
 import 'user_main_screen.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserHomeScreen extends StatelessWidget {
@@ -15,13 +20,51 @@ class UserHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppSettingsProvider>(
-      builder: (context, appSettings, _) {
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          bottomNavigationBar: _buildBottomNavigationBar(context, appSettings),
-          body: Center(child: _getPage(appSettings.pageIndex)),
-        );
+    return Consumer2<AppSettingsProvider, UserManagerProvider>(
+      builder: (context, appSettings, userManager, _) {
+        if (userManager.isApiCallProcess) {
+          return Scaffold(
+            body: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.widthSize(30, context)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const LinearProgressIndicator(),
+                  SizedBox(height: AppSize.heightSize(20, context)),
+                  Text(
+                    'جارٍ تحميل البيانات، يرجى الانتظار...',
+                    style: AppStyles.styleMedium(14, context),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (userManager.isDataInitialized) {
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            bottomNavigationBar:
+                _buildBottomNavigationBar(context, appSettings),
+            body: Stack(
+              children: [
+                Center(child: _getPage(appSettings.pageIndex)),
+                if (userManager.isLoading)
+                  const CustomLoadingIndicator(isVisible: true),
+                if (userManager.errorMessage != null)
+                  ErrorDisplay(errorMessage: userManager.errorMessage),
+              ],
+            ),
+          );
+        } else {
+          return Scaffold(
+            body: Center(
+              child: Text(
+                'Error loading data',
+                style: AppStyles.styleMedium(14, context),
+              ),
+            ),
+          );
+        }
       },
     );
   }

@@ -11,6 +11,7 @@ import '../../Screens/Start/Reset_password/reset_password.dart';
 import '../../Screens/User/Screens/dishe_view.dart';
 import '../../Screens/User/Screens/store_view.dart';
 import '../../Screens/User/Screens/user_home_screen.dart';
+import '../../Screens/User/Widgets/custom_search_page.dart';
 
 class AppRoutes {
   static const String splashScreen = '/';
@@ -25,6 +26,7 @@ class AppRoutes {
   static const String storeView = '/storeView';
   static const String disheView = '/disheView';
   static const String familyHomeScreen = '/familyHomeScreen';
+  static const String searchScreen = '/search';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -41,6 +43,7 @@ class AppRoutes {
       userHomeScreen: (BuildContext context) => const UserHomeScreen(),
       storeView: (BuildContext context) => const StoreView(),
       disheView: (BuildContext context) => const DisheView(),
+      searchScreen: (BuildContext context) => const CustomSearchPage(),
     };
   }
 }

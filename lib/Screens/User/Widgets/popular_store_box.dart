@@ -15,59 +15,64 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PopularStoreBox extends StatelessWidget {
   final StoreItemViewModel store;
+  final Function() addToFavorite;
   const PopularStoreBox({
     super.key,
     required this.store,
+    required this.addToFavorite,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(AppSize.widthSize(20, context)),
-                topRight: Radius.circular(AppSize.widthSize(20, context)),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: '${AppLinks.url}${store.storeImage}',
-                width: AppSize.widthSize(230, context),
-                height: AppSize.heightSize(120, context),
-                fit: BoxFit.fill,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
+    return Consumer<UserManagerProvider>(builder: (context, userManager, _) {
+      return Stack(
+        children: [
+          Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(AppSize.widthSize(20, context)),
+                  topRight: Radius.circular(AppSize.widthSize(20, context)),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                child: CachedNetworkImage(
+                  imageUrl: '${AppLinks.url}${store.storeImage}',
+                  width: AppSize.widthSize(230, context),
+                  height: AppSize.heightSize(120, context),
+                  fit: BoxFit.fill,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
-            ),
-            SizedBox(
-              height: AppSize.heightSize(50, context),
-            ),
-          ],
-        ),
-        Positioned(
-          top: 8,
-          child: _buildRatingAndFavorite(context),
-        ),
-        Positioned(
-          bottom: 0,
-          child: _buildBottomPanel(context),
-        ),
-      ],
-    );
+              SizedBox(
+                height: AppSize.heightSize(50, context),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 8,
+            child: _buildRatingAndFavorite(context, userManager),
+          ),
+          Positioned(
+            bottom: 0,
+            child: _buildBottomPanel(context),
+          ),
+        ],
+      );
+    });
   }
 
-  Widget _buildRatingAndFavorite(BuildContext context) {
+  Widget _buildRatingAndFavorite(
+      BuildContext context, UserManagerProvider userManager) {
     return Container(
       width: AppSize.widthSize(230, context),
       padding: EdgeInsets.symmetric(horizontal: AppSize.widthSize(8, context)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildRatingBox(context, store.storeRating),
-          _buildFavoriteIcon(context),
+          _buildRatingBox(context, store.storeRating!),
+          _buildFavoriteIcon(context, userManager),
         ],
       ),
     );
@@ -94,7 +99,8 @@ class PopularStoreBox extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoriteIcon(BuildContext context) {
+  Widget _buildFavoriteIcon(
+      BuildContext context, UserManagerProvider userManager) {
     return Container(
       height: AppSize.heightSize(30, context),
       decoration: const BoxDecoration(
@@ -102,9 +108,16 @@ class PopularStoreBox extends StatelessWidget {
         color: Colors.white,
       ),
       child: IconButton(
-        icon: const Icon(Icons.favorite_border),
-        color: Colors.black,
-        onPressed: () {},
+        icon: store.favorite == null || store.favorite!
+            ? const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              )
+            : const Icon(
+                Icons.favorite_border,
+                color: Colors.black,
+              ),
+        onPressed: addToFavorite,
       ),
     );
   }
@@ -124,11 +137,11 @@ class PopularStoreBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            store.storeName,
+            store.storeName!,
             style: AppStyles.styleBold(14, context),
           ),
           Text(
-            store.dishes.map((d) => d.disheName).join(', '),
+            store.dishs.map((d) => d.disheName).join(', '),
             style: AppStyles.styleRegular(10, context),
             overflow: TextOverflow.ellipsis,
           ),
@@ -139,7 +152,7 @@ class PopularStoreBox extends StatelessWidget {
                 color: AppColors.primaryColor,
               ),
               Expanded(
-                child: Text(store.storeLocation,
+                child: Text(store.storeLocation!,
                     style: AppStyles.styleRegular(10, context)),
               ),
               SizedBox(

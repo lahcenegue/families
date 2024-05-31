@@ -11,18 +11,22 @@ class CustomLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Visibility(
       visible: isVisible,
-      child: Stack(
-        children: [
-          ModalBarrier(
-            color: Colors.black.withOpacity(0.4),
-            dismissible: true,
-          ),
-          const Center(
-            child: CircularProgressIndicator(
-              color: Colors.white,
+      child: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          children: [
+            ModalBarrier(
+              color: Colors.black.withOpacity(0.4),
+              dismissible: true,
             ),
-          )
-        ],
+            const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

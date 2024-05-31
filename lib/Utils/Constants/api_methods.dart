@@ -10,5 +10,14 @@ class ApiMethods {
 
   static const String getBannerMethod = 'retrieve_banners';
   static const String getPopularFamilies = 'retrieve_popular_stores';
-  static const String getAllFamilies = 'retrieve_all_stores';
+  static const String getAllFamilies =
+      'retrieve_all_stores_with_favourite_stores';
+  static const String searchMethode = 'search_for_service';
+  static const String addToFavorite = 'add_to_favourite';
+
+// static const String = '';
+// static const String = '';
+// static const String = '';
+// static const String = '';
+// static const String = '';
 }

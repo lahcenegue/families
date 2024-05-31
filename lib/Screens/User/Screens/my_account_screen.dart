@@ -1,14 +1,13 @@
-import 'package:families/Providers/login_register_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../Providers/app_settings_provider.dart';
+import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Helprs/language_name.dart';
 
 class MyAccountScreen extends StatelessWidget {
   const MyAccountScreen({super.key});
@@ -92,8 +91,6 @@ class MyAccountScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildLanguageTile(context, appSettings),
-          _buildDivider(),
           _buildDarkModeTile(context, appSettings),
           _buildDivider(),
           _buildFavoritesTile(context),
@@ -102,34 +99,6 @@ class MyAccountScreen extends StatelessWidget {
           _buildDivider(),
           _buildLogoutTile(context),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLanguageTile(
-      BuildContext context, AppSettingsProvider appSettings) {
-    return ListTile(
-      title: Text(
-        AppLocalizations.of(context)!.language,
-        style: AppStyles.styleBold(12, context),
-      ),
-      trailing: DropdownButton(
-        value: appSettings.locale,
-        items: AppLocalizations.supportedLocales.map((locale) {
-          return DropdownMenuItem(
-            value: locale,
-            child: Text(
-              languageName(locale.languageCode),
-              style: AppStyles.styleBold(12, context),
-            ),
-          );
-        }).toList(),
-        onChanged: (Locale? newLocale) {
-          if (newLocale != null) {
-            appSettings.toggleLocale(newLocale);
-          }
-        },
-        underline: const SizedBox(),
       ),
     );
   }
@@ -160,6 +129,7 @@ class MyAccountScreen extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.arrow_forward_ios_rounded,
+        color: Theme.of(context).iconTheme.color,
         size: AppSize.iconSize(20, context),
       ),
     );
@@ -174,6 +144,7 @@ class MyAccountScreen extends StatelessWidget {
       ),
       trailing: Icon(
         Icons.arrow_forward_ios_rounded,
+        color: Theme.of(context).iconTheme.color,
         size: AppSize.iconSize(20, context),
       ),
     );

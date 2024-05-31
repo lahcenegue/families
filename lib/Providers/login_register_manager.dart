@@ -87,6 +87,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
           await loginApi(loginRequestModel: loginRequestModel);
 
       if (value.status == 'success') {
+        print('value == success  ${value.userData!.token}');
         await _handleSuccessfulLogin(value);
         return null;
       } else {
@@ -312,6 +313,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<void> saveUserData(dynamic value) async {
+    print('save data after login ${value.userData!.token}');
     await _prefs!.setString(PrefKeys.token, value.userData.token!);
     await _prefs!.setString(PrefKeys.userName, value.userData.userName!);
     await _prefs!.setString(PrefKeys.phoneNumber, value.userData.phoneNumber!);
@@ -345,6 +347,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<void> _handleSuccessfulLogin(LoginResponseModel value) async {
+    print('success login ${value.userData!.token}');
     isApiCallProcess = false;
     loginRequestModel = RequestModel();
     notifyListeners();

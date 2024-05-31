@@ -15,6 +15,11 @@ abstract class AppThemes {
       iconTheme: IconThemeData(color: Colors.black),
     ),
 
+    // Icon theme
+    iconTheme: const IconThemeData(
+      color: Colors.black,
+    ),
+
     // Text
     textTheme: const TextTheme(
       titleLarge: TextStyle(color: Colors.black),
@@ -131,6 +136,11 @@ abstract class AppThemes {
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       iconTheme: IconThemeData(color: Colors.white),
+    ),
+
+    // Icon theme
+    iconTheme: const IconThemeData(
+      color: Colors.white,
     ),
 
     // Text

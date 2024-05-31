@@ -31,7 +31,7 @@ class DisheBox extends StatelessWidget {
                 topRight: Radius.circular(AppSize.widthSize(20, context)),
               ),
               child: CachedNetworkImage(
-                imageUrl: '${AppLinks.url}${dish.dishesImages.first}',
+                imageUrl: '${AppLinks.url}${dish.dishesImages!.first}',
                 width: AppSize.widthSize(230, context),
                 height: AppSize.heightSize(120, context),
                 fit: BoxFit.fill,
@@ -68,7 +68,7 @@ class DisheBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            dish.disheName,
+            dish.disheName!,
             style: AppStyles.styleBold(14, context),
           ),
           Row(

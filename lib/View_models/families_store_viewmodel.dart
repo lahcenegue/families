@@ -18,26 +18,26 @@ class StoreItemViewModel {
 
   StoreItemViewModel({required Store store}) : _store = store;
 
-  // Expose store properties via getters for easy access
-  int get storeId => _store.storeId;
-  String get storeName => _store.storeName;
-  String get storeDescription => _store.storeDescription;
-  String get storeLocation => _store.storeLocation;
-  String get storeImage => _store.storeImage;
-  double get deliveryCost => _store.deliveryCost;
-  String get storeRating => _store.storeRating;
+  int? get storeId => _store.storeId;
+  String? get storeName => _store.storeName;
+  String? get storeDescription => _store.storeDescription;
+  String? get storeLocation => _store.storeLocation;
+  String? get storeImage => _store.storeImage;
+  double? get deliveryCost => _store.deliveryCost;
+  String? get storeRating => _store.storeRating;
+  bool? get favorite => _store.isFavorite;
 
-  List<DishItemViewModel> get dishes =>
-      _store.dishes.map((dish) => DishItemViewModel(dish: dish)).toList();
+  List<DishItemViewModel> get dishs =>
+      _store.dishs!.map((dish) => DishItemViewModel(dish: dish)).toList();
 }
 
 class DishItemViewModel {
-  final Dishes _dishes;
+  final Dishs _dishs;
 
-  DishItemViewModel({required Dishes dish}) : _dishes = dish;
+  DishItemViewModel({required Dishs dish}) : _dishs = dish;
 
-  String get disheName => _dishes.disheName;
-  double get dishePrice => _dishes.dishePrice;
-  String get disheDescription => _dishes.disheDescription;
-  List<String> get dishesImages => _dishes.disheImages;
+  String? get disheName => _dishs.dishName;
+  double? get dishePrice => _dishs.dishPrice;
+  String? get disheDescription => _dishs.dishDescription;
+  List<String>? get dishesImages => _dishs.dishImages;
 }

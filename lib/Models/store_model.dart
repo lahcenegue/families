@@ -22,24 +22,26 @@ class StoreModel extends BaseModel {
 }
 
 class Store {
-  final int storeId;
-  final String storeName;
-  final String storeDescription;
-  final String storeLocation;
-  final String storeImage;
-  final double deliveryCost;
-  final String storeRating;
-  final List<Dishes> dishes;
+  int? storeId;
+  String? storeName;
+  String? storeDescription;
+  String? storeLocation;
+  String? storeImage;
+  double? deliveryCost;
+  String? storeRating;
+  bool? isFavorite;
+  List<Dishs>? dishs;
 
   Store({
-    required this.storeId,
-    required this.storeName,
-    required this.storeDescription,
-    required this.storeLocation,
-    required this.storeImage,
-    required this.deliveryCost,
-    required this.storeRating,
-    required this.dishes,
+    this.storeId,
+    this.storeName,
+    this.storeDescription,
+    this.storeLocation,
+    this.storeImage,
+    this.deliveryCost,
+    this.storeRating,
+    this.isFavorite,
+    this.dishs,
   });
 
   factory Store.fromJson(Map<String, dynamic> json) {
@@ -51,38 +53,39 @@ class Store {
       storeImage: json['Image'],
       deliveryCost: json['DeliveryCost'].toDouble(),
       storeRating: json['StoreRating'].toString(),
-      dishes: (json['Items'] as List<dynamic>)
-          .map((item) => Dishes.fromJson(item as Map<String, dynamic>))
+      isFavorite: json['isFavourite'],
+      dishs: (json['Items'] as List<dynamic>)
+          .map((item) => Dishs.fromJson(item as Map<String, dynamic>))
           .toList(),
     );
   }
 }
 
-class Dishes {
-  final String disheName;
-  final double dishePrice;
-  final String disheDescription;
-  final List<String> disheImages;
+class Dishs {
+  String? dishName;
+  double? dishPrice;
+  String? dishDescription;
+  List<String>? dishImages;
 
-  Dishes({
-    required this.disheName,
-    required this.dishePrice,
-    required this.disheImages,
-    required this.disheDescription,
+  Dishs({
+    this.dishName,
+    this.dishPrice,
+    this.dishImages,
+    this.dishDescription,
   });
 
-  factory Dishes.fromJson(Map<String, dynamic> json) {
+  factory Dishs.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
 
     images = (convert.jsonDecode(json['Images']) as List<dynamic>)
         .map((imageJson) => imageJson.toString())
         .toList();
 
-    return Dishes(
-      disheName: json['ItemName'],
-      dishePrice: json['Price'].toDouble(),
-      disheDescription: json['Description'],
-      disheImages: images,
+    return Dishs(
+      dishName: json['ItemName'],
+      dishPrice: json['Price'].toDouble(),
+      dishDescription: json['Description'],
+      dishImages: images,
     );
   }
 }

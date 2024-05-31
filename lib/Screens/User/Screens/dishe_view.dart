@@ -28,7 +28,7 @@ class DisheView extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(AppSize.widthSize(20, context)),
                 child: CachedNetworkImage(
-                  imageUrl: '${AppLinks.url}${dish!.dishesImages.first}',
+                  imageUrl: '${AppLinks.url}${dish!.dishesImages!.first}',
                   width: AppSize.width(context),
                   height: AppSize.heightSize(225, context),
                   fit: BoxFit.fill,
@@ -45,7 +45,7 @@ class DisheView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        dish.disheName,
+                        dish.disheName!,
                         style: AppStyles.styleBold(20, context),
                       ),
                       Text(
@@ -96,7 +96,7 @@ class DisheView extends StatelessWidget {
                 style: AppStyles.styleBold(16, context),
               ),
               Text(
-                dish.disheDescription,
+                dish.disheDescription!,
                 style: AppStyles.styleRegular(12, context),
               ),
               SizedBox(height: AppSize.heightSize(20, context)),

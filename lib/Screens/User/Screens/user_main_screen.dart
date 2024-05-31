@@ -1,15 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:families/Screens/User/Widgets/custom_search_page.dart';
+import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Providers/user_manager_provider.dart';
-import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/error_show.dart';
 import '../Widgets/all_store_box.dart';
 import '../Widgets/popular_store_box.dart';
-import '../Widgets/search_bar.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserMainScreen extends StatelessWidget {
@@ -36,10 +39,10 @@ class UserMainScreen extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(AppSize.heightSize(20, context)),
       children: [
-        SizedBox(height: AppSize.heightSize(25, context)),
         _buildBannerImages(context, userManager),
         SizedBox(height: AppSize.heightSize(15, context)),
-        searchBar(context),
+        //const CustomSearchBar(),
+
         _buildSectionTitle(context, AppLocalizations.of(context)!.popular),
         _buildPopularFamilies(context, userManager),
         _buildSectionTitle(context, AppLocalizations.of(context)!.all),
@@ -61,6 +64,13 @@ class UserMainScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return PopularStoreBox(
             store: userManager.popularFamiliesViewModel!.stores[index],
+            addToFavorite: () async {
+              await userManager
+                  .addToFavorite(
+                      storeId: userManager
+                          .allFamiliesViewModel!.stores[index].storeId!)
+                  .then((value) => errorMessagesShow(context, value));
+            },
           );
         },
       ),
@@ -79,6 +89,13 @@ class UserMainScreen extends StatelessWidget {
             SizedBox(height: AppSize.heightSize(10, context)),
         itemBuilder: (context, index) => AllStoreBox(
           store: userManager.allFamiliesViewModel!.stores[index],
+          addToFavorite: () async {
+            await userManager
+                .addToFavorite(
+                    storeId: userManager
+                        .allFamiliesViewModel!.stores[index].storeId!)
+                .then((value) => errorMessagesShow(context, value));
+          },
         ),
       ),
     );
@@ -117,22 +134,22 @@ class UserMainScreen extends StatelessWidget {
 
   AppBar _buildCustomAppBar(BuildContext context) {
     return AppBar(
+      leading: ClipOval(
+        child: Image.asset(
+          AppImages.profilImage,
+          width: 90,
+          height: 90,
+          fit: BoxFit.cover,
+        ),
+      ),
       actions: [
-        Container(
-          width: AppSize.widthSize(150, context),
-          height: AppSize.heightSize(40, context),
-          margin:
-              EdgeInsets.symmetric(horizontal: AppSize.widthSize(24, context)),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.primaryColor, width: 1),
-            borderRadius:
-                BorderRadius.circular(AppSize.heightSize(44, context)),
-          ),
-          child: Center(
-            child: Text(
-              'حي الياسمين. الرياض',
-              style: AppStyles.styleRegular(10, context),
-            ),
+        IconButton(
+          onPressed: () {
+            NavigationService.navigateTo(AppRoutes.searchScreen);
+          },
+          icon: Icon(
+            Icons.search,
+            size: AppSize.iconSize(28, context),
           ),
         ),
       ],

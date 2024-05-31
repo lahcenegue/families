@@ -13,4 +13,6 @@ abstract class AppImages {
   static String storeIcon = 'assets/images/icons/store.png';
   static String accountIcon = 'assets/images/icons/account.png';
   static String sunnyIcon = 'assets/images/icons/sunny.png';
+  static String filtreIcon = 'assets/images/icons/filtre.png';
+  static String favoriteIcon = 'assets/images/icons/favorite.png';
 }

@@ -1,13 +1,12 @@
-import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Utils/Constants/app_strings.dart';
+import '../Utils/Helprs/navigation_service.dart';
 
 class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   SharedPreferences? _prefs;
-  Locale? _locale;
+
   Brightness? _theme;
   bool _autoDarkMode = true;
   late PageController pageController;
@@ -21,7 +20,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> initializeAsync() async {
     _prefs = await SharedPreferences.getInstance();
     pageController = PageController(initialPage: 0);
-    _initializeLocale();
+
     _initializeTheme();
     goToNextScreen();
   }
@@ -41,24 +40,9 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  Locale get locale => _locale ?? Locale(Intl.systemLocale);
   Brightness get theme => _theme ?? Brightness.light;
   bool get isDark => _theme == Brightness.dark;
   bool get autoDarkMode => _autoDarkMode;
-
-  void _initializeLocale() async {
-    String? savedLocaleCode = getData(key: PrefKeys.lang);
-
-    if (savedLocaleCode != null) {
-      _locale = Locale(savedLocaleCode);
-    } else {
-      _locale = Intl.getCurrentLocale().contains('ar')
-          ? const Locale('ar')
-          : const Locale('en');
-    }
-
-    saveData(key: PrefKeys.lang, value: _locale!.languageCode);
-  }
 
   void _initializeTheme() {
     _autoDarkMode = getData(key: PrefKeys.autoDarkMode) ?? true;
@@ -69,15 +53,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
       bool? isDarkModeStored = getData(key: PrefKeys.isDark);
       _theme = (isDarkModeStored ?? false) ? Brightness.dark : Brightness.light;
     }
-  }
-
-  void toggleLocale(Locale newLocale) {
-    if (AppLocalizations.supportedLocales.contains(newLocale) &&
-        newLocale != _locale) {
-      _locale = newLocale;
-      saveData(key: PrefKeys.lang, value: newLocale.languageCode);
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
   void toggleTheme() {
@@ -86,15 +62,6 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     saveData(key: PrefKeys.isDark, value: isDark);
     notifyListeners();
   }
-
-  // void setAutoDarkMode(bool value) {
-  //   _autoDarkMode = value;
-  //   saveData(key: PrefKeys.autoDarkMode, value: value);
-  //   if (_autoDarkMode) {
-  //     _theme = WidgetsBinding.instance.platformDispatcher.platformBrightness;
-  //   }
-  //   notifyListeners();
-  // }
 
   void goToNextScreen() {
     print('========== Go to Next Screen ===============');
