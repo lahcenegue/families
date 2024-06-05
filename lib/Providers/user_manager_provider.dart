@@ -49,6 +49,8 @@ class UserManagerProvider extends ChangeNotifier {
   DishItemViewModel? get selectedDish => _selectedDish;
   List<String> get searchHistory => _searchHistory;
 
+  int currentQuantity = 1;
+
   UserManagerProvider() {
     initializeData();
   }
@@ -250,5 +252,17 @@ class UserManagerProvider extends ChangeNotifier {
 
   void _saveSearchHistory() {
     _prefs?.setStringList(PrefKeys.searchHistory, _searchHistory);
+  }
+
+  void incrementQuantity() {
+    currentQuantity++;
+    notifyListeners();
+  }
+
+  void decrementQuantity() {
+    if (currentQuantity > 1) {
+      currentQuantity--;
+      notifyListeners();
+    }
   }
 }

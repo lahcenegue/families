@@ -9,6 +9,7 @@ import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../View_models/families_store_viewmodel.dart';
+import '../Widgets/product_counter.dart';
 
 class DisheView extends StatelessWidget {
   const DisheView({super.key});
@@ -80,16 +81,16 @@ class DisheView extends StatelessWidget {
           'family name',
           style: AppStyles.styleRegular(14, context),
         ),
+        SizedBox(height: AppSize.heightSize(8, context)),
         Row(
           children: [
             const Spacer(),
-            Container(
-              width: 100,
-              height: 50,
-              color: Colors.green,
+            ProductCounter(
+              onQuantityChanged: (quantity) {},
             ),
           ],
         ),
+        SizedBox(height: AppSize.heightSize(8, context)),
         Row(
           children: [
             Icon(
