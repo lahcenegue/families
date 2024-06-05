@@ -43,7 +43,7 @@ class DisheBox extends StatelessWidget {
         topRight: Radius.circular(AppSize.widthSize(20, context)),
       ),
       child: CachedNetworkImage(
-        imageUrl: '${AppLinks.url}${dish.dishesImages!.first}',
+        imageUrl: '${AppLinks.url}${dish.dishsImages!.first}',
         width: AppSize.widthSize(230, context),
         height: AppSize.heightSize(120, context),
         fit: BoxFit.fill,
@@ -78,7 +78,7 @@ class DisheBox extends StatelessWidget {
 
   Widget _buildDishName(BuildContext context) {
     return Text(
-      dish.disheName!,
+      dish.dishName!,
       style: AppStyles.styleBold(14, context),
     );
   }
@@ -88,7 +88,7 @@ class DisheBox extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '${dish.dishePrice.toString()} ريال',
+            '${dish.dishPrice.toString()} ريال',
             style: AppStyles.styleBold(15, context).copyWith(
               color: Colors.red,
             ),

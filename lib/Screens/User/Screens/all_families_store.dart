@@ -35,36 +35,33 @@ class AllFamiliesStore extends StatelessWidget {
               ),
             ],
           ),
-          body: ListView(
-            children: [
-              SizedBox(height: AppSize.heightSize(15, context)),
-              SizedBox(height: AppSize.heightSize(25, context)),
-              userManager.allFamiliesViewModel == null
-                  ? Center(
-                      child: CustomLoadingIndicator(
-                          isVisible: userManager.isApiCallProcess),
-                    )
-                  : ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.all(AppSize.widthSize(25, context)),
-                      itemCount:
-                          userManager.allFamiliesViewModel!.stores.length,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: AppSize.heightSize(10, context)),
-                      itemBuilder: (context, index) => AllStoreBox(
-                        store: userManager.allFamiliesViewModel!.stores[index],
+          body: Padding(
+            padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+            child: userManager.allFamiliesViewModel == null
+                ? Center(
+                    child: CustomLoadingIndicator(
+                        isVisible: userManager.isApiCallProcess),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: userManager.allFamiliesViewModel!.stores.length,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: AppSize.heightSize(10, context)),
+                    itemBuilder: (context, index) {
+                      final store =
+                          userManager.allFamiliesViewModel!.stores[index];
+                      return AllStoreBox(
+                        store: store,
                         addToFavorite: () async {
                           await userManager
-                              .addToFavorite(
-                                  storeId: userManager.allFamiliesViewModel!
-                                      .stores[index].storeId!)
+                              .addToFavorite(storeId: store.storeId!)
                               .then(
                                   (value) => errorMessagesShow(context, value));
                         },
-                      ),
-                    ),
-            ],
+                      );
+                    },
+                  ),
           ),
         );
       },

@@ -70,7 +70,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
       final token = getData(key: PrefKeys.token);
 
       if (accountType == null || token == null) {
-        NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+        NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
         return;
       }
 

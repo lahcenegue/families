@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'base_model.dart';
 import 'dart:convert' as convert;
 
@@ -62,16 +64,20 @@ class Store {
 }
 
 class Dishs {
+  int? storeId;
   String? dishName;
   double? dishPrice;
   String? dishDescription;
   List<String>? dishImages;
+  int? dishRating;
 
   Dishs({
+    this.storeId,
     this.dishName,
     this.dishPrice,
     this.dishImages,
     this.dishDescription,
+    this.dishRating,
   });
 
   factory Dishs.fromJson(Map<String, dynamic> json) {
@@ -82,10 +88,12 @@ class Dishs {
         .toList();
 
     return Dishs(
+      storeId: json['StoreId'],
       dishName: json['ItemName'],
       dishPrice: json['Price'].toDouble(),
       dishDescription: json['Description'],
       dishImages: images,
+      dishRating: json['ItemRating'],
     );
   }
 }

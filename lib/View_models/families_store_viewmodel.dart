@@ -36,8 +36,9 @@ class DishItemViewModel {
 
   DishItemViewModel({required Dishs dish}) : _dishs = dish;
 
-  String? get disheName => _dishs.dishName;
-  double? get dishePrice => _dishs.dishPrice;
-  String? get disheDescription => _dishs.dishDescription;
-  List<String>? get dishesImages => _dishs.dishImages;
+  String? get dishName => _dishs.dishName;
+  double? get dishPrice => _dishs.dishPrice;
+  String? get dishDescription => _dishs.dishDescription;
+  List<String>? get dishsImages => _dishs.dishImages;
+  int? get dishRating => _dishs.dishRating;
 }

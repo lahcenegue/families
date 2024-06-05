@@ -8,7 +8,7 @@ import '../../Screens/Start/Account_type/account_type.dart';
 import '../../Screens/Start/Congratulations/congratulations_screen.dart';
 import '../../Screens/Start/Onbording/onbording_screen.dart';
 import '../../Screens/Start/Reset_password/reset_password.dart';
-import '../../Screens/User/Screens/dishe_view.dart';
+import '../../Screens/User/Screens/dish_view.dart';
 import '../../Screens/User/Screens/store_view.dart';
 import '../../Screens/User/Screens/user_home_screen.dart';
 import '../../Screens/User/Widgets/custom_search_page.dart';

@@ -141,7 +141,7 @@ class PopularStoreBox extends StatelessWidget {
             style: AppStyles.styleBold(14, context),
           ),
           Text(
-            store.dishs.map((d) => d.disheName).join(', '),
+            store.dishs.map((d) => d.dishName).join(', '),
             style: AppStyles.styleRegular(10, context),
             overflow: TextOverflow.ellipsis,
           ),

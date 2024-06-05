@@ -33,7 +33,7 @@ class DisheView extends StatelessWidget {
               SizedBox(height: AppSize.heightSize(25, context)),
               _buildDishHeader(context, dish),
               SizedBox(height: AppSize.heightSize(20, context)),
-              _buildRatingsContainer(context),
+              _buildRatingsContainer(context, dish),
               SizedBox(height: AppSize.heightSize(20, context)),
               _buildDishDescription(context, dish),
             ],
@@ -48,7 +48,7 @@ class DisheView extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
       child: CachedNetworkImage(
-        imageUrl: '${AppLinks.url}${dish.dishesImages!.first}',
+        imageUrl: '${AppLinks.url}${dish.dishsImages!.first}',
         width: AppSize.width(context),
         height: AppSize.heightSize(225, context),
         fit: BoxFit.fill,
@@ -60,35 +60,63 @@ class DisheView extends StatelessWidget {
   }
 
   Widget _buildDishHeader(BuildContext context, DishItemViewModel dish) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              dish.disheName!,
+              dish.dishName!,
               style: AppStyles.styleBold(20, context),
             ),
             Text(
-              'family name',
-              style: AppStyles.styleRegular(14, context),
+              '${dish.dishPrice} ريال',
+              style: AppStyles.styleExtraBold(16, context),
             ),
           ],
         ),
         Text(
-          '${dish.dishePrice} Rial',
-          style: AppStyles.styleExtraBold(16, context),
+          'family name',
+          style: AppStyles.styleRegular(14, context),
+        ),
+        Row(
+          children: [
+            const Spacer(),
+            Container(
+              width: 100,
+              height: 50,
+              color: Colors.green,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.access_time,
+              color: const Color(0xFFC42C2C),
+              size: AppSize.iconSize(28, context),
+            ),
+            SizedBox(width: AppSize.widthSize(5, context)),
+            Text(
+              'وقت اعداد الطبق',
+              style: AppStyles.styleBold(16, context),
+            )
+          ],
+        ),
+        Text(
+          '2 ساعة',
+          style: AppStyles.styleRegular(15, context),
         ),
       ],
     );
   }
 
-  Widget _buildRatingsContainer(BuildContext context) {
+  Widget _buildRatingsContainer(BuildContext context, DishItemViewModel dish) {
     final appSettings = Provider.of<AppSettingsProvider>(context);
     return Container(
       width: AppSize.width(context),
-      height: AppSize.heightSize(66, context),
+      height: AppSize.heightSize(75, context),
       padding: EdgeInsets.all(AppSize.widthSize(12, context)),
       decoration: BoxDecoration(
         color: appSettings.isDark
@@ -106,11 +134,30 @@ class DisheView extends StatelessWidget {
                 'التقييمات',
                 style: AppStyles.styleBold(14, context),
               ),
+              SizedBox(height: AppSize.heightSize(8, context)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.star,
+                    color: AppColors.starColor,
+                    size: AppSize.iconSize(24, context),
+                  ),
+                  SizedBox(width: AppSize.widthSize(5, context)),
+                  Text(
+                    dish.dishRating.toString(),
+                    style: AppStyles.styleBold(16, context),
+                  ),
+                ],
+              ),
             ],
           ),
-          Icon(
-            Icons.arrow_forward,
-            size: AppSize.iconSize(24, context),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.arrow_forward,
+              size: AppSize.iconSize(24, context),
+            ),
           ),
         ],
       ),
@@ -126,7 +173,7 @@ class DisheView extends StatelessWidget {
           style: AppStyles.styleBold(16, context),
         ),
         Text(
-          dish.disheDescription!,
+          dish.dishDescription!,
           style: AppStyles.styleRegular(12, context),
         ),
       ],
