@@ -140,7 +140,7 @@ class DisheView extends StatelessWidget {
         width: AppSize.widthSize(340, context),
         child: ElevatedButton(
           onPressed: () {},
-          child: Text('اضف الى السلة'),
+          child: const Text('اضف الى السلة'),
         ),
       ),
     );
