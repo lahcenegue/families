@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class DisheView extends StatelessWidget {
         height: AppSize.heightSize(225, context),
         fit: BoxFit.fill,
         progressIndicatorBuilder: (context, url, progress) =>
-            const CircularProgressIndicator(),
+            const Center(child: CircularProgressIndicator()),
         errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
@@ -95,7 +96,7 @@ class DisheView extends StatelessWidget {
           children: [
             Icon(
               Icons.access_time,
-              color: const Color(0xFFC42C2C),
+              color: AppColors.redColor,
               size: AppSize.iconSize(28, context),
             ),
             SizedBox(width: AppSize.widthSize(5, context)),
@@ -154,7 +155,9 @@ class DisheView extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              NavigationService.navigateTo(AppRoutes.feedbackScreen);
+            },
             icon: Icon(
               Icons.arrow_forward,
               size: AppSize.iconSize(24, context),

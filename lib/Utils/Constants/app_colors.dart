@@ -9,6 +9,7 @@ class AppColors {
   static Color fieldFillColor = const Color(0xFFF0F5FA);
   static Color greyTextColors = const Color(0xFF9C9BA6);
   static Color starColor = const Color(0xFFE4B40A);
+  static Color redColor = const Color(0xFFC42C2C);
   static Color darkContainerBackground = const Color(0xFF455a64);
 }
 

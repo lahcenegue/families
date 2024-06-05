@@ -66,7 +66,7 @@ class StoreView extends StatelessWidget {
         height: AppSize.heightSize(225, context),
         fit: BoxFit.fill,
         progressIndicatorBuilder: (context, url, progress) =>
-            const CircularProgressIndicator(),
+            const Center(child: CircularProgressIndicator()),
         errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );

@@ -124,6 +124,7 @@ class UserManagerProvider extends ChangeNotifier {
 
   Future<void> getBannerImages() async {
     try {
+      print('========== get banner images ==================');
       BannerImagesModel value = await getBannerImagesApi(
         getBannerRequest: RequestModel(method: ApiMethods.getBannerMethod),
       );

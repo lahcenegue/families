@@ -8,7 +8,7 @@ import '../Utils/Constants/app_links.dart';
 Future<BannerImagesModel> getBannerImagesApi(
     {required RequestModel getBannerRequest}) async {
   BannerImagesModel bannerImages = BannerImagesModel();
-
+  print('========== get banner images form api ==================');
   try {
     Uri url = Uri.parse(AppLinks.api);
 
