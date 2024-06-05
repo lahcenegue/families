@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:families/Screens/User/Widgets/custom_search_page.dart';
 import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +40,6 @@ class UserMainScreen extends StatelessWidget {
       children: [
         _buildBannerImages(context, userManager),
         SizedBox(height: AppSize.heightSize(15, context)),
-        //const CustomSearchBar(),
-
         _buildSectionTitle(context, AppLocalizations.of(context)!.popular),
         _buildPopularFamilies(context, userManager),
         _buildSectionTitle(context, AppLocalizations.of(context)!.all),

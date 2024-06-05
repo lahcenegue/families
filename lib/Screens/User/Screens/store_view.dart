@@ -44,7 +44,7 @@ class StoreView extends StatelessWidget {
                       SizedBox(height: AppSize.heightSize(25, context)),
                       _buildStoreDetails(context, store),
                       SizedBox(height: AppSize.heightSize(12, context)),
-                      _buildDishesSection(context, store),
+                      _buildDishsSection(context, store),
                       SizedBox(height: AppSize.heightSize(40, context)),
                     ],
                   ),
@@ -124,7 +124,7 @@ class StoreView extends StatelessWidget {
     );
   }
 
-  Widget _buildDishesSection(BuildContext context, StoreItemViewModel store) {
+  Widget _buildDishsSection(BuildContext context, StoreItemViewModel store) {
     return Column(
       children: [
         Row(
@@ -152,7 +152,7 @@ class StoreView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: store.dishs.length,
             separatorBuilder: (context, index) =>
-                SizedBox(width: AppSize.widthSize(10, context)),
+                SizedBox(width: AppSize.widthSize(14, context)),
             itemBuilder: (context, index) => DisheBox(
               dish: store.dishs[index],
             ),
