@@ -14,6 +14,7 @@ class ApiMethods {
       'retrieve_all_stores_with_favourite_stores';
   static const String searchMethode = 'search_for_service';
   static const String addToFavorite = 'add_to_favourite';
+  static const String dishReviews = 'retrieve_item_reviews';
 
 // static const String = '';
 // static const String = '';

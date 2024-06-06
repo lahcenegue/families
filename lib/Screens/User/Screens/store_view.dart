@@ -153,9 +153,7 @@ class StoreView extends StatelessWidget {
             itemCount: store.dishs.length,
             separatorBuilder: (context, index) =>
                 SizedBox(width: AppSize.widthSize(14, context)),
-            itemBuilder: (context, index) => DisheBox(
-              dish: store.dishs[index],
-            ),
+            itemBuilder: (context, index) => DisheBox(dish: store.dishs[index]),
           ),
         ),
       ],

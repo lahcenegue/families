@@ -8,12 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apis/add_to_favorite.dart';
 import '../Apis/get_banner_images.dart';
+import '../Apis/get_dish_review_api.dart';
 import '../Apis/search_api.dart';
 import '../Models/banner_images.dart';
 import '../Models/base_model.dart';
+import '../Models/dish_review_model.dart';
 import '../Models/request_model.dart';
 import '../Models/search_model.dart';
 import '../Models/store_model.dart';
+import '../View_models/dish_review_viewmodel.dart';
 import '../View_models/families_store_viewmodel.dart';
 import '../View_models/search_view_model.dart';
 
@@ -42,6 +45,7 @@ class UserManagerProvider extends ChangeNotifier {
 
   StoreItemViewModel? _selectedStore;
   DishItemViewModel? _selectedDish;
+  DishReviewViewModel? dishReviewViewModel;
 
   String? token;
 
@@ -264,6 +268,30 @@ class UserManagerProvider extends ChangeNotifier {
     if (currentQuantity > 1) {
       currentQuantity--;
       notifyListeners();
+    }
+  }
+
+  Future<void> getDishReviews({required int itemID}) async {
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.dishReviews,
+      token: token,
+      itemId: itemID,
+    );
+
+    try {
+      DishReviewModel dishReviewModel =
+          await getDishReviewsApi(request: requestModel);
+
+      if (dishReviewModel.status == 'Success') {
+        dishReviewViewModel =
+            DishReviewViewModel(dishReviewModel: dishReviewModel);
+        notifyListeners();
+      } else {
+        print('Failed to fetch dish reviews');
+      }
+    } catch (e) {
+      print('Error fetching dish reviews: $e');
     }
   }
 }

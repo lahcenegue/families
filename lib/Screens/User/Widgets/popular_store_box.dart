@@ -108,7 +108,7 @@ class PopularStoreBox extends StatelessWidget {
         color: Colors.white,
       ),
       child: IconButton(
-        icon: store.favorite == null || store.favorite!
+        icon: store.favorite!
             ? const Icon(
                 Icons.favorite,
                 color: Colors.red,

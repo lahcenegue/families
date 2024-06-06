@@ -41,4 +41,7 @@ class DishItemViewModel {
   String? get dishDescription => _dishs.dishDescription;
   List<String>? get dishsImages => _dishs.dishImages;
   int? get dishRating => _dishs.dishRating;
+  int? get preparationTime => _dishs.preparationTime;
+  int? get itemId => _dishs.itemId;
+  int? get storeId => _dishs.storeId;
 }

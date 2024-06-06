@@ -62,20 +62,24 @@ class Store {
 }
 
 class Dishs {
+  int? itemId;
   int? storeId;
   String? dishName;
   double? dishPrice;
   String? dishDescription;
   List<String>? dishImages;
   int? dishRating;
+  int? preparationTime;
 
   Dishs({
+    this.itemId,
     this.storeId,
     this.dishName,
     this.dishPrice,
     this.dishImages,
     this.dishDescription,
     this.dishRating,
+    this.preparationTime,
   });
 
   factory Dishs.fromJson(Map<String, dynamic> json) {
@@ -86,12 +90,14 @@ class Dishs {
         .toList();
 
     return Dishs(
+      itemId: json['ItemId'],
       storeId: json['StoreId'],
       dishName: json['ItemName'],
       dishPrice: json['Price'].toDouble(),
       dishDescription: json['Description'],
       dishImages: images,
       dishRating: json['ItemRating'],
+      preparationTime: json['PreparationTime'],
     );
   }
 }

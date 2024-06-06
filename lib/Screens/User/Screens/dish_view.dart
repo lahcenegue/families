@@ -35,7 +35,7 @@ class DisheView extends StatelessWidget {
               SizedBox(height: AppSize.heightSize(25, context)),
               _buildDishHeader(context, dish),
               SizedBox(height: AppSize.heightSize(20, context)),
-              _buildRatingsContainer(context, dish),
+              _buildRatingsContainer(context, dish, userManager),
               SizedBox(height: AppSize.heightSize(20, context)),
               _buildDishDescription(context, dish),
             ],
@@ -93,33 +93,47 @@ class DisheView extends StatelessWidget {
         ),
         SizedBox(height: AppSize.heightSize(8, context)),
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
               Icons.access_time,
               color: AppColors.redColor,
-              size: AppSize.iconSize(28, context),
+              size: AppSize.iconSize(24, context),
             ),
-            SizedBox(width: AppSize.widthSize(5, context)),
-            Text(
-              'وقت اعداد الطبق',
-              style: AppStyles.styleBold(16, context),
-            )
+            SizedBox(width: AppSize.widthSize(12, context)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'وقت اعداد الطبق',
+                  style: AppStyles.styleBold(16, context),
+                ),
+                Text(
+                  '${dish.preparationTime} دقيقة',
+                  style: AppStyles.styleRegular(15, context),
+                ),
+              ],
+            ),
           ],
-        ),
-        Text(
-          '2 ساعة',
-          style: AppStyles.styleRegular(15, context),
         ),
       ],
     );
   }
 
-  Widget _buildRatingsContainer(BuildContext context, DishItemViewModel dish) {
+  Widget _buildRatingsContainer(
+    BuildContext context,
+    DishItemViewModel dish,
+    UserManagerProvider userManager,
+  ) {
     final appSettings = Provider.of<AppSettingsProvider>(context);
     return Container(
       width: AppSize.width(context),
-      height: AppSize.heightSize(75, context),
-      padding: EdgeInsets.all(AppSize.widthSize(12, context)),
+      height: AppSize.heightSize(80, context),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSize.widthSize(20, context),
+        vertical: AppSize.widthSize(8, context),
+      ),
       decoration: BoxDecoration(
         color: appSettings.isDark
             ? AppColors.darkContainerBackground
@@ -131,6 +145,7 @@ class DisheView extends StatelessWidget {
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'التقييمات',
@@ -147,7 +162,7 @@ class DisheView extends StatelessWidget {
                   ),
                   SizedBox(width: AppSize.widthSize(5, context)),
                   Text(
-                    dish.dishRating.toString(),
+                    '${dish.dishRating}',
                     style: AppStyles.styleBold(16, context),
                   ),
                 ],
@@ -155,7 +170,8 @@ class DisheView extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
+              userManager.getDishReviews(itemID: dish.itemId!);
               NavigationService.navigateTo(AppRoutes.feedbackScreen);
             },
             icon: Icon(

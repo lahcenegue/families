@@ -13,6 +13,7 @@ class RequestModel {
   String? resetToken;
   String? query;
   int? storeId;
+  int? itemId;
   String? token;
 
   RequestModel({
@@ -30,6 +31,7 @@ class RequestModel {
     this.resetToken,
     this.query,
     this.storeId,
+    this.itemId,
     this.token,
   });
 
@@ -49,6 +51,7 @@ class RequestModel {
       if (resetToken != null) 'ResetToken': resetToken!.trim(),
       if (query != null) 'query': query!.trim(),
       if (storeId != null) 'StoreId': storeId!,
+      if (itemId != null) 'ItemId': itemId!,
       if (token != null) 'Token': token!.trim(),
     };
   }
