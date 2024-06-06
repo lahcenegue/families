@@ -11,6 +11,7 @@ class AppColors {
   static Color starColor = const Color(0xFFE4B40A);
   static Color redColor = const Color(0xFFC42C2C);
   static Color darkContainerBackground = const Color(0xFF455a64);
+  static Color reviewBoxcolor = const Color(0xFFF5F4F8);
 }
 
 class MaterialColorGenerator {

@@ -40,24 +40,24 @@ class UserManagerProvider extends ChangeNotifier {
   FamiliesStoreViewModel? popularFamiliesViewModel;
   FamiliesStoreViewModel? allFamiliesViewModel;
   SearchViewModel? searchViewModel;
+  DishReviewViewModel? dishReviewViewModel;
   List<String> _searchHistory = [];
   Timer? debounce;
+  int selectedRating = 0;
 
   StoreItemViewModel? _selectedStore;
   DishItemViewModel? _selectedDish;
-  DishReviewViewModel? dishReviewViewModel;
 
   String? token;
-
-  StoreItemViewModel? get selectedStore => _selectedStore;
-  DishItemViewModel? get selectedDish => _selectedDish;
-  List<String> get searchHistory => _searchHistory;
-
   int currentQuantity = 1;
 
   UserManagerProvider() {
     initializeData();
   }
+
+  StoreItemViewModel? get selectedStore => _selectedStore;
+  DishItemViewModel? get selectedDish => _selectedDish;
+  List<String> get searchHistory => _searchHistory;
 
   Future<void> initializeData() async {
     if (!isDataInitialized) {
@@ -293,5 +293,18 @@ class UserManagerProvider extends ChangeNotifier {
     } catch (e) {
       print('Error fetching dish reviews: $e');
     }
+  }
+
+  void setSelectedRating(int rating) {
+    selectedRating = rating;
+    notifyListeners();
+  }
+
+  List<DishReviewItemViewModel> get filteredReviews {
+    if (dishReviewViewModel == null) return [];
+    if (selectedRating == 0) return dishReviewViewModel!.items;
+    return dishReviewViewModel!.items
+        .where((review) => review.rating == selectedRating)
+        .toList();
   }
 }
