@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:families/Providers/cart_provider.dart';
 import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,6 @@ import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../View_models/families_store_viewmodel.dart';
-import '../Widgets/product_counter.dart';
 
 class DisheView extends StatelessWidget {
   const DisheView({super.key});
@@ -33,14 +33,14 @@ class DisheView extends StatelessWidget {
             children: [
               _buildDishImage(context, dish),
               SizedBox(height: AppSize.heightSize(25, context)),
-              _buildDishHeader(context, dish),
+              _buildDishHeader(context, dish, userManager),
               SizedBox(height: AppSize.heightSize(20, context)),
               _buildRatingsContainer(context, dish, userManager),
               SizedBox(height: AppSize.heightSize(20, context)),
               _buildDishDescription(context, dish),
             ],
           ),
-          bottomNavigationBar: _buildAddToCartButton(context),
+          bottomNavigationBar: _buildAddToCartButton(context, dish),
         );
       },
     );
@@ -61,7 +61,8 @@ class DisheView extends StatelessWidget {
     );
   }
 
-  Widget _buildDishHeader(BuildContext context, DishItemViewModel dish) {
+  Widget _buildDishHeader(BuildContext context, DishItemViewModel dish,
+      UserManagerProvider userManager) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -79,18 +80,21 @@ class DisheView extends StatelessWidget {
           ],
         ),
         Text(
-          'family name',
+          '${dish.storeName}',
           style: AppStyles.styleRegular(14, context),
         ),
         SizedBox(height: AppSize.heightSize(8, context)),
-        Row(
-          children: [
-            const Spacer(),
-            ProductCounter(
-              onQuantityChanged: (quantity) {},
-            ),
-          ],
-        ),
+        // Row(
+        //   children: [
+        //     const Spacer(),
+        //     ProductCounter(
+        //       itemId: dish.itemId!,
+        //       onQuantityChanged: (quantity) {
+        //         print('Selected quantity: $quantity');
+        //       },
+        //     ),
+        //   ],
+        // ),
         SizedBox(height: AppSize.heightSize(8, context)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -200,13 +204,18 @@ class DisheView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddToCartButton(BuildContext context) {
+  Widget _buildAddToCartButton(BuildContext context, DishItemViewModel dish) {
     return Padding(
       padding: EdgeInsets.all(AppSize.widthSize(25, context)),
       child: SizedBox(
         width: AppSize.widthSize(340, context),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Provider.of<CartProvider>(context, listen: false).addToCart(
+              itemId: dish.itemId!,
+              amount: 1,
+            );
+          },
           child: const Text('اضف الى السلة'),
         ),
       ),

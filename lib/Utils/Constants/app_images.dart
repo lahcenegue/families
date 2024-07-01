@@ -5,7 +5,8 @@ abstract class AppImages {
   static String onBordingImage2 = "assets/images/onBording2.png";
   static String onBordingImage3 = "assets/images/onBording3.png";
   static String congratulationsImage = 'assets/images/congratulations.png';
-  static String profilImage = 'assets/images/profil.png';
+  static String userProfilImage = 'assets/images/profil.png';
+  static String storeProfilImage = 'assets/images/profil.png';
 
   //Icons
   static String homeIcon = 'assets/images/icons/home.png';

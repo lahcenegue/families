@@ -35,7 +35,7 @@ class MyAccountScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildProfileImage(),
+                      _buildProfileImage(context),
                       SizedBox(height: AppSize.heightSize(20, context)),
                       _buildProfileName(context),
                       SizedBox(height: AppSize.heightSize(10, context)),
@@ -53,12 +53,12 @@ class MyAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage() {
+  Widget _buildProfileImage(BuildContext context) {
     return ClipOval(
       child: Image.asset(
-        AppImages.profilImage,
-        width: 90,
-        height: 90,
+        AppImages.userProfilImage,
+        width: AppSize.widthSize(90, context),
+        height: AppSize.widthSize(90, context),
         fit: BoxFit.cover,
       ),
     );

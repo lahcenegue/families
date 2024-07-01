@@ -6,6 +6,7 @@ import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
+import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
@@ -161,8 +162,14 @@ class LoginScreen extends StatelessWidget {
                 style: AppStyles.styleMedium(13, context),
               ),
               TextButton(
-                onPressed: () =>
-                    NavigationService.navigateTo(AppRoutes.registerScreen),
+                onPressed: () {
+                  if (loginManager.accountType == AppStrings.user) {
+                    NavigationService.navigateTo(AppRoutes.registerScreen);
+                  } else {
+                    NavigationService.navigateTo(
+                        AppRoutes.familyRegisterScreen);
+                  }
+                },
                 child: Text(
                   AppLocalizations.of(context)!.sign_up,
                   style: AppStyles.styleMedium(13, context)

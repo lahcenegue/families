@@ -32,16 +32,35 @@ class StoreItemViewModel {
 }
 
 class DishItemViewModel {
-  final Dishs _dishs;
+  final DishModel _dish;
+  int currentQuantity;
 
-  DishItemViewModel({required Dishs dish}) : _dishs = dish;
+  DishItemViewModel({required DishModel dish, this.currentQuantity = 1})
+      : _dish = dish;
 
-  String? get dishName => _dishs.dishName;
-  double? get dishPrice => _dishs.dishPrice;
-  String? get dishDescription => _dishs.dishDescription;
-  List<String>? get dishsImages => _dishs.dishImages;
-  int? get dishRating => _dishs.dishRating;
-  int? get preparationTime => _dishs.preparationTime;
-  int? get itemId => _dishs.itemId;
-  int? get storeId => _dishs.storeId;
+  int? get cartItemId => _dish.cartItemId;
+  int? get itemId => _dish.itemId;
+  int? get storeId => _dish.storeId;
+  int? get amount => _dish.amount;
+  String? get dishName => _dish.dishName;
+  String? get storeName => _dish.storeName;
+  double? get dishPrice => _dish.dishPrice;
+  String? get dishDescription => _dish.dishDescription;
+  List<String>? get dishsImages => _dish.dishImages;
+  int? get dishRating => _dish.dishRating;
+  int? get preparationTime => _dish.preparationTime;
+
+  void updateAmount(int newAmount) {
+    _dish.amount = newAmount;
+  }
+
+  // void incrementQuantity() {
+  //   currentQuantity++;
+  // }
+
+  // void decrementQuantity() {
+  //   if (currentQuantity > 1) {
+  //     currentQuantity--;
+  //   }
+  // }
 }

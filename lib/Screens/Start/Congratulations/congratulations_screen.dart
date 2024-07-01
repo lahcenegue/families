@@ -76,21 +76,17 @@ class CongratulationsScreen extends StatelessWidget {
         Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
         ElevatedButton(
           onPressed: () {
-            _navigateToHome(context, loginManager);
+            if (loginManager.accountType == AppStrings.user) {
+              NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
+            } else {
+              NavigationService.navigateToAndReplace(
+                  AppRoutes.familyHomeScreen);
+            }
           },
           child: Text(AppLocalizations.of(context)!.home_screen),
         ),
         SizedBox(height: AppSize.heightSize(50, context)),
       ],
     );
-  }
-
-  void _navigateToHome(
-      BuildContext context, LoginAndRegisterManager loginManager) {
-    if (loginManager.accountType == AppStrings.user) {
-      NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-    } else {
-      NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
-    }
   }
 }

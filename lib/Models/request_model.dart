@@ -15,6 +15,11 @@ class RequestModel {
   int? storeId;
   int? itemId;
   String? token;
+  int? amount;
+  int? cartItemId;
+  String? document;
+  String? category;
+  String? description;
 
   RequestModel({
     this.method,
@@ -33,6 +38,11 @@ class RequestModel {
     this.storeId,
     this.itemId,
     this.token,
+    this.amount,
+    this.cartItemId,
+    this.document,
+    this.category,
+    this.description,
   });
 
   Map<String, dynamic> toJson() {
@@ -53,6 +63,11 @@ class RequestModel {
       if (storeId != null) 'StoreId': storeId!,
       if (itemId != null) 'ItemId': itemId!,
       if (token != null) 'Token': token!.trim(),
+      if (amount != null) 'Amount': amount!,
+      if (cartItemId != null) 'CartItemId': cartItemId!,
+      if (document != null) 'Document1': document!.trim(),
+      if (category != null) 'Category': category!.trim(),
+      if (description != null) 'Description': description!.trim(),
     };
   }
 }

@@ -150,20 +150,13 @@ class AllStoreBox extends StatelessWidget {
             store.storeName!,
             style: AppStyles.styleBold(14, context),
           ),
-          Text(
-            store.dishs.map((d) => d.dishName).join(', '),
-            style: AppStyles.styleRegular(10, context),
-            overflow: TextOverflow.ellipsis,
-          ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                Icons.location_on,
-                color: AppColors.primaryColor,
-              ),
-              Expanded(
-                child: Text(store.storeLocation!,
-                    style: AppStyles.styleRegular(10, context)),
+              Text(
+                store.dishs.map((d) => d.dishName).join(', '),
+                style: AppStyles.styleRegular(10, context),
+                overflow: TextOverflow.ellipsis,
               ),
               SizedBox(
                 height: AppSize.heightSize(25, context),

@@ -7,6 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'Providers/app_settings_provider.dart';
+import 'Providers/cart_provider.dart';
+import 'Providers/search_provider.dart';
 import 'Utils/Constants/theme.dart';
 
 Future<void> main() async {
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
         ChangeNotifierProvider(create: (_) => LoginAndRegisterManager()),
         ChangeNotifierProvider(create: (_) => UserManagerProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, appSettings, _) {

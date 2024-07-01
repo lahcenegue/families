@@ -1,3 +1,4 @@
+import 'package:families/Screens/User/Screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -113,7 +114,7 @@ class UserHomeScreen extends StatelessWidget {
   Widget _getPage(int pageIndex) {
     const pages = [
       UserMainScreen(),
-      Text('Search Page'),
+      CartScreen(),
       AllFamiliesStore(),
       MyAccountScreen(),
     ];

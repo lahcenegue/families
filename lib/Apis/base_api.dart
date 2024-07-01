@@ -8,6 +8,7 @@ import '../Utils/Constants/app_links.dart';
 Future<BaseModel> baseApi({
   required RequestModel requestModel,
 }) async {
+  print('enter to api ');
   BaseModel baseResponse = BaseModel();
 
   try {
@@ -33,6 +34,8 @@ Future<BaseModel> baseApi({
     }
   } catch (e) {
     throw Exception(e);
+  } finally {
+    print('remouve from cart finiched');
   }
   return baseResponse;
 }

@@ -114,8 +114,11 @@ Widget _buildPageView(BuildContext context, AppSettingsProvider appsettings,
   );
 }
 
-Widget _buildBottomRow(BuildContext context, AppSettingsProvider appsettings,
-    List<Onboard> demoData) {
+Widget _buildBottomRow(
+  BuildContext context,
+  AppSettingsProvider appsettings,
+  List<Onboard> demoData,
+) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -125,7 +128,10 @@ Widget _buildBottomRow(BuildContext context, AppSettingsProvider appsettings,
   );
 }
 
-Widget _buildBackButton(BuildContext context, AppSettingsProvider appsettings) {
+Widget _buildBackButton(
+  BuildContext context,
+  AppSettingsProvider appsettings,
+) {
   return InkWell(
     onTap: () => appsettings.pageController.previousPage(
       duration: const Duration(milliseconds: 300),
@@ -156,7 +162,7 @@ Widget _buildNextButton(BuildContext context, AppSettingsProvider appsettings,
         curve: Curves.ease,
       );
       if (appsettings.pageIndex == demoData.length - 1) {
-        NavigationService.navigateTo(AppRoutes.loginScreen);
+        NavigationService.navigateTo(AppRoutes.accountTypeScreen);
         appsettings.saveData(key: PrefKeys.onBording, value: 'watched');
       }
     },

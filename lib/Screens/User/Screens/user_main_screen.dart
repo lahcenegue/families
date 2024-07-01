@@ -133,7 +133,7 @@ class UserMainScreen extends StatelessWidget {
     return AppBar(
       leading: ClipOval(
         child: Image.asset(
-          AppImages.profilImage,
+          AppImages.userProfilImage,
           width: 90,
           height: 90,
           fit: BoxFit.cover,

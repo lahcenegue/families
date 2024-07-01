@@ -9,8 +9,9 @@ import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../Utils/Widgets/error_show.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -116,7 +117,7 @@ class RegisterScreen extends StatelessWidget {
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.password_entryPrompt;
+              return AppLocalizations.of(context)!.name_entryPrompt;
             }
             return null;
           },
@@ -131,7 +132,7 @@ class RegisterScreen extends StatelessWidget {
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.password_entryPrompt;
+              return AppLocalizations.of(context)!.phone_entryPrompt;
             }
             return null;
           },
@@ -143,6 +144,7 @@ class RegisterScreen extends StatelessWidget {
           hintText: '*********',
           onChanged: (value) {
             registerManager.registerRequestModel.password = value;
+            registerManager.firstPasword(value);
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -163,14 +165,12 @@ class RegisterScreen extends StatelessWidget {
         CustomTextField(
           title: AppLocalizations.of(context)!.retype_password,
           hintText: '*********',
-          onChanged: (value) {
-            registerManager.resetRequestModel.password = value;
-          },
+          onChanged: (value) {},
           validator: (value) {
             if (value == null || value.isEmpty) {
               return AppLocalizations.of(context)!.password_entryPrompt;
             }
-            if (value != registerManager.resetRequestModel.password) {
+            if (value != registerManager.checkPassrowd) {
               return AppLocalizations.of(context)!.password_mismatch;
             }
             return null;

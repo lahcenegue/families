@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../Providers/user_manager_provider.dart';
+
+import '../../../Providers/cart_provider.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 
 class ProductCounter extends StatelessWidget {
+  final int itemId;
   final Function(int) onQuantityChanged;
 
   const ProductCounter({
     super.key,
     required this.onQuantityChanged,
+    required this.itemId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserManagerProvider>(
-      builder: (context, userManager, _) {
+    return Consumer<CartProvider>(
+      builder: (context, cartManager, _) {
+        int currentQuantity = cartManager.getQuantity(itemId);
+
         return Container(
-          //width: AppSize.widthSize(100, context),
           height: AppSize.heightSize(30, context),
           decoration: BoxDecoration(
             color: AppColors.primaryColor,
@@ -34,12 +38,12 @@ class ProductCounter extends StatelessWidget {
                   size: AppSize.iconSize(14, context),
                 ),
                 onPressed: () {
-                  userManager.decrementQuantity();
-                  onQuantityChanged(userManager.currentQuantity);
+                  cartManager.decrementQuantity(itemId);
+                  onQuantityChanged(cartManager.getQuantity(itemId));
                 },
               ),
               Text(
-                '${userManager.currentQuantity}',
+                '$currentQuantity',
                 style: AppStyles.styleRegular(14, context)
                     .copyWith(color: Colors.white),
               ),
@@ -50,8 +54,8 @@ class ProductCounter extends StatelessWidget {
                   size: AppSize.iconSize(14, context),
                 ),
                 onPressed: () {
-                  userManager.incrementQuantity();
-                  onQuantityChanged(userManager.currentQuantity);
+                  cartManager.incrementQuantity(itemId);
+                  onQuantityChanged(cartManager.getQuantity(itemId));
                 },
               ),
             ],

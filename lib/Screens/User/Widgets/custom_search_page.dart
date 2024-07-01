@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Providers/user_manager_provider.dart';
+import '../../../Providers/search_provider.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
@@ -13,28 +13,30 @@ class CustomSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserManagerProvider>(
-      builder: (context, userManager, _) {
+    return Consumer<SearchProvider>(
+      builder: (context, searchManager, _) {
         return Scaffold(
           appBar: AppBar(
-            title: buildSearchField(context, userManager),
-            actions: buildActions(context, userManager),
+            title: buildSearchField(context, searchManager),
+            actions: buildActions(context, searchManager),
           ),
-          body: userManager.isSearching
-              ? buildResults(context, userManager)
-              : buildSuggestions(context, userManager),
+          body: searchManager.isSearching
+              ? buildResults(context, searchManager)
+              : buildSuggestions(context, searchManager),
         );
       },
     );
   }
 
   Widget buildSearchField(
-      BuildContext context, UserManagerProvider userManager) {
+    BuildContext context,
+    SearchProvider searchManager,
+  ) {
     return TextField(
-      controller: userManager.searchController,
+      controller: searchManager.searchController,
       autofocus: true,
       decoration: InputDecoration(
-        hintText: userManager.filterOption == 'family'
+        hintText: searchManager.filterOption == 'family'
             ? 'ابحث عن اسم أسرة'
             : 'ابحث عن اسم طبق',
         border: InputBorder.none,
@@ -46,15 +48,15 @@ class CustomSearchPage extends StatelessWidget {
         ),
       ),
       onSubmitted: (query) {
-        if (userManager.debounce?.isActive ?? false) {
-          userManager.debounce!.cancel();
+        if (searchManager.debounce?.isActive ?? false) {
+          searchManager.debounce!.cancel();
         }
-        userManager.debounce = Timer(const Duration(milliseconds: 500), () {
+        searchManager.debounce = Timer(const Duration(milliseconds: 500), () {
           if (query.isNotEmpty) {
-            userManager.setIsSearching(true);
-            userManager.search(query: query);
+            searchManager.setIsSearching(true);
+            searchManager.search(query: query);
           } else {
-            userManager.setIsSearching(false);
+            searchManager.setIsSearching(false);
           }
         });
       },
@@ -62,15 +64,17 @@ class CustomSearchPage extends StatelessWidget {
   }
 
   List<Widget> buildActions(
-      BuildContext context, UserManagerProvider userManager) {
+    BuildContext context,
+    SearchProvider searchManager,
+  ) {
     return [
       InkWell(
         onTap: () {
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
-              return Consumer<UserManagerProvider>(
-                builder: (context, userManager, _) {
+              return Consumer<SearchProvider>(
+                builder: (context, searchManager, _) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -78,10 +82,10 @@ class CustomSearchPage extends StatelessWidget {
                         title: const Text('ابحث عن أسرة'),
                         leading: Radio<String>(
                           value: 'family',
-                          groupValue: userManager.filterOption,
+                          groupValue: searchManager.filterOption,
                           onChanged: (value) {
-                            userManager.setFilterOption(value!);
-                            userManager.searchController.clear();
+                            searchManager.setFilterOption(value!);
+                            searchManager.searchController.clear();
                             Navigator.pop(context);
                           },
                         ),
@@ -90,10 +94,10 @@ class CustomSearchPage extends StatelessWidget {
                         title: const Text('ابحث عن طبق'),
                         leading: Radio<String>(
                           value: 'dish',
-                          groupValue: userManager.filterOption,
+                          groupValue: searchManager.filterOption,
                           onChanged: (value) {
-                            userManager.setFilterOption(value!);
-                            userManager.searchController.clear();
+                            searchManager.setFilterOption(value!);
+                            searchManager.searchController.clear();
                             Navigator.pop(context);
                           },
                         ),
@@ -120,23 +124,23 @@ class CustomSearchPage extends StatelessWidget {
     ];
   }
 
-  Widget buildResults(BuildContext context, UserManagerProvider userManager) {
-    if (userManager.isLoading) {
+  Widget buildResults(BuildContext context, SearchProvider searchManager) {
+    if (searchManager.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (userManager.searchViewModel == null ||
-        userManager.searchViewModel!.items.isEmpty) {
+    if (searchManager.searchViewModel == null ||
+        searchManager.searchViewModel!.items.isEmpty) {
       return const Center(child: Text('لم يتم العثور على نتائج'));
     }
 
     return ListView.separated(
-      itemCount: userManager.searchViewModel!.items.length,
+      itemCount: searchManager.searchViewModel!.items.length,
       separatorBuilder: (buildContext, index) {
         return const SizedBox(height: 20);
       },
       itemBuilder: (buildContext, index) {
-        final item = userManager.searchViewModel!.items[index];
+        final item = searchManager.searchViewModel!.items[index];
         return ListTile(
           title: Text(item.itemName!),
           subtitle: Text(item.description!),
@@ -148,10 +152,9 @@ class CustomSearchPage extends StatelessWidget {
     );
   }
 
-  Widget buildSuggestions(
-      BuildContext context, UserManagerProvider userManager) {
-    final suggestions = userManager.searchHistory
-        .where((word) => word.startsWith(userManager.searchController.text))
+  Widget buildSuggestions(BuildContext context, SearchProvider searchManager) {
+    final suggestions = searchManager.searchHistory
+        .where((word) => word.startsWith(searchManager.searchController.text))
         .toList()
         .reversed
         .toList();
@@ -170,14 +173,14 @@ class CustomSearchPage extends StatelessWidget {
               color: Theme.of(context).iconTheme.color,
             ),
             onPressed: () {
-              userManager.deleteSearchWord(suggestions[index]);
-              userManager
-                  .setIsSearching(userManager.searchController.text.isNotEmpty);
+              searchManager.deleteSearchWord(suggestions[index]);
+              searchManager.setIsSearching(
+                  searchManager.searchController.text.isNotEmpty);
             },
           ),
           onTap: () {
-            userManager.searchController.text = suggestions[index];
-            userManager.setIsSearching(true);
+            searchManager.searchController.text = suggestions[index];
+            searchManager.setIsSearching(true);
           },
         );
       },

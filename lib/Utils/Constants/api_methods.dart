@@ -15,10 +15,10 @@ class ApiMethods {
   static const String searchMethode = 'search_for_service';
   static const String addToFavorite = 'add_to_favourite';
   static const String dishReviews = 'retrieve_item_reviews';
+  static const String getCartItems = 'get_cart';
+  static const String addToCart = 'add_to_cart';
+  static const String remouveFromCart = 'remove_from_cart';
 
-// static const String = '';
-// static const String = '';
-// static const String = '';
 // static const String = '';
 // static const String = '';
 }

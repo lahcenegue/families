@@ -65,21 +65,29 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   void goToNextScreen() {
     print('========== Go to Next Screen ===============');
-    Future.delayed(const Duration(seconds: 1), () {
-      final accountType = getData(key: PrefKeys.accountType);
-      final token = getData(key: PrefKeys.token);
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        final onBording = getData(key: PrefKeys.onBording);
+        final accountType = getData(key: PrefKeys.accountType);
+        final token = getData(key: PrefKeys.token);
 
-      if (accountType == null || token == null) {
-        NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
-        return;
-      }
-
-      if (accountType == AppStrings.family) {
-        NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
-      } else {
-        NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-      }
-    });
+        if (onBording == null) {
+          NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
+        } else {
+          if (token == null) {
+            NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+          } else {
+            if (accountType == AppStrings.family) {
+              NavigationService.navigateToAndReplace(
+                  AppRoutes.familyHomeScreen);
+            } else {
+              NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
+            }
+          }
+        }
+      },
+    );
   }
 
   void getPageIndex(int index) {

@@ -30,7 +30,7 @@ class Store {
   double? deliveryCost;
   String? storeRating;
   bool? isFavorite;
-  List<Dishs>? dishs;
+  List<DishModel>? dishs;
 
   Store({
     this.storeId,
@@ -55,49 +55,60 @@ class Store {
       storeRating: json['StoreRating'].toString(),
       isFavorite: json['isFavourite'],
       dishs: (json['Items'] as List<dynamic>)
-          .map((item) => Dishs.fromJson(item as Map<String, dynamic>))
+          .map((item) => DishModel.fromJson(item as Map<String, dynamic>))
           .toList(),
     );
   }
 }
 
-class Dishs {
+class DishModel {
+  int? cartItemId;
   int? itemId;
+  int? amount;
   int? storeId;
   String? dishName;
+  String? storeName;
   double? dishPrice;
   String? dishDescription;
   List<String>? dishImages;
   int? dishRating;
   int? preparationTime;
 
-  Dishs({
+  DishModel({
+    this.cartItemId,
     this.itemId,
+    this.amount,
     this.storeId,
     this.dishName,
+    this.storeName,
     this.dishPrice,
-    this.dishImages,
     this.dishDescription,
+    this.dishImages,
     this.dishRating,
     this.preparationTime,
   });
 
-  factory Dishs.fromJson(Map<String, dynamic> json) {
+  factory DishModel.fromJson(Map<String, dynamic> json) {
     List<String> images = [];
 
-    images = (convert.jsonDecode(json['Images']) as List<dynamic>)
-        .map((imageJson) => imageJson.toString())
-        .toList();
+    if (json['Images'] != null) {
+      images = (convert.jsonDecode(json['Images']) as List<dynamic>)
+          .map((imageJson) => imageJson.toString())
+          .toList();
+    }
 
-    return Dishs(
+    return DishModel(
+      cartItemId: json['CartItemId'],
       itemId: json['ItemId'],
+      amount: json['Amount'] ?? 0,
       storeId: json['StoreId'],
-      dishName: json['ItemName'],
-      dishPrice: json['Price'].toDouble(),
-      dishDescription: json['Description'],
-      dishImages: images,
-      dishRating: json['ItemRating'],
-      preparationTime: json['PreparationTime'],
+      dishName: json['ItemName'] ?? 'Unknown Dish',
+      storeName: json['StoreName'] ?? 'Unknown Store',
+      dishPrice: (json['Price'] as num?)?.toDouble() ?? 0.0,
+      dishDescription: json['Description'] ?? 'No description available',
+      dishImages: images.isNotEmpty ? images : ['default_image_url'],
+      dishRating: json['ItemRating'] ?? 0,
+      preparationTime: json['PreparationTime'] ?? 0,
     );
   }
 }

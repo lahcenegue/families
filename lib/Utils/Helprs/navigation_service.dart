@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../Screens/Start/Register/family_register_screen.dart';
 import '../../Screens/Start/Splash/splash.dart';
 import '../../Screens/Start/Login/login_screen.dart';
 import '../../Screens/Start/Otp/otp_screen.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String onBordingScreen = '/onBordingScreen';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
+  static const String familyRegisterScreen = '/familyRegisterScreen';
   static const String otpScreen = '/otpScreen';
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String congratulationsScreen = '/congratulationsScreen';
@@ -37,6 +39,8 @@ class AppRoutes {
       onBordingScreen: (BuildContext context) => const OnBordingScreen(),
       loginScreen: (BuildContext context) => const LoginScreen(),
       registerScreen: (BuildContext context) => const RegisterScreen(),
+      familyRegisterScreen: (BuildContext context) =>
+          const FamilyRegisterScreen(),
       otpScreen: (BuildContext context) => const OtpScreen(),
       resetPasswordScreen: (BuildContext context) =>
           const ResetPasswordScreen(),

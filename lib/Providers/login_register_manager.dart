@@ -4,7 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apis/base_api.dart';
@@ -20,11 +22,7 @@ import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
 import '../Utils/Helprs/navigation_service.dart';
 
-enum AccountType { user, admin }
-
 enum OTPType { confirm, reset }
-
-enum VisibilityField { password, password2 }
 
 class LoginAndRegisterManager extends ChangeNotifier {
   SharedPreferences? _prefs;
@@ -40,10 +38,10 @@ class LoginAndRegisterManager extends ChangeNotifier {
   String? otpToken;
   int _seconds = 60;
 
-  // pick Image
-  //List<File> selectedImages = [];
   File? storeImage;
   String storeImageBase64 = '';
+  File? medicalCertificate;
+  String medicalCertificateBase64 = '';
 
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -53,6 +51,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
   RequestModel registerRequestModel = RequestModel();
   RequestModel otpRequestModel = RequestModel();
   RequestModel resetRequestModel = RequestModel();
+
+  String storeClassification = 'حلويات';
+  String? checkPassrowd;
 
   //
 
@@ -101,6 +102,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<int?> register() async {
+    print('register ========');
     if (!isAgree) return 10;
     if (!validateAndSave(registerFormKey)) return null;
 
@@ -110,7 +112,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
     try {
       registerRequestModel.method = ApiMethods.register;
       registerRequestModel.accountType = accountType;
-      registerRequestModel.email = 'test@test.com'; //TODO delete
 
       RegisterResponseModel value =
           await registerApi(registerRequestModel: registerRequestModel);
@@ -129,6 +130,11 @@ class LoginAndRegisterManager extends ChangeNotifier {
     } finally {
       await _setApiCallProcess(false);
     }
+  }
+
+  void firstPasword(String value) {
+    checkPassrowd = value;
+    notifyListeners();
   }
 
   Future<void> lougOut() async {
@@ -301,16 +307,79 @@ class LoginAndRegisterManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImageFromGallery() async {
+  Future<void> pickProfileImage() async {
     final ImagePicker picker = ImagePicker();
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       storeImage = File(image.path);
       Uint8List storeImageBytes = await storeImage!.readAsBytes();
-      storeImageBase64 = base64Encode(storeImageBytes);
+      String mimeType = lookupMimeType(storeImage!.path) ?? 'image/jpeg';
+      String base64Image = base64Encode(storeImageBytes);
+
+      storeImageBase64 = 'data:$mimeType;base64,$base64Image';
+      registerRequestModel.storeImage = storeImageBase64;
+
       notifyListeners();
     }
   }
+
+  Future<void> pickMedicalCertificate() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      medicalCertificate = File(image.path);
+      Uint8List medicalCertificateBytes =
+          await medicalCertificate!.readAsBytes();
+      String mimeType = lookupMimeType(medicalCertificate!.path) ??
+          'application/octet-stream';
+      String base64Image = base64Encode(medicalCertificateBytes);
+
+      medicalCertificateBase64 = 'data:$mimeType;base64,$base64Image';
+      registerRequestModel.document = medicalCertificateBase64;
+      notifyListeners();
+    }
+  }
+
+  // Future<void> selectLocation() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   String address = await _getAddressFromCoordinates(
+  //     position.latitude,
+  //     position.longitude,
+  //   );
+  //   locationController.text = address;
+  //   notifyListeners();
+  // }
+
+  // Future<String> _getAddressFromCoordinates(
+  //     double latitude, double longitude) async {
+  //   List<Placemark> placemarks =
+  //       await placemarkFromCoordinates(latitude, longitude);
+  //   if (placemarks.isNotEmpty) {
+  //     final Placemark place = placemarks.first;
+  //     return "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+  //   }
+  //   return "Unknown location";
+  // }
 
   Future<void> saveUserData(dynamic value) async {
     print('save data after login ${value.userData!.token}');
