@@ -88,7 +88,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
           await loginApi(loginRequestModel: loginRequestModel);
 
       if (value.status == 'success') {
-        print('value == success  ${value.userData!.token}');
         await _handleSuccessfulLogin(value);
         return null;
       } else {
@@ -102,11 +101,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<int?> register() async {
-    print('register ========');
     if (!isAgree) return 10;
     if (!validateAndSave(registerFormKey)) return null;
 
-    print('register function');
     await _setApiCallProcess(true);
 
     try {
@@ -155,7 +152,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
   // send otp for create account
   Future<int?> sendOtpForCreateAccount() async {
-    print('send otp code ======');
     otpType = OTPType.confirm;
     await _setApiCallProcess(true);
 
@@ -416,12 +412,15 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<void> _handleSuccessfulLogin(LoginResponseModel value) async {
-    print('success login ${value.userData!.token}');
     isApiCallProcess = false;
     loginRequestModel = RequestModel();
     notifyListeners();
     await saveUserData(value);
-    NavigationService.navigateTo(AppRoutes.userHomeScreen);
+    if (accountType == AppStrings.user) {
+      NavigationService.navigateTo(AppRoutes.userHomeScreen);
+    } else {
+      NavigationService.navigateTo(AppRoutes.familyHomeScreen);
+    }
   }
 }
 

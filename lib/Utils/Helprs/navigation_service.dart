@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../Screens/Family/add_dish.dart';
+import '../../Screens/Family/family_home_screen.dart';
+import '../../Screens/Family/term_condition.dart';
 import '../../Screens/Start/Register/family_register_screen.dart';
 import '../../Screens/Start/Splash/splash.dart';
 import '../../Screens/Start/Login/login_screen.dart';
@@ -31,6 +34,8 @@ class AppRoutes {
   static const String familyHomeScreen = '/familyHomeScreen';
   static const String searchScreen = '/search';
   static const String feedbackScreen = '/feedbackScreen';
+  static const String addNewDish = '/addNewDish';
+  static const String familiTermsConditions = '/familiTermsConditions';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -51,6 +56,10 @@ class AppRoutes {
       disheView: (BuildContext context) => const DisheView(),
       searchScreen: (BuildContext context) => const CustomSearchPage(),
       feedbackScreen: (BuildContext context) => const FeedbacksScreen(),
+      familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
+      addNewDish: (BuildContext context) => const AddNewDish(),
+      familiTermsConditions: (BuildContext context) =>
+          const FamilyTermsAndConditionsPage(),
     };
   }
 }

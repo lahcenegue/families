@@ -20,9 +20,6 @@ Future<ResetTokenResponseModel> getResetTokenApi({
       },
       body: convert.jsonEncode(requestModel.toJson()),
     );
-    print(convert.jsonEncode(requestModel.toJson()));
-    print(response.body);
-    print(response.statusCode);
 
     var body = convert.json.decode(response.body);
 

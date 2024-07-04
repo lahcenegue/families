@@ -9,8 +9,8 @@ import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 
-class MyAccountScreen extends StatelessWidget {
-  const MyAccountScreen({super.key});
+class UserAccountScreen extends StatelessWidget {
+  const UserAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

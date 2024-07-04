@@ -8,7 +8,7 @@ import '../Utils/Constants/app_links.dart';
 Future<DishReviewModel> getDishReviewsApi(
     {required RequestModel request}) async {
   DishReviewModel dishReviewModel = DishReviewModel();
-  print('========== get dish reviews from api ==================');
+
   try {
     Uri url = Uri.parse(AppLinks.api);
 
@@ -19,10 +19,6 @@ Future<DishReviewModel> getDishReviewsApi(
       },
       body: convert.jsonEncode(request.toJson()),
     );
-
-    print(convert.jsonEncode(request.toJson()));
-    print(response.body);
-    print(response.statusCode);
 
     var body = convert.json.decode(response.body);
 

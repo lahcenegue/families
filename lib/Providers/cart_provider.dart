@@ -50,7 +50,6 @@ class CartProvider extends ChangeNotifier {
       itemQuantities.clear();
       for (var item in cartModel.data ?? []) {
         itemQuantities[item.itemId ?? 0] = item.amount ?? 1;
-        print(itemQuantities);
       }
 
       if (cartModel.status == 'Success') {

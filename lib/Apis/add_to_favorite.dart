@@ -19,10 +19,6 @@ Future<BaseModel> addToFavoriteApi(
       body: convert.jsonEncode(favoriteRequest.toJson()),
     );
 
-    print(convert.jsonEncode(favoriteRequest.toJson()));
-    print(response.body);
-    print(response.statusCode);
-
     var body = convert.json.decode(response.body);
 
     favoriteResult = BaseModel.fromJson(body);

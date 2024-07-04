@@ -1,14 +1,13 @@
+import 'package:families/Models/my_ordres_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../Models/register_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/app_links.dart';
 
-Future<RegisterResponseModel> registerApi({
-  required RequestModel registerRequestModel,
-}) async {
-  RegisterResponseModel registerResponse = RegisterResponseModel();
+Future<MyOrdersModel> getMyOrdersApi(
+    {required RequestModel getMyOredesRequest}) async {
+  MyOrdersModel myOredersModel = MyOrdersModel();
 
   try {
     Uri url = Uri.parse(AppLinks.api);
@@ -18,14 +17,14 @@ Future<RegisterResponseModel> registerApi({
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: convert.jsonEncode(registerRequestModel.toJson()),
+      body: convert.jsonEncode(getMyOredesRequest.toJson()),
     );
 
     var body = convert.json.decode(response.body);
 
-    registerResponse = RegisterResponseModel.fromJson(body);
+    myOredersModel = MyOrdersModel.fromJson(body);
 
-    return registerResponse;
+    return myOredersModel;
   } catch (e) {
     throw Exception(e);
   }

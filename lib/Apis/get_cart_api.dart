@@ -7,7 +7,7 @@ import '../Utils/Constants/app_links.dart';
 
 Future<CartModel> getCartItemsApi({required RequestModel request}) async {
   CartModel cartModel = CartModel();
-  print('========== get cart items from api ==================');
+
   try {
     Uri url = Uri.parse(AppLinks.api);
 
@@ -18,10 +18,6 @@ Future<CartModel> getCartItemsApi({required RequestModel request}) async {
       },
       body: convert.jsonEncode(request.toJson()),
     );
-
-    print(convert.jsonEncode(request.toJson()));
-    print(response.body);
-    print(response.statusCode);
 
     var body = convert.json.decode(response.body);
 

@@ -1,14 +1,13 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../Models/register_model.dart';
+import '../Models/my_dishs_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/app_links.dart';
 
-Future<RegisterResponseModel> registerApi({
-  required RequestModel registerRequestModel,
-}) async {
-  RegisterResponseModel registerResponse = RegisterResponseModel();
+Future<MyDishsModel> getMyDishsApi(
+    {required RequestModel getItemsRequest}) async {
+  MyDishsModel myDishsModel = MyDishsModel();
 
   try {
     Uri url = Uri.parse(AppLinks.api);
@@ -18,14 +17,14 @@ Future<RegisterResponseModel> registerApi({
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: convert.jsonEncode(registerRequestModel.toJson()),
+      body: convert.jsonEncode(getItemsRequest.toJson()),
     );
 
     var body = convert.json.decode(response.body);
 
-    registerResponse = RegisterResponseModel.fromJson(body);
+    myDishsModel = MyDishsModel.fromJson(body);
 
-    return registerResponse;
+    return myDishsModel;
   } catch (e) {
     throw Exception(e);
   }

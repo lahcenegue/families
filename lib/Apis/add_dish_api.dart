@@ -1,14 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../Models/register_model.dart';
+import '../Models/add_dish_mode.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/app_links.dart';
 
-Future<RegisterResponseModel> registerApi({
-  required RequestModel registerRequestModel,
-}) async {
-  RegisterResponseModel registerResponse = RegisterResponseModel();
+Future<AddDishModel> addDishApi({required RequestModel addDishRequest}) async {
+  AddDishModel addDishModel = AddDishModel();
 
   try {
     Uri url = Uri.parse(AppLinks.api);
@@ -18,14 +16,14 @@ Future<RegisterResponseModel> registerApi({
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: convert.jsonEncode(registerRequestModel.toJson()),
+      body: convert.jsonEncode(addDishRequest.toJson()),
     );
 
     var body = convert.json.decode(response.body);
 
-    registerResponse = RegisterResponseModel.fromJson(body);
+    addDishModel = AddDishModel.fromJson(body);
 
-    return registerResponse;
+    return addDishModel;
   } catch (e) {
     throw Exception(e);
   }

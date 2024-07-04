@@ -18,10 +18,6 @@ Future<StoreModel> getFamilyStoresApi(
       body: convert.jsonEncode(getFamilyStoresRequest.toJson()),
     );
 
-    print(convert.jsonEncode(getFamilyStoresRequest.toJson()));
-    print(response.body);
-    print(response.statusCode);
-
     var body = convert.json.decode(response.body);
 
     familyStores = StoreModel.fromJson(body);

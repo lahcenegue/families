@@ -18,7 +18,13 @@ class ApiMethods {
   static const String getCartItems = 'get_cart';
   static const String addToCart = 'add_to_cart';
   static const String remouveFromCart = 'remove_from_cart';
+  static const String getMyOrders = 'get_orders';
+  static const String getMyDishs = 'retrieve_my_store_items';
+  static const String addNewDish = 'add_item';
 
+// static const String = '';
+// static const String = '';
+// static const String = '';
 // static const String = '';
 // static const String = '';
 }

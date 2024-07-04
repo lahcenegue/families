@@ -11,7 +11,7 @@ import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../Utils/Widgets/error_desplay.dart';
 import 'all_families_store.dart';
-import 'my_account_screen.dart';
+import 'user_account_screen.dart';
 import 'user_main_screen.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -116,7 +116,7 @@ class UserHomeScreen extends StatelessWidget {
       UserMainScreen(),
       CartScreen(),
       AllFamiliesStore(),
-      MyAccountScreen(),
+      UserAccountScreen(),
     ];
     return pages[pageIndex];
   }

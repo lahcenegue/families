@@ -54,7 +54,6 @@ class UserManagerProvider extends ChangeNotifier {
 
       _prefs = await SharedPreferences.getInstance();
       token = _prefs!.getString(PrefKeys.token);
-      print('=============== User Manager $token =================');
 
       await getBannerImages();
       await getFamilyStores(StoreType.popular);
@@ -69,12 +68,10 @@ class UserManagerProvider extends ChangeNotifier {
   // Get Banner Images =============================================
   Future<void> getBannerImages() async {
     try {
-      print('========== get banner images ==================');
       BannerImagesModel value = await getBannerImagesApi(
         getBannerRequest: RequestModel(method: ApiMethods.getBannerMethod),
       );
 
-      print(value.status);
       if (value.status == 'Success') {
         bannerImages = value.data!;
         print(value.data);

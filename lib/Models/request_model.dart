@@ -20,6 +20,9 @@ class RequestModel {
   String? document;
   String? category;
   String? description;
+  double? preparationTime;
+  String? dishName;
+  double? dishPrice;
 
   RequestModel({
     this.method,
@@ -43,6 +46,9 @@ class RequestModel {
     this.document,
     this.category,
     this.description,
+    this.preparationTime,
+    this.dishName,
+    this.dishPrice,
   });
 
   Map<String, dynamic> toJson() {
@@ -68,6 +74,9 @@ class RequestModel {
       if (document != null) 'Document1': document!.trim(),
       if (category != null) 'Category': category!.trim(),
       if (description != null) 'Description': description!.trim(),
+      if (preparationTime != null) 'PreparationTime': preparationTime!,
+      if (dishName != null) 'ItemName': dishName!.trim(),
+      if (dishPrice != null) 'Price': dishPrice!,
     };
   }
 }

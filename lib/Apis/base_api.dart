@@ -8,7 +8,6 @@ import '../Utils/Constants/app_links.dart';
 Future<BaseModel> baseApi({
   required RequestModel requestModel,
 }) async {
-  print('enter to api ');
   BaseModel baseResponse = BaseModel();
 
   try {
