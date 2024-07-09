@@ -1,4 +1,5 @@
 import 'base_model.dart';
+import 'dart:convert' as convert;
 
 class MyDishsModel extends BaseModel {
   final List<MyDish>? data;
@@ -28,6 +29,7 @@ class MyDish {
   double? price;
   String? description;
   int? preparationTime;
+  List<String>? images;
 
   MyDish({
     this.itemId,
@@ -37,6 +39,7 @@ class MyDish {
     this.price,
     this.description,
     this.preparationTime,
+    this.images,
   });
 
   factory MyDish.fromJson(Map<String, dynamic> json) {
@@ -48,6 +51,18 @@ class MyDish {
       price: json['Price'].toDouble(),
       description: json['Description'],
       preparationTime: json['PreparationTime'],
+      images: parseImages(json['Images']),
     );
+  }
+
+  static List<String> parseImages(dynamic imagesJson) {
+    if (imagesJson is String) {
+      final List<dynamic> decoded = convert.jsonDecode(imagesJson);
+      return decoded.map((image) => image.toString()).toList();
+    } else if (imagesJson is List) {
+      return imagesJson.map((image) => image.toString()).toList();
+    } else {
+      return [];
+    }
   }
 }

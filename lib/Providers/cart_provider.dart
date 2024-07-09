@@ -81,7 +81,10 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addToCart({required int itemId, required int amount}) async {
+  Future<int> addToCart({
+    required int itemId,
+    required int amount,
+  }) async {
     isApiCallProcess = true;
     notifyListeners();
 
@@ -94,11 +97,20 @@ class CartProvider extends ChangeNotifier {
     try {
       BaseModel value = await baseApi(requestModel: requestModel);
       if (value.status == 'Success') {
+        await getCartItems();
         isApiCallProcess = false;
         notifyListeners();
+        return 11;
+      } else {
+        isApiCallProcess = false;
+        notifyListeners();
+        return value.errorCode ?? 12;
       }
     } catch (e) {
+      isApiCallProcess = false;
+      notifyListeners();
       print('Error fetching cart items: $e');
+      return 13;
     }
   }
 

@@ -1,4 +1,5 @@
 import '../Models/my_dishs_model.dart';
+import '../Utils/Constants/app_links.dart';
 
 class MyDishsViewmodel {
   final MyDishsModel _myDishsModel;
@@ -25,4 +26,8 @@ class MyDishViewModel {
   double? get price => _item.price;
   String? get description => _item.description;
   int? get preparationTime => _item.preparationTime;
+  List<String>? get images => _item.images;
+
+  String? get firstImage =>
+      images?.isNotEmpty == true ? '${AppLinks.url}${images!.first}' : null;
 }

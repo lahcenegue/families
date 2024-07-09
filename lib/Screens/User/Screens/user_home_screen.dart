@@ -34,7 +34,7 @@ class UserHomeScreen extends StatelessWidget {
                   const LinearProgressIndicator(),
                   SizedBox(height: AppSize.heightSize(20, context)),
                   Text(
-                    'جارٍ تحميل البيانات، يرجى الانتظار...',
+                    AppLocalizations.of(context)!.loading_data,
                     style: AppStyles.styleMedium(14, context),
                   ),
                 ],
@@ -60,7 +60,7 @@ class UserHomeScreen extends StatelessWidget {
           return Scaffold(
             body: Center(
               child: Text(
-                'Error loading data',
+                AppLocalizations.of(context)!.error_loading_data,
                 style: AppStyles.styleMedium(14, context),
               ),
             ),
@@ -86,7 +86,7 @@ class UserHomeScreen extends StatelessWidget {
       AppLocalizations.of(context)!.home,
       AppLocalizations.of(context)!.cart,
       AppLocalizations.of(context)!.productive_family,
-      AppLocalizations.of(context)!.account,
+      AppLocalizations.of(context)!.my_account,
     ];
     List<String> icons = [
       AppImages.homeIcon,

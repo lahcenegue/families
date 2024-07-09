@@ -21,7 +21,7 @@ class FamilyAccountScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              AppLocalizations.of(context)!.account,
+              AppLocalizations.of(context)!.my_account,
               style: AppStyles.styleBold(18, context),
             ),
           ),
@@ -169,7 +169,7 @@ class FamilyAccountScreen extends StatelessWidget {
   Widget _buildTermsConditionsTile(BuildContext context) {
     return ListTile(
       onTap: () {
-        NavigationService.navigateTo(AppRoutes.familiTermsConditions);
+        NavigationService.navigateTo(AppRoutes.familyTermsConditions);
       },
       title: Text(
         'الشروط و الاحكام',

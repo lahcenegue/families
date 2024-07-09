@@ -8,10 +8,11 @@ import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../Utils/Widgets/custom_text_field.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
-import '../../../Utils/Widgets/error_show.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -150,7 +151,7 @@ class LoginScreen extends StatelessWidget {
             onPressed: () async {
               await loginManager
                   .login()
-                  .then((value) => errorMessagesShow(context, value));
+                  .then((value) => customSnackBar(context, value));
             },
             child: Text(AppLocalizations.of(context)!.login),
           ),

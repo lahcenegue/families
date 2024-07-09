@@ -8,6 +8,7 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Helprs/navigation_service.dart';
 
 class UserAccountScreen extends StatelessWidget {
   const UserAccountScreen({super.key});
@@ -20,7 +21,7 @@ class UserAccountScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              AppLocalizations.of(context)!.account,
+              AppLocalizations.of(context)!.my_account,
               style: AppStyles.styleBold(18, context),
             ),
           ),
@@ -97,6 +98,8 @@ class UserAccountScreen extends StatelessWidget {
           _buildDivider(),
           _buildPurchasesTile(context),
           _buildDivider(),
+          _buildTermsConditionsTile(context),
+          _buildDivider(),
           _buildLogoutTile(context),
         ],
       ),
@@ -159,6 +162,23 @@ class UserAccountScreen extends StatelessWidget {
         AppLocalizations.of(context)!.logout,
         style: AppStyles.styleBold(12, context)
             .copyWith(color: const Color(0xFFC42C2C)),
+      ),
+    );
+  }
+
+  Widget _buildTermsConditionsTile(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        NavigationService.navigateTo(AppRoutes.userTermsConditions);
+      },
+      title: Text(
+        'الشروط و الاحكام',
+        style: AppStyles.styleBold(12, context),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios_rounded,
+        color: Theme.of(context).iconTheme.color,
+        size: AppSize.iconSize(20, context),
       ),
     );
   }

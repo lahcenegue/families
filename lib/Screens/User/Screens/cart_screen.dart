@@ -18,107 +18,50 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CartProvider>(
       builder: (context, cartManager, _) {
-        double totalPrice = cartManager.cartViewModel?.items.fold(0,
-                (sum, item) => sum! + (item.dishPrice ?? 0) * item.amount!) ??
-            0;
-        double deliveryPrice = 10.0; // Example delivery price
-
         if (cartManager.cartViewModel == null) {
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
-        } else {
-          return Scaffold(
-            appBar: _buildAppBar(context),
-            body: Padding(
-              padding: EdgeInsets.all(AppSize.widthSize(25, context)),
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await cartManager.getCartItems();
-                },
-                child: ListView.separated(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: cartManager.cartViewModel?.items.length ?? 0,
-                  separatorBuilder: (context, index) =>
-                      SizedBox(height: AppSize.heightSize(14, context)),
-                  itemBuilder: (context, index) {
-                    final item = cartManager.cartViewModel!.items[index];
-                    return Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.startToEnd,
-                      onDismissed: (direction) {
-                        cartManager.removeFromCart(
-                            cartItemId: item.cartItemId!);
-                      },
-                      confirmDismiss: (direction) async {
-                        return await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                "تأكيد حذف الطبق",
-                                textAlign: TextAlign.center,
-                                style: AppStyles.styleBold(16, context),
-                              ),
-                              content: Text(
-                                "هل انت متأكد من أنك تريد حدف الطبق من السلة",
-                                textAlign: TextAlign.center,
-                                style: AppStyles.styleMedium(14, context),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: Text(
-                                    "رجوع",
-                                    style: AppStyles.styleBold(14, context),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: Text(
-                                    "تأكيد",
-                                    style: AppStyles.styleMedium(14, context),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      background: Container(
-                        color: Colors.red,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                right: AppSize.widthSize(20, context)),
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                              size: AppSize.iconSize(32, context),
-                            ),
-                          ),
-                        ),
-                      ),
-                      child: _buildCartItem(context, item, cartManager),
-                    );
-                  },
-                ),
-              ),
-            ),
-            bottomNavigationBar: _buildBottomNavigationBar(
-              context,
-              totalPrice,
-              deliveryPrice,
-              cartManager,
-            ),
-          );
         }
+
+        double totalPrice = cartManager.cartViewModel!.items.fold(0,
+                (sum, item) => sum! + (item.dishPrice ?? 0) * item.amount!) ??
+            0;
+
+        return Scaffold(
+          appBar: _buildAppBar(context),
+          body: Padding(
+            padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await cartManager.getCartItems();
+              },
+              child: cartManager.cartViewModel!.items.isEmpty
+                  ? Center(
+                      child: Text(
+                        'لا يوجد عناصر في السلة',
+                        style: AppStyles.styleBold(16, context),
+                      ),
+                    )
+                  : ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: cartManager.cartViewModel!.items.length,
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: AppSize.heightSize(14, context)),
+                      itemBuilder: (context, index) {
+                        final item = cartManager.cartViewModel!.items[index];
+                        return _buildDismissibleCartItem(
+                            context, item, cartManager);
+                      },
+                    ),
+            ),
+          ),
+          bottomNavigationBar: cartManager.cartViewModel!.items.isEmpty
+              ? null
+              : _buildBottomNavigationBar(context, totalPrice, cartManager),
+        );
       },
     );
   }
@@ -130,6 +73,67 @@ class CartScreen extends StatelessWidget {
         'السلة',
         style: AppStyles.styleBold(14, context),
       ),
+    );
+  }
+
+  Widget _buildDismissibleCartItem(
+      BuildContext context, DishItemViewModel item, CartProvider cartManager) {
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        cartManager.removeFromCart(cartItemId: item.cartItemId!);
+      },
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "تأكيد حذف الطبق",
+                textAlign: TextAlign.center,
+                style: AppStyles.styleBold(16, context),
+              ),
+              content: Text(
+                "هل انت متأكد من أنك تريد حذف الطبق من السلة",
+                textAlign: TextAlign.center,
+                style: AppStyles.styleMedium(14, context),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(
+                    "رجوع",
+                    style: AppStyles.styleBold(14, context),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(
+                    "تأكيد",
+                    style: AppStyles.styleMedium(14, context),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: AppSize.widthSize(20, context)),
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: AppSize.iconSize(32, context),
+            ),
+          ),
+        ),
+      ),
+      child: _buildCartItem(context, item, cartManager),
     );
   }
 
@@ -202,11 +206,7 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildBottomNavigationBar(
-    BuildContext context,
-    double totalPrice,
-    double deliveryPrice,
-    CartProvider cartManager,
-  ) {
+      BuildContext context, double totalPrice, CartProvider cartManager) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -264,11 +264,7 @@ class CartScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'سعر التوصيل :   $deliveryPrice ريال',
-                    style: AppStyles.styleBold(14, context),
-                  ),
-                  Text(
-                    'السعر الاجمالي:   ${totalPrice + deliveryPrice} ريال',
+                    'السعر الاجمالي:   $totalPrice ريال',
                     style: AppStyles.styleBold(14, context),
                   ),
                 ],

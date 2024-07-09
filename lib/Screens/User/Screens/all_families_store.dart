@@ -5,7 +5,7 @@ import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
-import '../../../Utils/Widgets/error_show.dart';
+import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../Widgets/all_store_box.dart';
 
 class AllFamiliesStore extends StatelessWidget {
@@ -18,7 +18,11 @@ class AllFamiliesStore extends StatelessWidget {
         return Scaffold(
           appBar: _buildAppBar(context),
           body: Padding(
-            padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+            padding: EdgeInsets.only(
+              top: AppSize.widthSize(40, context),
+              left: AppSize.widthSize(25, context),
+              right: AppSize.widthSize(25, context),
+            ),
             child: userManager.allFamiliesViewModel == null
                 ? _buildLoadingIndicator(userManager)
                 : _buildStoreList(context, userManager),
@@ -58,11 +62,9 @@ class AllFamiliesStore extends StatelessWidget {
   Widget _buildStoreList(
       BuildContext context, UserManagerProvider userManager) {
     return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemCount: userManager.allFamiliesViewModel!.stores.length,
       separatorBuilder: (context, index) =>
-          SizedBox(height: AppSize.heightSize(10, context)),
+          SizedBox(height: AppSize.heightSize(20, context)),
       itemBuilder: (context, index) {
         final store = userManager.allFamiliesViewModel!.stores[index];
         return AllStoreBox(
@@ -70,7 +72,7 @@ class AllFamiliesStore extends StatelessWidget {
           addToFavorite: () async {
             await userManager
                 .addToFavorite(storeId: store.storeId!)
-                .then((value) => errorMessagesShow(context, value));
+                .then((value) => customSnackBar(context, value));
           },
         );
       },

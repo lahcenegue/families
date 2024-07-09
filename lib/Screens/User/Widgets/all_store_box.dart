@@ -112,22 +112,27 @@ class AllStoreBox extends StatelessWidget {
   Widget _buildFavoriteIcon(
       BuildContext context, UserManagerProvider userManager) {
     return Container(
-      height: AppSize.heightSize(30, context),
+      height: AppSize.widthSize(34, context),
+      width: AppSize.widthSize(34, context),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
       ),
-      child: IconButton(
-        icon: store.favorite!
-            ? const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              )
-            : const Icon(
-                Icons.favorite_border,
-                color: Colors.black,
-              ),
-        onPressed: addToFavorite,
+      child: Center(
+        child: IconButton(
+          icon: store.favorite!
+              ? Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                  size: AppSize.iconSize(20, context),
+                )
+              : Icon(
+                  Icons.favorite_border,
+                  color: Colors.black,
+                  size: AppSize.iconSize(20, context),
+                ),
+          onPressed: addToFavorite,
+        ),
       ),
     );
   }
@@ -153,10 +158,15 @@ class AllStoreBox extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                store.dishs.map((d) => d.dishName).join(', '),
-                style: AppStyles.styleRegular(10, context),
-                overflow: TextOverflow.ellipsis,
+              SizedBox(
+                width: AppSize.widthSize(190, context),
+                child: Text(
+                  store.dishs.map((d) => d.dishName).join(', '),
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: AppStyles.styleRegular(10, context),
+                ),
               ),
               SizedBox(
                 height: AppSize.heightSize(25, context),

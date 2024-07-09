@@ -10,6 +10,8 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Widgets/costum_snackbar.dart';
+import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../View_models/families_store_viewmodel.dart';
 
 class DisheView extends StatelessWidget {
@@ -17,8 +19,8 @@ class DisheView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserManagerProvider>(
-      builder: (context, userManager, _) {
+    return Consumer2<UserManagerProvider, CartProvider>(
+      builder: (context, userManager, cartManager, _) {
         final dish = userManager.selectedDish;
         if (dish == null) {
           return const Scaffold(
@@ -28,21 +30,37 @@ class DisheView extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(),
-          body: ListView(
-            padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+          body: Stack(
             children: [
-              _buildDishImage(context, dish),
-              SizedBox(height: AppSize.heightSize(25, context)),
-              _buildDishHeader(context, dish, userManager),
-              SizedBox(height: AppSize.heightSize(20, context)),
-              _buildRatingsContainer(context, dish, userManager),
-              SizedBox(height: AppSize.heightSize(20, context)),
-              _buildDishDescription(context, dish),
+              _buildContent(context, userManager, dish),
+              CustomLoadingIndicator(
+                isVisible: cartManager.isApiCallProcess,
+              ),
             ],
           ),
-          bottomNavigationBar: _buildAddToCartButton(context, dish),
+          bottomNavigationBar:
+              _buildAddToCartButton(context, cartManager, dish),
         );
       },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    UserManagerProvider userManager,
+    DishItemViewModel dish,
+  ) {
+    return ListView(
+      padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+      children: [
+        _buildDishImage(context, dish),
+        SizedBox(height: AppSize.heightSize(25, context)),
+        _buildDishHeader(context, dish, userManager),
+        SizedBox(height: AppSize.heightSize(20, context)),
+        _buildRatingsContainer(context, dish, userManager),
+        SizedBox(height: AppSize.heightSize(20, context)),
+        _buildDishDescription(context, dish),
+      ],
     );
   }
 
@@ -84,17 +102,6 @@ class DisheView extends StatelessWidget {
           style: AppStyles.styleRegular(14, context),
         ),
         SizedBox(height: AppSize.heightSize(8, context)),
-        // Row(
-        //   children: [
-        //     const Spacer(),
-        //     ProductCounter(
-        //       itemId: dish.itemId!,
-        //       onQuantityChanged: (quantity) {
-        //         print('Selected quantity: $quantity');
-        //       },
-        //     ),
-        //   ],
-        // ),
         SizedBox(height: AppSize.heightSize(8, context)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -204,17 +211,26 @@ class DisheView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddToCartButton(BuildContext context, DishItemViewModel dish) {
+  Widget _buildAddToCartButton(
+    BuildContext context,
+    CartProvider cartManager,
+    DishItemViewModel dish,
+  ) {
     return Padding(
       padding: EdgeInsets.all(AppSize.widthSize(25, context)),
       child: SizedBox(
         width: AppSize.widthSize(340, context),
         child: ElevatedButton(
-          onPressed: () {
-            Provider.of<CartProvider>(context, listen: false).addToCart(
-              itemId: dish.itemId!,
-              amount: 1,
-            );
+          onPressed: () async {
+            await cartManager
+                .addToCart(
+                  itemId: dish.itemId!,
+                  amount: 1,
+                )
+                .then(
+                  (value) => customSnackBar(context, value),
+                );
+            ;
           },
           child: const Text('اضف الى السلة'),
         ),

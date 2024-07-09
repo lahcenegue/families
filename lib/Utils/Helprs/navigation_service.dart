@@ -15,6 +15,7 @@ import '../../Screens/Start/Reset_password/reset_password.dart';
 import '../../Screens/User/Screens/dish_view.dart';
 import '../../Screens/User/Screens/feedbacks_screen.dart';
 import '../../Screens/User/Screens/store_view.dart';
+import '../../Screens/User/Screens/terms_conditions_user.dart';
 import '../../Screens/User/Screens/user_home_screen.dart';
 import '../../Screens/User/Widgets/custom_search_page.dart';
 
@@ -35,7 +36,8 @@ class AppRoutes {
   static const String searchScreen = '/search';
   static const String feedbackScreen = '/feedbackScreen';
   static const String addNewDish = '/addNewDish';
-  static const String familiTermsConditions = '/familiTermsConditions';
+  static const String familyTermsConditions = '/familyTermsConditions';
+  static const String userTermsConditions = '/userTermsConditions';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -58,8 +60,10 @@ class AppRoutes {
       feedbackScreen: (BuildContext context) => const FeedbacksScreen(),
       familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
       addNewDish: (BuildContext context) => const AddNewDish(),
-      familiTermsConditions: (BuildContext context) =>
+      familyTermsConditions: (BuildContext context) =>
           const FamilyTermsAndConditionsPage(),
+      userTermsConditions: (BuildContext context) =>
+          const UserTermsAndConditionsPage(),
     };
   }
 }

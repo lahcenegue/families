@@ -1,3 +1,4 @@
+import 'package:families/Providers/family_manager_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,25 +11,49 @@ import 'family_account_screen.dart';
 import 'family_main_screen.dart';
 import 'my_dishs.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class FamilyHomeScreen extends StatelessWidget {
   const FamilyHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppSettingsProvider>(
-      builder: (context, appSettings, _) {
-        return Scaffold(
-          bottomNavigationBar: _buildBottomNavigationBar(context, appSettings),
-          body: Stack(
-            children: [
-              Center(child: _getPage(appSettings.pageIndex)),
-              // if (userManager.isLoading)
-              //   const CustomLoadingIndicator(isVisible: true),
-              // if (userManager.errorMessage != null)
-              //   ErrorDisplay(errorMessage: userManager.errorMessage),
-            ],
-          ),
-        );
+    return Consumer2<AppSettingsProvider, FamilyManagerProvider>(
+      builder: (context, appSettings, familyManager, _) {
+        if (familyManager.isApiCallProcess) {
+          return Scaffold(
+            body: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.widthSize(30, context)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const LinearProgressIndicator(),
+                  SizedBox(height: AppSize.heightSize(20, context)),
+                  Text(
+                    AppLocalizations.of(context)!.loading_data,
+                    style: AppStyles.styleMedium(14, context),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (familyManager.isDataInitialized) {
+          return Scaffold(
+            bottomNavigationBar:
+                _buildBottomNavigationBar(context, appSettings),
+            body: Center(child: _getPage(appSettings.pageIndex)),
+          );
+        } else {
+          return Scaffold(
+            body: Center(
+              child: Text(
+                AppLocalizations.of(context)!.error_loading_data,
+                style: AppStyles.styleMedium(14, context),
+              ),
+            ),
+          );
+        }
       },
     );
   }
@@ -46,9 +71,9 @@ class FamilyHomeScreen extends StatelessWidget {
   List<BottomNavigationBarItem> _buildNavItems(
       BuildContext context, AppSettingsProvider appSettings) {
     List<String> labels = [
-      'الطلبات',
-      'اطباقي',
-      'حسابي',
+      AppLocalizations.of(context)!.orders,
+      AppLocalizations.of(context)!.my_dishes,
+      AppLocalizations.of(context)!.my_account,
     ];
     List<String> icons = [
       AppImages.cartIcon,

@@ -24,43 +24,46 @@ class PopularStoreBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserManagerProvider>(builder: (context, userManager, _) {
-      return Stack(
-        children: [
-          Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppSize.widthSize(20, context)),
-                  topRight: Radius.circular(AppSize.widthSize(20, context)),
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: '${AppLinks.url}${store.storeImage}',
-                  width: AppSize.widthSize(230, context),
-                  height: AppSize.heightSize(120, context),
-                  fit: BoxFit.fill,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
+    return Consumer<UserManagerProvider>(
+      builder: (context, userManager, _) {
+        return Stack(
+          children: [
+            Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(AppSize.widthSize(20, context)),
+                    topRight: Radius.circular(AppSize.widthSize(20, context)),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  child: CachedNetworkImage(
+                    imageUrl: '${AppLinks.url}${store.storeImage}',
+                    width: AppSize.widthSize(230, context),
+                    height: AppSize.heightSize(120, context),
+                    fit: BoxFit.fill,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: AppSize.heightSize(50, context),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 8,
-            child: _buildRatingAndFavorite(context, userManager),
-          ),
-          Positioned(
-            bottom: 0,
-            child: _buildBottomPanel(context),
-          ),
-        ],
-      );
-    });
+                SizedBox(
+                  height: AppSize.heightSize(50, context),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 8,
+              child: _buildRatingAndFavorite(context, userManager),
+            ),
+            Positioned(
+              bottom: 0,
+              child: _buildBottomPanel(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildRatingAndFavorite(
@@ -143,10 +146,15 @@ class PopularStoreBox extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                store.dishs.map((d) => d.dishName).join(', '),
-                style: AppStyles.styleRegular(10, context),
-                overflow: TextOverflow.ellipsis,
+              SizedBox(
+                width: AppSize.widthSize(120, context),
+                child: Text(
+                  store.dishs.map((d) => d.dishName).join(', '),
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: AppStyles.styleRegular(10, context),
+                ),
               ),
               SizedBox(
                 height: AppSize.heightSize(25, context),

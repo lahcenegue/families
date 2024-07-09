@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:families/Apis/get_all_messages.dart';
 import 'package:families/Apis/get_my_dishs.dart';
 import 'package:families/Models/my_dishs_model.dart';
 import 'package:families/Models/my_ordres_model.dart';
@@ -13,8 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Apis/add_dish_api.dart';
 import '../Apis/get_my_orders.dart';
 import '../Models/add_dish_mode.dart';
+import '../Models/messages_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/api_methods.dart';
+import '../View_models/messages_viewmodel.dart';
 import '../View_models/my_dishs_viewmodel.dart';
 import '../View_models/my_ordres_viewmodel.dart';
 
@@ -27,6 +30,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
   MyOrdersViewModel? myOrders;
   MyDishsViewmodel? myDishs;
+  MessageViewModel? allMessages;
 
   File? dishImage;
   String dishImageBase64 = '';
@@ -52,6 +56,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
       await fetchMyOrders();
       await fetchMyDishs();
+      await fetchMessages();
 
       isApiCallProcess = false;
       isDataInitialized = true;
@@ -119,6 +124,25 @@ class FamilyManagerProvider extends ChangeNotifier {
     } finally {
       isApiCallProcess = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> fetchMessages() async {
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.getAllMessages,
+      token: token,
+    );
+
+    try {
+      MessagesModel value = await getAllMessagesApi(requestModel: requestModel);
+      if (value.status == 'Success') {
+        allMessages = MessageViewModel(messageModel: value);
+        notifyListeners();
+      } else {
+        print('Failed to fetch messages');
+      }
+    } catch (e) {
+      print('Error fetching messages: $e');
     }
   }
 

@@ -1,12 +1,16 @@
-import 'package:families/Utils/Constants/app_colors.dart';
-import 'package:families/Utils/Helprs/navigation_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Providers/app_settings_provider.dart';
 import '../../Providers/family_manager_provider.dart';
+import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/Constants/app_size.dart';
 import '../../Utils/Constants/app_styles.dart';
+import '../../Utils/Helprs/navigation_service.dart';
 import '../../View_models/my_dishs_viewmodel.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDishsScreen extends StatelessWidget {
   const MyDishsScreen({super.key});
@@ -29,7 +33,7 @@ class MyDishsScreen extends StatelessWidget {
     return AppBar(
       centerTitle: true,
       title: Text(
-        'اطباقي',
+        AppLocalizations.of(context)!.my_dishes,
         style: AppStyles.styleBold(14, context),
       ),
     );
@@ -70,7 +74,7 @@ class MyDishsScreen extends StatelessWidget {
               NavigationService.navigateTo(AppRoutes.addNewDish);
             },
             child: Text(
-              '+ اضافة طبق',
+              AppLocalizations.of(context)!.add_dish,
               style: AppStyles.styleBold(14, context).copyWith(
                 color: Colors.white,
               ),
@@ -86,38 +90,47 @@ class MyDishsScreen extends StatelessWidget {
       width: AppSize.width(context),
       padding: EdgeInsets.only(left: AppSize.widthSize(10, context)),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
+        color: Provider.of<AppSettingsProvider>(context).isDark
+            ? AppColors.darkContainerBackground
+            : const Color(0xFFf5f5f5),
         borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
       ),
       child: Row(
         children: [
-          // ClipRRect(
-          //   borderRadius: BorderRadius.circular(AppSize.widthSize(10, context)),
-          //   child: Image.network(
-          //     item.firstImage!,
-          //     width: AppSize.widthSize(100, context),
-          //     height: AppSize.heightSize(100, context),
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
-          SizedBox(width: AppSize.widthSize(10, context)),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppSize.widthSize(10, context)),
+            child: CachedNetworkImage(
+              imageUrl: item.firstImage!,
+              width: AppSize.widthSize(130, context),
+              height: AppSize.heightSize(100, context),
+              fit: BoxFit.fill,
+              progressIndicatorBuilder: (context, url, progress) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
+          ),
+          SizedBox(width: AppSize.widthSize(20, context)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  item.itemName ?? 'Unknown Item',
+                  item.itemName!,
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  softWrap: false,
                   style: AppStyles.styleBold(14, context),
                 ),
                 Text(
-                  item.description ?? 'No description',
-                  style: AppStyles.styleBold(10, context).copyWith(
-                    color: AppColors.greyTextColors,
-                  ),
+                  item.description!,
+                  overflow: TextOverflow.fade,
+                  maxLines: 2,
+                  softWrap: false,
+                  style: AppStyles.styleMedium(9, context).copyWith(),
                 ),
                 Text(
-                  '${item.price} ريال',
+                  '${item.price} ${AppLocalizations.of(context)!.currency}',
                   style: AppStyles.styleExtraBold(14, context),
                 ),
               ],

@@ -6,9 +6,9 @@ import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
+import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../Utils/Widgets/error_show.dart';
 
 class OtpScreen extends StatelessWidget {
   const OtpScreen({super.key});
@@ -94,7 +94,7 @@ class OtpScreen extends StatelessWidget {
       onPressed: () async {
         if (otpManager.otpType == OTPType.confirm) {
           await otpManager.confirmOTP().then((value) {
-            errorMessagesShow(context, value);
+            customSnackBar(context, value);
           });
         } else {
           await otpManager.getResetToken();

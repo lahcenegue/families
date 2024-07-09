@@ -8,7 +8,7 @@ import '../../../Providers/user_manager_provider.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Widgets/error_show.dart';
+import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../Widgets/all_store_box.dart';
 import '../Widgets/popular_store_box.dart';
 
@@ -24,13 +24,37 @@ class UserMainScreen extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(top: AppSize.heightSize(20, context)),
           child: Scaffold(
-            appBar: _buildCustomAppBar(context),
+            appBar: _buildAppBar(context),
             body: userManager.isApiCallProcess
                 ? const Center(child: CircularProgressIndicator())
                 : _buildContent(context, userManager),
           ),
         );
       },
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: ClipOval(
+        child: Image.asset(
+          AppImages.userProfilImage,
+          width: AppSize.widthSize(50, context),
+          height: AppSize.widthSize(50, context),
+          fit: BoxFit.cover,
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            NavigationService.navigateTo(AppRoutes.searchScreen);
+          },
+          icon: Icon(
+            Icons.search,
+            size: AppSize.iconSize(28, context),
+          ),
+        ),
+      ],
     );
   }
 
@@ -66,7 +90,9 @@ class UserMainScreen extends StatelessWidget {
                   .addToFavorite(
                       storeId: userManager
                           .allFamiliesViewModel!.stores[index].storeId!)
-                  .then((value) => errorMessagesShow(context, value));
+                  .then(
+                    (value) => customSnackBar(context, value),
+                  );
             },
           );
         },
@@ -91,7 +117,7 @@ class UserMainScreen extends StatelessWidget {
                 .addToFavorite(
                     storeId: userManager
                         .allFamiliesViewModel!.stores[index].storeId!)
-                .then((value) => errorMessagesShow(context, value));
+                .then((value) => customSnackBar(context, value));
           },
         ),
       ),
@@ -126,30 +152,6 @@ class UserMainScreen extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSize.heightSize(15, context)),
       child: Text(title, style: AppStyles.styleBold(20, context)),
-    );
-  }
-
-  AppBar _buildCustomAppBar(BuildContext context) {
-    return AppBar(
-      leading: ClipOval(
-        child: Image.asset(
-          AppImages.userProfilImage,
-          width: 90,
-          height: 90,
-          fit: BoxFit.cover,
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {
-            NavigationService.navigateTo(AppRoutes.searchScreen);
-          },
-          icon: Icon(
-            Icons.search,
-            size: AppSize.iconSize(28, context),
-          ),
-        ),
-      ],
     );
   }
 }

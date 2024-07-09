@@ -24,7 +24,7 @@ Future<BaseModel> baseApi({
     print(convert.jsonEncode(requestModel.toJson()));
     print(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       var body = convert.json.decode(response.body);
 
       baseResponse = BaseModel.fromJson(body);
@@ -33,8 +33,6 @@ Future<BaseModel> baseApi({
     }
   } catch (e) {
     throw Exception(e);
-  } finally {
-    print('remouve from cart finiched');
-  }
+  } finally {}
   return baseResponse;
 }
