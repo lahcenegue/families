@@ -1,32 +1,30 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../Models/all_messages_model.dart';
 import '../Models/request_model.dart';
+import '../Models/messages_model.dart';
 import '../Utils/Constants/app_links.dart';
 
-Future<AllMessagesModel> getAllMessagesApi(
-    {required RequestModel requestModel}) async {
-  AllMessagesModel messages = AllMessagesModel();
+Future<MessagesModel> getUserMessagesApi(
+    {required RequestModel getUserMessagesRequest}) async {
+  MessagesModel userMessages = MessagesModel(status: '', data: []);
 
   try {
     Uri url = Uri.parse(AppLinks.api);
-
     http.Response response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: convert.jsonEncode(requestModel.toJson()),
+      body: convert.jsonEncode(getUserMessagesRequest.toJson()),
     );
-    print('get all messages api');
-    print(convert.jsonEncode(requestModel.toJson()));
+    print('get User Messages');
+    print(convert.jsonEncode(getUserMessagesRequest.toJson()));
 
     var body = convert.json.decode(response.body);
 
-    messages = AllMessagesModel.fromJson(body);
-
-    return messages;
+    userMessages = MessagesModel.fromJson(body);
+    return userMessages;
   } catch (e) {
     throw Exception(e);
   }

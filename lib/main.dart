@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:families/Providers/chat_manager_provider.dart';
 import 'package:families/Providers/login_register_manager.dart';
 import 'package:families/Providers/user_manager_provider.dart';
 import 'package:families/Utils/Helprs/navigation_service.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SearchProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => FamilyManagerProvider()),
+        ChangeNotifierProvider(create: (_) => ChatManagerProvider()),
       ],
       child: Consumer<AppSettingsProvider>(
         builder: (context, appSettings, _) {

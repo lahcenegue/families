@@ -1,7 +1,6 @@
 import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
@@ -9,6 +8,8 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FamilyAccountScreen extends StatelessWidget {
   const FamilyAccountScreen({super.key});

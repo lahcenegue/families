@@ -22,9 +22,9 @@ class ApiMethods {
   static const String getMyDishs = 'retrieve_my_store_items';
   static const String addNewDish = 'add_item';
   static const String getAllMessages = 'retrieve_new_messages_for_store';
+  static const String sendMessageFromStore = 'send_message_from_store';
+  static const String getUserMessages = 'retrieve_messages_with_user';
 
-// static const String = '';
-// static const String = '';
 // static const String = '';
 // static const String = '';
 }

@@ -21,6 +21,7 @@ Future<BaseModel> baseApi({
       body: convert.jsonEncode(requestModel.toJson()),
     );
 
+    print('send a new messag');
     print(convert.jsonEncode(requestModel.toJson()));
     print(response.body);
 

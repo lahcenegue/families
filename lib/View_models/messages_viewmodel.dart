@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 
-import '../Models/messages_model.dart';
+import '../Models/all_messages_model.dart';
 
 class MessageViewModel {
-  final MessagesModel _messageModel;
+  final AllMessagesModel _messageModel;
   late final List<MessageItemViewModel> messages;
 
-  MessageViewModel({required MessagesModel messageModel})
+  MessageViewModel({required AllMessagesModel messageModel})
       : _messageModel = messageModel {
     messages = _messageModel.data
             ?.map((message) => MessageItemViewModel(message: message))
@@ -16,9 +16,9 @@ class MessageViewModel {
 }
 
 class MessageItemViewModel {
-  final MessageData _message;
+  final AllMessageData _message;
 
-  MessageItemViewModel({required MessageData message}) : _message = message;
+  MessageItemViewModel({required AllMessageData message}) : _message = message;
 
   int? get messageId => _message.messageId;
   int? get userId => _message.userId;

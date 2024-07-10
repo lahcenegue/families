@@ -12,6 +12,8 @@ import '../../View_models/my_ordres_viewmodel.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'all_messages_screen.dart';
+
 class FamilyMainScreen extends StatelessWidget {
   const FamilyMainScreen({super.key});
 
@@ -99,7 +101,7 @@ class FamilyMainScreen extends StatelessWidget {
     return TabBarView(
       children: [
         _buildOrdersContent(context, familyManager),
-        _buildMessagesContent(context, familyManager),
+        const AllMessagesScreen(),
       ],
     );
   }
@@ -240,67 +242,77 @@ class FamilyMainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMessagesContent(
-      BuildContext context, FamilyManagerProvider familyManager) {
-    if (familyManager.allMessages == null ||
-        familyManager.allMessages!.messages.isEmpty) {
-      return Center(
-        child: Text(AppLocalizations.of(context)!.no_messages),
-      );
-    } else {
-      return Container(
-        margin: EdgeInsets.only(top: AppSize.heightSize(40, context)),
-        color: Provider.of<AppSettingsProvider>(context).isDark
-            ? AppColors.darkContainerBackground
-            : Colors.white,
-        child: ListView.builder(
-          itemCount: familyManager.allMessages!.messages.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                familyManager.allMessages!.messages[index].userName!,
-                style: AppStyles.styleBold(12, context),
-              ),
-              subtitle: Text(
-                familyManager.allMessages!.messages[index].message!,
-                style: AppStyles.styleRegular(10, context),
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    familyManager.allMessages!.messages[index].time!,
-                    style: AppStyles.styleRegular(10, context),
-                  ),
-                  familyManager.allMessages!.messages[index].latestMessages! ==
-                          0
-                      ? Icon(
-                          Icons.check,
-                          color: AppColors.primaryColor,
-                        )
-                      : Container(
-                          width: AppSize.widthSize(25, context),
-                          height: AppSize.widthSize(20, context),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(
-                                AppSize.widthSize(20, context)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${familyManager.allMessages!.messages[index].latestMessages}',
-                              style: AppStyles.styleBold(12, context).copyWith(
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                          ),
-                        )
-                ],
-              ),
-            );
-          },
-        ),
-      );
-    }
-  }
+  // Widget _buildMessagesContent(
+  //     BuildContext context, FamilyManagerProvider familyManager) {
+  //   if (familyManager.allMessages == null ||
+  //       familyManager.allMessages!.messages.isEmpty) {
+  //     return Center(
+  //       child: Text(AppLocalizations.of(context)!.no_messages),
+  //     );
+  //   } else {
+  //     return Container(
+  //       margin: EdgeInsets.only(top: AppSize.heightSize(40, context)),
+  //       color: Provider.of<AppSettingsProvider>(context).isDark
+  //           ? AppColors.darkContainerBackground
+  //           : Colors.white,
+  //       child: ListView.builder(
+  //         itemCount: familyManager.allMessages!.messages.length,
+  //         itemBuilder: (context, index) {
+  //           return ListTile(
+  //             onTap: () {
+  //               Navigator.of(context).push(
+  //                 MaterialPageRoute(
+  //                   builder: (context) => const ChatScreen(
+  //                     userId: 18,
+  //                     token: 'UfFqCtub4U',
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //             title: Text(
+  //               familyManager.allMessages!.messages[index].userName!,
+  //               style: AppStyles.styleBold(12, context),
+  //             ),
+  //             subtitle: Text(
+  //               familyManager.allMessages!.messages[index].message!,
+  //               style: AppStyles.styleRegular(10, context),
+  //             ),
+  //             trailing: Column(
+  //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //               children: [
+  //                 Text(
+  //                   familyManager.allMessages!.messages[index].time!,
+  //                   style: AppStyles.styleRegular(10, context),
+  //                 ),
+  //                 familyManager.allMessages!.messages[index].latestMessages! ==
+  //                         0
+  //                     ? Icon(
+  //                         Icons.check,
+  //                         color: AppColors.primaryColor,
+  //                       )
+  //                     : Container(
+  //                         width: AppSize.widthSize(25, context),
+  //                         height: AppSize.widthSize(20, context),
+  //                         decoration: BoxDecoration(
+  //                           color: AppColors.primaryColor.withOpacity(0.2),
+  //                           borderRadius: BorderRadius.circular(
+  //                               AppSize.widthSize(20, context)),
+  //                         ),
+  //                         child: Center(
+  //                           child: Text(
+  //                             '${familyManager.allMessages!.messages[index].latestMessages}',
+  //                             style: AppStyles.styleBold(12, context).copyWith(
+  //                               color: AppColors.primaryColor,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       )
+  //               ],
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     );
+  //   }
+  // }
 }

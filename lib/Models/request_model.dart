@@ -23,6 +23,9 @@ class RequestModel {
   double? preparationTime;
   String? dishName;
   double? dishPrice;
+  int? userId;
+  String? message;
+  int? messageId;
 
   RequestModel({
     this.method,
@@ -49,6 +52,9 @@ class RequestModel {
     this.preparationTime,
     this.dishName,
     this.dishPrice,
+    this.userId,
+    this.message,
+    this.messageId,
   });
 
   Map<String, dynamic> toJson() {
@@ -77,6 +83,9 @@ class RequestModel {
       if (preparationTime != null) 'PreparationTime': preparationTime!,
       if (dishName != null) 'ItemName': dishName!.trim(),
       if (dishPrice != null) 'Price': dishPrice!,
+      if (userId != null) 'UserId': userId!,
+      if (message != null) 'Message': message!.trim(),
+      if (messageId != null) 'MessageId': messageId!,
     };
   }
 }

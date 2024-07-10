@@ -1,53 +1,47 @@
-import 'base_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class MessagesModel extends BaseModel {
+part 'messages_model.g.dart';
+
+@JsonSerializable()
+class MessagesModel {
+  final String status;
   final List<MessageData>? data;
 
-  MessagesModel({
-    super.status,
-    super.errorCode,
-    this.data,
-  });
+  MessagesModel({required this.status, this.data});
 
-  factory MessagesModel.fromJson(Map<String, dynamic> json) {
-    return MessagesModel(
-      status: json['status'],
-      errorCode: json['error_code'],
-      data: (json['data'] as List<dynamic>?)
-          ?.map((item) => MessageData.fromJson(item))
-          .toList(),
-    );
-  }
+  factory MessagesModel.fromJson(Map<String, dynamic> json) =>
+      _$MessagesModelFromJson(json);
+  Map<String, dynamic> toJson() => _$MessagesModelToJson(this);
 }
 
+@JsonSerializable()
 class MessageData {
-  int? messageId;
-  int? userId;
-  int? storeId;
-  String? message;
-  int? time;
-  String? userName;
-  int? latestMessages;
+  @JsonKey(name: 'MessageId')
+  final int messageId;
+  @JsonKey(name: 'UserId')
+  final int userId;
+  @JsonKey(name: 'StoreId')
+  final int storeId;
+  @JsonKey(name: 'Message')
+  final String message;
+  @JsonKey(name: 'SentByUser')
+  final int sentByUser;
+  @JsonKey(name: 'Time')
+  final int time;
+  @JsonKey(name: 'UserName')
+  final String userName;
 
   MessageData({
-    this.messageId,
-    this.userId,
-    this.storeId,
-    this.message,
-    this.time,
-    this.userName,
-    this.latestMessages,
+    required this.messageId,
+    required this.userId,
+    required this.storeId,
+    required this.message,
+    required this.sentByUser,
+    required this.time,
+    required this.userName,
   });
 
-  factory MessageData.fromJson(Map<String, dynamic> json) {
-    return MessageData(
-      messageId: json['MessageId'],
-      userId: json['UserId'],
-      storeId: json['StoreId'],
-      message: json['Message'],
-      time: json['Time'],
-      userName: json['UserName'],
-      latestMessages: json['latest_messages'],
-    );
-  }
+  factory MessageData.fromJson(Map<String, dynamic> json) =>
+      _$MessageDataFromJson(json);
+  Map<String, dynamic> toJson() => _$MessageDataToJson(this);
 }
