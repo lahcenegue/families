@@ -33,7 +33,7 @@ class ChatScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 message.userName!,
-                style: AppStyles.styleBold(14, context),
+                style: AppStyles.styleBold(18, context),
               ),
             ),
             body: Column(

@@ -23,7 +23,7 @@ class FamilyAccountScreen extends StatelessWidget {
             centerTitle: true,
             title: Text(
               AppLocalizations.of(context)!.my_account,
-              style: AppStyles.styleBold(18, context),
+              style: AppStyles.styleBold(16, context),
             ),
           ),
           body: CustomScrollView(
