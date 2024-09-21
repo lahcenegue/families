@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../Models/messages_model.dart';
 import '../../Providers/chat_manager_provider.dart';
-import '../../Providers/login_register_manager.dart';
 import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/Constants/app_size.dart';
 import '../../Utils/Constants/app_strings.dart';
@@ -23,8 +22,13 @@ class ChatScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) {
         final chatManager = ChatManagerProvider();
-        chatManager.fetchUserMessages(userId: message.userId!);
-        chatManager.startPolling(message.userId!);
+        chatManager.fetchUserMessages(
+            id: chatManager.accountType == AppStrings.family
+                ? message.userId!
+                : message.storeId!);
+        chatManager.startPolling(chatManager.accountType == AppStrings.family
+            ? message.userId!
+            : message.storeId!);
         return chatManager;
       },
       child: Consumer<ChatManagerProvider>(
@@ -32,7 +36,9 @@ class ChatScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                message.userName!,
+                chatManager.accountType == AppStrings.user
+                    ? message.storeName!
+                    : message.userName!,
                 style: AppStyles.styleBold(18, context),
               ),
             ),
@@ -46,12 +52,9 @@ class ChatScreen extends StatelessWidget {
                           itemCount: chatManager.messages.length,
                           itemBuilder: (context, index) {
                             final message = chatManager.messages[index];
-                            final isUserAccount =
-                                Provider.of<LoginAndRegisterManager>(context)
-                                        .accountType ==
-                                    AppStrings.user;
-                            final isMe =
-                                message.sentByUser == (isUserAccount ? 0 : 1);
+                            // final isUserAccount =
+                            //     chatManager.accountType == AppStrings.user;
+                            final isMe = message.sentByUser == 1;
 
                             return _buildMessageItem(context, message, isMe);
                           },
@@ -134,7 +137,9 @@ class ChatScreen extends StatelessWidget {
               onPressed: () {
                 if (chatManager.messageController.text.isNotEmpty) {
                   chatManager.sendMessage(
-                    userId: message.userId!,
+                    id: chatManager.accountType == AppStrings.family
+                        ? message.userId!
+                        : message.storeId!,
                     message: chatManager.messageController.text,
                   );
                   chatManager.messageController.clear();

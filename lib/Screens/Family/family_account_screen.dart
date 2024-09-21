@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,17 @@ import '../../../Utils/Constants/app_styles.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../Providers/family_manager_provider.dart';
+import '../../Utils/Constants/app_links.dart';
+import '../../Utils/Constants/app_strings.dart';
+
 class FamilyAccountScreen extends StatelessWidget {
   const FamilyAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppSettingsProvider>(
-      builder: (context, appSettings, _) {
+    return Consumer2<AppSettingsProvider, FamilyManagerProvider>(
+      builder: (context, appSettings, familyManager, _) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -37,11 +42,11 @@ class FamilyAccountScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildProfileImage(context),
+                      _buildProfileImage(context, familyManager),
                       SizedBox(height: AppSize.heightSize(20, context)),
-                      _buildProfileName(context),
+                      _buildProfileName(context, familyManager),
                       SizedBox(height: AppSize.heightSize(10, context)),
-                      _buildPhoneNumber(context),
+                      _buildPhoneNumber(context, familyManager),
                       SizedBox(height: AppSize.heightSize(50, context)),
                       _buildSettingsCard(context, appSettings),
                     ],
@@ -55,27 +60,34 @@ class FamilyAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage(BuildContext context) {
+  Widget _buildProfileImage(
+      BuildContext context, FamilyManagerProvider familyManager) {
     return ClipOval(
-      child: Image.asset(
-        AppImages.userProfilImage,
-        width: AppSize.widthSize(90, context),
-        height: AppSize.widthSize(90, context),
-        fit: BoxFit.cover,
+      child: CachedNetworkImage(
+        imageUrl:
+            '${AppLinks.url}${familyManager.prefs!.getString(PrefKeys.profilImage)!}',
+        width: AppSize.widthSize(100, context),
+        height: AppSize.widthSize(100, context),
+        fit: BoxFit.fill,
+        progressIndicatorBuilder: (context, url, progress) =>
+            const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
   }
 
-  Widget _buildProfileName(BuildContext context) {
+  Widget _buildProfileName(
+      BuildContext context, FamilyManagerProvider familyManager) {
     return Text(
-      'عبد الله عبد الرحيم',
+      familyManager.prefs!.getString(PrefKeys.storeName)!,
       style: AppStyles.styleBold(16, context),
     );
   }
 
-  Widget _buildPhoneNumber(BuildContext context) {
+  Widget _buildPhoneNumber(
+      BuildContext context, FamilyManagerProvider familyManager) {
     return Text(
-      '+670001876',
+      familyManager.prefs!.getString(PrefKeys.phoneNumber)!,
       style: AppStyles.styleBold(16, context),
     );
   }

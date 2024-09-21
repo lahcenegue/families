@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:families/Providers/user_manager_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,7 +8,9 @@ import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
+import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
 
@@ -15,8 +19,8 @@ class UserAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppSettingsProvider>(
-      builder: (context, appSettings, _) {
+    return Consumer2<AppSettingsProvider, UserManagerProvider>(
+      builder: (context, appSettings, userManager, _) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -36,11 +40,11 @@ class UserAccountScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildProfileImage(context),
+                      _buildProfileImage(context, userManager),
                       SizedBox(height: AppSize.heightSize(20, context)),
-                      _buildProfileName(context),
+                      _buildProfileName(context, userManager),
                       SizedBox(height: AppSize.heightSize(10, context)),
-                      _buildPhoneNumber(context),
+                      _buildPhoneNumber(context, userManager),
                       SizedBox(height: AppSize.heightSize(50, context)),
                       _buildSettingsCard(context, appSettings),
                     ],
@@ -54,27 +58,34 @@ class UserAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage(BuildContext context) {
+  Widget _buildProfileImage(
+      BuildContext context, UserManagerProvider userManager) {
     return ClipOval(
-      child: Image.asset(
-        AppImages.userProfilImage,
-        width: AppSize.widthSize(90, context),
-        height: AppSize.widthSize(90, context),
-        fit: BoxFit.cover,
+      child: CachedNetworkImage(
+        imageUrl:
+            '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)!}',
+        width: AppSize.widthSize(100, context),
+        height: AppSize.widthSize(100, context),
+        fit: BoxFit.fill,
+        progressIndicatorBuilder: (context, url, progress) =>
+            const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
   }
 
-  Widget _buildProfileName(BuildContext context) {
+  Widget _buildProfileName(
+      BuildContext context, UserManagerProvider userManager) {
     return Text(
-      'عبد الله عبد الرحيم',
+      userManager.prefs!.getString(PrefKeys.userName)!,
       style: AppStyles.styleBold(16, context),
     );
   }
 
-  Widget _buildPhoneNumber(BuildContext context) {
+  Widget _buildPhoneNumber(
+      BuildContext context, UserManagerProvider userManager) {
     return Text(
-      '+670001876',
+      userManager.prefs!.getString(PrefKeys.phoneNumber)!,
       style: AppStyles.styleBold(16, context),
     );
   }
@@ -97,6 +108,8 @@ class UserAccountScreen extends StatelessWidget {
           _buildFavoritesTile(context),
           _buildDivider(),
           _buildPurchasesTile(context),
+          _buildDivider(),
+          _buildChatTile(context),
           _buildDivider(),
           _buildTermsConditionsTile(context),
           _buildDivider(),
@@ -153,15 +166,19 @@ class UserAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoutTile(BuildContext context) {
+  Widget _buildChatTile(BuildContext context) {
     return ListTile(
       onTap: () {
-        Provider.of<LoginAndRegisterManager>(context, listen: false).lougOut();
+        NavigationService.navigateTo(AppRoutes.userAllMessages);
       },
       title: Text(
-        AppLocalizations.of(context)!.logout,
-        style: AppStyles.styleBold(12, context)
-            .copyWith(color: const Color(0xFFC42C2C)),
+        'الرسائل',
+        style: AppStyles.styleBold(12, context),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios_rounded,
+        color: Theme.of(context).iconTheme.color,
+        size: AppSize.iconSize(20, context),
       ),
     );
   }
@@ -179,6 +196,19 @@ class UserAccountScreen extends StatelessWidget {
         Icons.arrow_forward_ios_rounded,
         color: Theme.of(context).iconTheme.color,
         size: AppSize.iconSize(20, context),
+      ),
+    );
+  }
+
+  Widget _buildLogoutTile(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Provider.of<LoginAndRegisterManager>(context, listen: false).lougOut();
+      },
+      title: Text(
+        AppLocalizations.of(context)!.logout,
+        style: AppStyles.styleBold(12, context)
+            .copyWith(color: const Color(0xFFC42C2C)),
       ),
     );
   }

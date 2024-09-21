@@ -32,7 +32,7 @@ class RegisterScreen extends StatelessWidget {
                     key: registerManager.registerFormKey,
                     child: CustomScrollView(
                       slivers: [
-                        _buildHeader(context),
+                        _buildProfileImage(context, registerManager),
                         _buildRegisterForm(context, registerManager),
                         _buildFooter(context, registerManager),
                       ],
@@ -50,26 +50,74 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildProfileImage(
+    BuildContext context,
+    LoginAndRegisterManager registerManager,
+  ) {
     return SliverToBoxAdapter(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: AppSize.widthSize(30, context)),
-          SizedBox(
-            width: AppSize.widthSize(100, context),
-            child: AspectRatio(
-              aspectRatio: 0.82,
-              child: Image.asset(
-                AppImages.accountTypeImage,
-                fit: BoxFit.contain,
+          SizedBox(height: AppSize.widthSize(50, context)),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.primaryColor,
+                width: 3,
               ),
             ),
-          ),
-          Text(
-            AppLocalizations.of(context)!.app_name,
-            style: AppStyles.styleBold(24, context).copyWith(
-              color: AppColors.primaryColor,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: ClipOval(
+                    child: registerManager.storeImage != null
+                        ? Image.file(
+                            registerManager.storeImage!,
+                            width: AppSize.widthSize(100, context),
+                            height: AppSize.widthSize(100, context),
+                            fit: BoxFit.contain,
+                          )
+                        : Image.asset(
+                            AppImages.storeProfilImage,
+                            width: AppSize.widthSize(100, context),
+                            height: AppSize.widthSize(100, context),
+                            fit: BoxFit.contain,
+                          ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: AppSize.widthSize(100, context),
+                    height: AppSize.widthSize(100, context),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          AppColors.primaryColor.withOpacity(0.5),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: IconButton(
+                        onPressed: () {
+                          registerManager.pickProfileImage();
+                        },
+                        icon: Icon(
+                          Icons.photo_camera,
+                          color: AppColors.primaryColor,
+                          size: AppSize.iconSize(28, context),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

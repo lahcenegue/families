@@ -93,7 +93,11 @@ class LoginScreen extends StatelessWidget {
             title: AppLocalizations.of(context)!.phone,
             hintText: '050 505 505',
             onChanged: (value) {
-              loginManager.loginRequestModel.phoneNumber = int.parse(value);
+              //print(value);
+              if (value.isNotEmpty) {
+                print(value);
+                loginManager.loginRequestModel.phoneNumber = int.parse(value);
+              }
             },
             validator: (value) {
               if (value == null || value.isEmpty) {

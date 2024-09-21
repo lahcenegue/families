@@ -25,7 +25,7 @@ class AccountType extends StatelessWidget {
                 slivers: [
                   _buildHeader(context),
                   _buildDescription(context),
-                  _buildButtons(context, loginManager),
+                  _buildButtons(context, loginManager, appSettings),
                 ],
               ),
             ),
@@ -45,8 +45,10 @@ class AccountType extends StatelessWidget {
             width: AppSize.widthSize(120, context),
             child: AspectRatio(
               aspectRatio: 0.82,
-              child:
-                  Image.asset(AppImages.accountTypeImage, fit: BoxFit.contain),
+              child: Image.asset(
+                AppImages.accountTypeImage,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           Text(
@@ -75,8 +77,8 @@ class AccountType extends StatelessWidget {
     );
   }
 
-  Widget _buildButtons(
-      BuildContext context, LoginAndRegisterManager loginManager) {
+  Widget _buildButtons(BuildContext context,
+      LoginAndRegisterManager loginManager, AppSettingsProvider appSettings) {
     return SliverToBoxAdapter(
       child: Column(
         children: [

@@ -15,11 +15,12 @@ import '../Models/my_dishs_model.dart';
 import '../Models/my_ordres_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/api_methods.dart';
+import '../Utils/Constants/app_strings.dart';
 import '../View_models/my_dishs_viewmodel.dart';
 import '../View_models/my_ordres_viewmodel.dart';
 
 class FamilyManagerProvider extends ChangeNotifier {
-  SharedPreferences? _prefs;
+  SharedPreferences? prefs;
   bool isApiCallProcess = false;
   bool isDataInitialized = false;
 
@@ -46,9 +47,8 @@ class FamilyManagerProvider extends ChangeNotifier {
       isApiCallProcess = true;
       notifyListeners();
 
-      _prefs = await SharedPreferences.getInstance();
-      token = 'UfFqCtub4U';
-      //token = _prefs!.getString(PrefKeys.token);
+      prefs = await SharedPreferences.getInstance();
+      token = prefs!.getString(PrefKeys.token);
 
       await fetchMyOrders();
       await fetchMyDishs();

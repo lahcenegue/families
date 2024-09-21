@@ -104,7 +104,7 @@ Widget _buildPageView(BuildContext context, AppSettingsProvider appsettings,
     child: PageView.builder(
       controller: appsettings.pageController,
       itemCount: demoData.length,
-      onPageChanged: (index) => appsettings.getPageIndex(index),
+      onPageChanged: (index) => appsettings.setPageIndex(index),
       itemBuilder: (context, index) => OnBoardContent(
         image: demoData[index].image,
         title: demoData[index].title,

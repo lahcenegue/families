@@ -55,7 +55,7 @@ class OtpScreen extends StatelessWidget {
           style: AppStyles.styleBold(24, context),
         ),
         Text(
-          '${AppLocalizations.of(context)!.sent_code_to} ${otpManager.otpRequestModel.phoneNumber}',
+          '${AppLocalizations.of(context)!.sent_code_to} ${otpManager.registerRequestModel.phoneNumber}',
           style: AppStyles.styleRegular(14, context),
         ),
       ],

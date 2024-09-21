@@ -24,10 +24,11 @@ MessageData _$MessageDataFromJson(Map<String, dynamic> json) => MessageData(
       messageId: (json['MessageId'] as num).toInt(),
       userId: (json['UserId'] as num).toInt(),
       storeId: (json['StoreId'] as num).toInt(),
-      message: json['Message'] as String,
+      message: json['Message'] as String? ?? '',
       sentByUser: (json['SentByUser'] as num).toInt(),
       time: (json['Time'] as num).toInt(),
-      userName: json['UserName'] as String,
+      userName: json['UserName'] as String? ?? '',
+      storeName: json['StoreName'] as String? ?? '',
     );
 
 Map<String, dynamic> _$MessageDataToJson(MessageData instance) =>
@@ -39,4 +40,5 @@ Map<String, dynamic> _$MessageDataToJson(MessageData instance) =>
       'SentByUser': instance.sentByUser,
       'Time': instance.time,
       'UserName': instance.userName,
+      'StoreName': instance.storeName,
     };

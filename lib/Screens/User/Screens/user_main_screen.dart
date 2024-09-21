@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Providers/user_manager_provider.dart';
-import '../../../Utils/Constants/app_images.dart';
+import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
+import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../Widgets/all_store_box.dart';
@@ -24,7 +25,7 @@ class UserMainScreen extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(top: AppSize.heightSize(20, context)),
           child: Scaffold(
-            appBar: _buildAppBar(context),
+            appBar: _buildAppBar(context, userManager),
             body: userManager.isApiCallProcess
                 ? const Center(child: CircularProgressIndicator())
                 : _buildContent(context, userManager),
@@ -34,14 +35,18 @@ class UserMainScreen extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context, UserManagerProvider userManager) {
     return AppBar(
       title: ClipOval(
-        child: Image.asset(
-          AppImages.userProfilImage,
+        child: CachedNetworkImage(
+          imageUrl:
+              '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)!}',
           width: AppSize.widthSize(50, context),
           height: AppSize.widthSize(50, context),
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
+          progressIndicatorBuilder: (context, url, progress) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       ),
       actions: [

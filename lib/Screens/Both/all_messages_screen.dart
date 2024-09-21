@@ -5,6 +5,7 @@ import '../../Providers/app_settings_provider.dart';
 import '../../Providers/chat_manager_provider.dart';
 import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/Constants/app_size.dart';
+import '../../Utils/Constants/app_strings.dart';
 import '../../Utils/Constants/app_styles.dart';
 import 'chat_screen.dart';
 
@@ -53,7 +54,9 @@ class AllMessagesScreen extends StatelessWidget {
                 );
               },
               title: Text(
-                chatManager.allMessages!.messages[index].userName!,
+                chatManager.accountType == AppStrings.user
+                    ? chatManager.allMessages!.messages[index].storeName!
+                    : chatManager.allMessages!.messages[index].userName!,
                 style: AppStyles.styleBold(12, context),
               ),
               subtitle: Text(

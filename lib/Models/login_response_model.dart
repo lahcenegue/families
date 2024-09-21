@@ -17,25 +17,31 @@ class LoginResponseModel extends BaseResponseModel {
 class LoginUserData {
   String? phoneNumber;
   String? userName;
-  String? email;
   String? token;
   String? accountType;
+  String? storeName;
+  String? location;
+  String? image;
 
   LoginUserData({
     this.token,
     this.userName,
-    this.email,
     this.phoneNumber,
     this.accountType,
+    this.storeName,
+    this.location,
+    this.image,
   });
 
   factory LoginUserData.fromJson(Map<String, dynamic> json) {
     return LoginUserData(
       phoneNumber: json['PhoneNumber'].toString(),
       userName: json['UserName'].toString(),
-      email: json['Email'].toString(),
       token: json['Token'].toString(),
       accountType: json['AccountType'].toString(),
+      storeName: json['StoreName'].toString(),
+      location: json['Location'].toString(),
+      image: json['Image'].toString(),
     );
   }
 }

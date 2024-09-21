@@ -252,7 +252,7 @@ class FamilyRegisterScreen extends StatelessWidget {
           },
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please select a classification';
+              return 'الرجاء اختيار التصنيف';
             }
             return null;
           },

@@ -20,7 +20,7 @@ import '../View_models/families_store_viewmodel.dart';
 enum StoreType { popular, all }
 
 class UserManagerProvider extends ChangeNotifier {
-  SharedPreferences? _prefs;
+  SharedPreferences? prefs;
 
   bool isApiCallProcess = false;
   bool isDataInitialized = false;
@@ -52,8 +52,8 @@ class UserManagerProvider extends ChangeNotifier {
       isApiCallProcess = true;
       notifyListeners();
 
-      _prefs = await SharedPreferences.getInstance();
-      token = _prefs!.getString(PrefKeys.token);
+      prefs = await SharedPreferences.getInstance();
+      token = prefs!.getString(PrefKeys.token);
 
       await getBannerImages();
       await getFamilyStores(StoreType.popular);

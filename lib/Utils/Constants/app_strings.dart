@@ -1,6 +1,7 @@
 class AppStrings {
   static const String user = 'Customer';
   static const String family = 'Store';
+  static const String onSignalID = 'fe34967e-ec5a-46c2-ad8e-62d61ed2cb12';
 }
 
 class PrefKeys {
@@ -11,9 +12,13 @@ class PrefKeys {
   static String onBording = 'onBording';
   static String accountType = 'accountType';
   static String searchHistory = 'searchHistory';
+  static String onSignalID = 'oneSignalID';
 
   //User data keys
   static String phoneNumber = 'phoneNumber';
   static String userName = 'userName';
   static String token = 'token';
+  static String storeName = 'storeName';
+  static String profilImage = 'profileImage';
+  static String storeLocation = 'storeLocation';
 }

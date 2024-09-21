@@ -26,6 +26,7 @@ class RequestModel {
   int? userId;
   String? message;
   int? messageId;
+  String? oneSignalId;
 
   RequestModel({
     this.method,
@@ -55,6 +56,7 @@ class RequestModel {
     this.userId,
     this.message,
     this.messageId,
+    this.oneSignalId,
   });
 
   Map<String, dynamic> toJson() {
@@ -86,6 +88,7 @@ class RequestModel {
       if (userId != null) 'UserId': userId!,
       if (message != null) 'Message': message!.trim(),
       if (messageId != null) 'MessageId': messageId!,
+      if (oneSignalId != null) 'OneSignalId': oneSignalId!.trim(),
     };
   }
 }

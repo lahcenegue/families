@@ -24,7 +24,8 @@ class MessageItemViewModel {
   int? get userId => _message.userId;
   int? get storeId => _message.storeId;
   String? get message => _message.message;
-  String? get userName => _message.userName;
+  String? get userName => _message.userName ?? '';
+  String? get storeName => _message.storeName ?? '';
   int? get latestMessages => _message.latestMessages;
 
   String? get time {

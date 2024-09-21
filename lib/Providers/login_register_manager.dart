@@ -83,6 +83,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
     try {
       loginRequestModel.method = ApiMethods.login;
       loginRequestModel.accountType = accountType;
+      loginRequestModel.oneSignalId =
+          _prefs!.getString(PrefKeys.onSignalID) ?? ' ';
 
       LoginResponseModel value =
           await loginApi(loginRequestModel: loginRequestModel);
@@ -109,6 +111,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
     try {
       registerRequestModel.method = ApiMethods.register;
       registerRequestModel.accountType = accountType;
+      registerRequestModel.oneSignalId =
+          _prefs!.getString(PrefKeys.onSignalID) ?? ' ';
 
       RegisterResponseModel value =
           await registerApi(registerRequestModel: registerRequestModel);
@@ -140,10 +144,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
 
     if (_prefs != null) {
-      await _prefs!.remove(PrefKeys.accountType);
-      await _prefs!.remove(PrefKeys.token);
-      await _prefs!.remove(PrefKeys.userName);
-      await _prefs!.remove(PrefKeys.phoneNumber);
+      await _prefs!.clear();
       NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
     } else {
       print('Error: SharedPreferences _prefs is null.');
@@ -380,8 +381,14 @@ class LoginAndRegisterManager extends ChangeNotifier {
   Future<void> saveUserData(dynamic value) async {
     print('save data after login ${value.userData!.token}');
     await _prefs!.setString(PrefKeys.token, value.userData.token!);
-    await _prefs!.setString(PrefKeys.userName, value.userData.userName!);
+    await _prefs!.setString(PrefKeys.profilImage, value.userData.image);
     await _prefs!.setString(PrefKeys.phoneNumber, value.userData.phoneNumber!);
+    if (accountType == AppStrings.family) {
+      await _prefs!.setString(PrefKeys.storeName, value.userData.storeName);
+      await _prefs!.setString(PrefKeys.storeLocation, value.userData.location);
+    } else {
+      await _prefs!.setString(PrefKeys.userName, value.userData.userName!);
+    }
   }
 
   void startTimer() {
@@ -417,9 +424,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
     notifyListeners();
     await saveUserData(value);
     if (accountType == AppStrings.user) {
-      NavigationService.navigateTo(AppRoutes.userHomeScreen);
+      NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
     } else {
-      NavigationService.navigateTo(AppRoutes.familyHomeScreen);
+      NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
     }
   }
 }

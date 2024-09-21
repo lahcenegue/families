@@ -10,10 +10,12 @@ import '../Models/all_messages_model.dart';
 import '../Models/messages_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/api_methods.dart';
+import '../Utils/Constants/app_strings.dart';
 import '../View_models/messages_viewmodel.dart';
 
 class ChatManagerProvider extends ChangeNotifier {
-  //SharedPreferences? _prefs;
+  SharedPreferences? _prefs;
+  String? accountType;
   List<MessageData> messages = [];
   MessageViewModel? allMessages;
   bool isApiCallProcess = false;
@@ -35,9 +37,10 @@ class ChatManagerProvider extends ChangeNotifier {
       isApiCallProcess = true;
       notifyListeners();
 
-      //_prefs = await SharedPreferences.getInstance();
-      token = 'UfFqCtub4U';
-      //token = _prefs!.getString(PrefKeys.token);
+      _prefs = await SharedPreferences.getInstance();
+      //token = 'g76yesQxYc';
+      accountType = _prefs!.getString(PrefKeys.accountType);
+      token = _prefs!.getString(PrefKeys.token);
 
       await fetchAllMessages();
 
@@ -49,7 +52,9 @@ class ChatManagerProvider extends ChangeNotifier {
 
   Future<void> fetchAllMessages() async {
     RequestModel requestModel = RequestModel(
-      method: ApiMethods.getAllMessages,
+      method: accountType == AppStrings.user
+          ? ApiMethods.getAllMessagesForUser
+          : ApiMethods.getAllMessagesForStore,
       token: token,
     );
 
@@ -67,7 +72,7 @@ class ChatManagerProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchUserMessages({required int userId}) async {
+  Future<void> fetchUserMessages({required int id}) async {
     print('++++++++++++ fecth user messages+++++++++++');
     if (!isPolling) {
       isApiCallProcess = true;
@@ -75,9 +80,12 @@ class ChatManagerProvider extends ChangeNotifier {
     }
 
     RequestModel getUserMessagesRequest = RequestModel(
-      method: ApiMethods.getUserMessages,
+      method: accountType == AppStrings.family
+          ? ApiMethods.getUserMessages
+          : ApiMethods.getStoreMessages,
       token: token!,
-      userId: userId,
+      userId: accountType == AppStrings.family ? id : null,
+      storeId: accountType == AppStrings.user ? id : null,
       messageId: 0,
     );
 
@@ -97,20 +105,23 @@ class ChatManagerProvider extends ChangeNotifier {
   }
 
   Future<void> sendMessage({
-    required int userId,
+    required int id,
     required String message,
   }) async {
     RequestModel requestModel = RequestModel(
-      method: ApiMethods.sendMessageFromStore,
+      method: accountType == AppStrings.family
+          ? ApiMethods.sendMessageFromStore
+          : ApiMethods.sendMessageFromUser,
       token: token,
-      userId: userId,
+      userId: accountType == AppStrings.family ? id : null,
+      storeId: accountType == AppStrings.user ? id : null,
       message: message,
     );
 
     try {
       final response = await baseApi(requestModel: requestModel);
       if (response.status == 'Success') {
-        fetchUserMessages(userId: userId);
+        fetchUserMessages(id: id);
         fetchAllMessages();
       }
     } catch (e) {
@@ -125,7 +136,7 @@ class ChatManagerProvider extends ChangeNotifier {
     _pollingTimer?.cancel();
     _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       isPolling = true;
-      fetchUserMessages(userId: userId).then((_) => isPolling = false);
+      fetchUserMessages(id: userId).then((_) => isPolling = false);
     });
   }
 

@@ -76,7 +76,7 @@ class UserHomeScreen extends StatelessWidget {
       selectedLabelStyle: AppStyles.styleBold(10, context),
       items: _buildNavItems(context, appSettings),
       currentIndex: appSettings.pageIndex,
-      onTap: appSettings.getPageIndex,
+      onTap: appSettings.setPageIndex,
     );
   }
 

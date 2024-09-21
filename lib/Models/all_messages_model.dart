@@ -27,6 +27,7 @@ class AllMessageData {
   String? message;
   int? time;
   String? userName;
+  String? storeName;
   int? latestMessages;
 
   AllMessageData({
@@ -36,6 +37,7 @@ class AllMessageData {
     this.message,
     this.time,
     this.userName,
+    this.storeName,
     this.latestMessages,
   });
 
@@ -47,6 +49,7 @@ class AllMessageData {
       message: json['Message'],
       time: json['Time'],
       userName: json['UserName'],
+      storeName: json['StoreName'],
       latestMessages: json['latest_messages'],
     );
   }

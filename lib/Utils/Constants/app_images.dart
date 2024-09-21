@@ -1,5 +1,5 @@
 abstract class AppImages {
-  static String logo = 'assets/images/icon.png';
+  static String logo = 'assets/images/logo.png';
   static String accountTypeImage = "assets/images/account_type.png";
   static String onBordingImage1 = "assets/images/onBording1.png";
   static String onBordingImage2 = "assets/images/onBording2.png";

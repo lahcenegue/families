@@ -16,6 +16,7 @@ import '../../Screens/User/Screens/dish_view.dart';
 import '../../Screens/User/Screens/feedbacks_screen.dart';
 import '../../Screens/User/Screens/store_view.dart';
 import '../../Screens/User/Screens/terms_conditions_user.dart';
+import '../../Screens/User/Screens/user_all_messages.dart';
 import '../../Screens/User/Screens/user_home_screen.dart';
 import '../../Screens/User/Widgets/custom_search_page.dart';
 
@@ -38,6 +39,7 @@ class AppRoutes {
   static const String addNewDish = '/addNewDish';
   static const String familyTermsConditions = '/familyTermsConditions';
   static const String userTermsConditions = '/userTermsConditions';
+  static const String userAllMessages = '/userallMessages';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -64,6 +66,7 @@ class AppRoutes {
           const FamilyTermsAndConditionsPage(),
       userTermsConditions: (BuildContext context) =>
           const UserTermsAndConditionsPage(),
+      userAllMessages: (BuildContext context) => const UserAllMessages(),
     };
   }
 }
