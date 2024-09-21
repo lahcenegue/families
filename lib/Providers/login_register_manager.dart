@@ -51,6 +51,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   RequestModel registerRequestModel = RequestModel();
   RequestModel otpRequestModel = RequestModel();
   RequestModel resetRequestModel = RequestModel();
+  RequestModel deleteAccountModel = RequestModel();
 
   String storeClassification = 'حلويات';
   String? checkPassrowd;
@@ -159,6 +160,28 @@ class LoginAndRegisterManager extends ChangeNotifier {
     } else {
       print('Error: SharedPreferences _prefs is null.');
     }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      deleteAccountModel.method = ApiMethods.deleteAccount;
+      deleteAccountModel.token = _prefs!.getString(PrefKeys.token);
+      deleteAccountModel.accountType = accountType;
+
+      BaseModel value = await baseApi(requestModel: deleteAccountModel);
+      if (value.status == 'Success') {
+        deleteAccountModel = RequestModel();
+        await _prefs!.remove(PrefKeys.token);
+        await _prefs!.remove(
+          PrefKeys.profilImage,
+        );
+        await _prefs!.remove(PrefKeys.phoneNumber);
+        await _prefs!.remove(PrefKeys.storeName);
+        await _prefs!.remove(PrefKeys.storeLocation);
+        await _prefs!.remove(PrefKeys.userName);
+        NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+      }
+    } catch (e) {}
   }
 
   // send otp for create account

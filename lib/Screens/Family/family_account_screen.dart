@@ -21,8 +21,9 @@ class FamilyAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppSettingsProvider, FamilyManagerProvider>(
-      builder: (context, appSettings, familyManager, _) {
+    return Consumer3<AppSettingsProvider, FamilyManagerProvider,
+        LoginAndRegisterManager>(
+      builder: (context, appSettings, familyManager, deleteAccountManager, _) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -48,7 +49,8 @@ class FamilyAccountScreen extends StatelessWidget {
                       SizedBox(height: AppSize.heightSize(10, context)),
                       _buildPhoneNumber(context, familyManager),
                       SizedBox(height: AppSize.heightSize(50, context)),
-                      _buildSettingsCard(context, appSettings),
+                      _buildSettingsCard(
+                          context, appSettings, deleteAccountManager),
                     ],
                   ),
                 ),
@@ -93,7 +95,9 @@ class FamilyAccountScreen extends StatelessWidget {
   }
 
   Widget _buildSettingsCard(
-      BuildContext context, AppSettingsProvider appSettings) {
+      BuildContext context,
+      AppSettingsProvider appSettings,
+      LoginAndRegisterManager deleteAccountManager) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSize.widthSize(5, context)),
       decoration: BoxDecoration(
@@ -107,11 +111,13 @@ class FamilyAccountScreen extends StatelessWidget {
         children: [
           _buildDarkModeTile(context, appSettings),
           _buildDivider(),
-          _buildInfermationTile(context),
-          _buildDivider(),
-          _buildFeedbackTile(context),
-          _buildDivider(),
+          // _buildInfermationTile(context),
+          // _buildDivider(),
+          // _buildFeedbackTile(context),
+          // _buildDivider(),
           _buildTermsConditionsTile(context),
+          _buildDivider(),
+          _deleteAccount(context, deleteAccountManager),
           _buildDivider(),
           _buildLogoutTile(context),
         ],
@@ -192,6 +198,55 @@ class FamilyAccountScreen extends StatelessWidget {
         Icons.arrow_forward_ios_rounded,
         color: Theme.of(context).iconTheme.color,
         size: AppSize.iconSize(20, context),
+      ),
+    );
+  }
+
+  Widget _deleteAccount(
+      BuildContext context, LoginAndRegisterManager deleteAccountManager) {
+    return ListTile(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'تأكيد الحذف',
+                style: AppStyles.styleBold(16, context),
+              ),
+              content: Text(
+                'هل تريد حقًا حذف حسابك بشكل دائم؟',
+                style: AppStyles.styleRegular(14, context),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'إلغاء',
+                    style: AppStyles.styleBold(14, context),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'تأكيد الحذف',
+                    style: AppStyles.styleRegular(12, context),
+                  ),
+                  onPressed: () {
+                    print('Account deletion confirmed');
+                    deleteAccountManager.deleteAccount();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      title: Text(
+        'حذف الحساب',
+        style: AppStyles.styleBold(12, context),
       ),
     );
   }
