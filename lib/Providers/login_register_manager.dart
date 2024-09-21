@@ -92,6 +92,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
       if (value.status == 'success') {
         await _handleSuccessfulLogin(value);
         return null;
+      } else if (value.status == 'Unverified') {
+        NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
+        return 20;
       } else {
         return value.errorCode;
       }
@@ -144,7 +147,14 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
 
     if (_prefs != null) {
-      await _prefs!.clear();
+      await _prefs!.remove(PrefKeys.token);
+      await _prefs!.remove(
+        PrefKeys.profilImage,
+      );
+      await _prefs!.remove(PrefKeys.phoneNumber);
+      await _prefs!.remove(PrefKeys.storeName);
+      await _prefs!.remove(PrefKeys.storeLocation);
+      await _prefs!.remove(PrefKeys.userName);
       NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
     } else {
       print('Error: SharedPreferences _prefs is null.');
@@ -191,6 +201,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
         await _handleSuccessfulLogin(value);
         NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
         return null;
+      } else if (value.status == 'Unverified') {
+        NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
+        return 20;
       } else {
         return value.errorCode;
       }

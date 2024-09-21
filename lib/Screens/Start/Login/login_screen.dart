@@ -153,9 +153,11 @@ class LoginScreen extends StatelessWidget {
           Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
           ElevatedButton(
             onPressed: () async {
-              await loginManager
-                  .login()
-                  .then((value) => customSnackBar(context, value));
+              await loginManager.login().then((value) {
+                if (value != 20) {
+                  customSnackBar(context, value);
+                }
+              });
             },
             child: Text(AppLocalizations.of(context)!.login),
           ),

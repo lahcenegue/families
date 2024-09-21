@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../Providers/login_register_manager.dart';
 import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_size.dart';
-import '../../../Utils/Constants/app_strings.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Helprs/navigation_service.dart';
 
@@ -76,14 +75,12 @@ class CongratulationsScreen extends StatelessWidget {
         Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
         ElevatedButton(
           onPressed: () {
-            if (loginManager.accountType == AppStrings.user) {
-              NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-            } else {
-              NavigationService.navigateToAndReplace(
-                  AppRoutes.familyHomeScreen);
-            }
+            NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
           },
-          child: Text(AppLocalizations.of(context)!.home_screen),
+          child: Text(
+            'تسحيل الدخول',
+            style: AppStyles.styleBold(14, context),
+          ),
         ),
         SizedBox(height: AppSize.heightSize(50, context)),
       ],
