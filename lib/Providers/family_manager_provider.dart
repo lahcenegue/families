@@ -1,19 +1,24 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:families/Utils/Helprs/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apis/add_dish_api.dart';
+import '../Apis/base_api.dart';
 import '../Apis/get_my_dishs.dart';
 import '../Apis/get_my_orders.dart';
+import '../Apis/upload_image_api.dart';
 import '../Models/add_dish_mode.dart';
+import '../Models/base_model.dart';
 import '../Models/my_dishs_model.dart';
 import '../Models/my_ordres_model.dart';
 import '../Models/request_model.dart';
+import '../Models/ulpoad_image_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
 import '../View_models/my_dishs_viewmodel.dart';
@@ -30,13 +35,14 @@ class FamilyManagerProvider extends ChangeNotifier {
   MyDishsViewmodel? myDishs;
 
   File? dishImage;
-  String dishImageBase64 = '';
+  List<String> uploadedImages = [];
 
-  double? preparationTime;
+  int? preparationTime;
+  String? dishName;
+  double? dishPrice;
+  String? dishDescription;
 
   final GlobalKey<FormState> addDishFormKey = GlobalKey<FormState>();
-
-  RequestModel addDishRequestModel = RequestModel();
 
   FamilyManagerProvider() {
     initializeData();
@@ -98,42 +104,118 @@ class FamilyManagerProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addNewDishFunction() async {
+  Future<void> uploadImage() async {
+    if (dishImage == null) return;
+
     isApiCallProcess = true;
     notifyListeners();
-    addDishRequestModel.method = ApiMethods.addNewDish;
-    addDishRequestModel.token = token;
-    addDishRequestModel.preparationTime = preparationTime;
 
     try {
-      AddDishModel response =
-          await addDishApi(addDishRequest: addDishRequestModel);
+      Uint8List imageBytes = await dishImage!.readAsBytes();
+      String mimeType = lookupMimeType(dishImage!.path) ?? 'image/jpeg';
+      String base64Image = convert.base64Encode(imageBytes);
+      String fullBase64 = 'data:$mimeType;base64,$base64Image';
+
+      RequestModel uploadImageRequest = RequestModel(
+        method: "upload_image",
+        token: token,
+        image: fullBase64,
+      );
+
+      UploadImageModel response =
+          await uploadImageApi(uploadImageRequest: uploadImageRequest);
+
       if (response.status == 'Success') {
-        await fetchMyDishs();
+        uploadedImages.add(response.data!.image!);
         notifyListeners();
       } else {
-        print('Failed to add dish');
+        print('Failed to upload image: ${response.errorCode}');
       }
     } catch (e) {
-      print('Error adding dish: $e');
+      print('Error uploading image: $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();
     }
   }
 
-  Future<void> pickPDishImage() async {
+  Future<void> addNewDishFunction() async {
+    if (addDishFormKey.currentState!.validate()) {
+      isApiCallProcess = true;
+      notifyListeners();
+
+      try {
+        RequestModel addDishRequest = RequestModel(
+          method: ApiMethods.addNewDish,
+          token: token,
+          dishImages: uploadedImages,
+          preparationTime: preparationTime,
+          dishName: dishName,
+          dishPrice: dishPrice,
+          description: dishDescription,
+        );
+
+        AddDishModel response =
+            await addDishApi(addDishRequest: addDishRequest);
+
+        if (response.status == 'Success') {
+          await fetchMyDishs();
+          clearDishData();
+          NavigationService.navigateToAndReplace(AppRoutes.myDishsScreen);
+          notifyListeners();
+        } else {
+          print('Failed to add dish: ${response.errorCode}');
+        }
+      } catch (e) {
+        print('Error adding dish: $e');
+      } finally {
+        isApiCallProcess = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> pickDishImage() async {
     final ImagePicker picker = ImagePicker();
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       dishImage = File(image.path);
-      Uint8List dishImageBytes = await dishImage!.readAsBytes();
-      String mimeType = lookupMimeType(dishImage!.path) ?? 'image/jpeg';
-      String base64Image = base64Encode(dishImageBytes);
+      await uploadImage();
+      notifyListeners();
+    }
+  }
 
-      dishImageBase64 = 'data:$mimeType;base64,$base64Image';
-      addDishRequestModel.storeImage = dishImageBase64;
+  void clearDishData() {
+    dishImage = null;
+    uploadedImages.clear();
+    preparationTime = null;
+    dishName = null;
+    dishPrice = null;
+    dishDescription = null;
+  }
 
+  Future<void> deleteDish(int dishID) async {
+    isApiCallProcess = true;
+    notifyListeners();
+
+    try {
+      RequestModel deleteDishRequest = RequestModel(
+        method: ApiMethods.deleteDish,
+        token: token,
+        itemId: dishID,
+      );
+
+      BaseModel value = await baseApi(requestModel: deleteDishRequest);
+      if (value.status == 'Success') {
+        await fetchMyDishs();
+        notifyListeners();
+      } else {
+        print('Failed to delete dish: ${value.errorCode}');
+      }
+    } catch (e) {
+      print('Error deleting dish: $e');
+    } finally {
+      isApiCallProcess = false;
       notifyListeners();
     }
   }

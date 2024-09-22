@@ -65,7 +65,7 @@ class AddNewDish extends StatelessWidget {
           SizedBox(height: AppSize.heightSize(20, context)),
           GestureDetector(
             onTap: () async {
-              await familyManager.pickPDishImage();
+              await familyManager.pickDishImage();
             },
             child: Container(
               width: AppSize.width(context),
@@ -100,7 +100,7 @@ class AddNewDish extends StatelessWidget {
             title: AppLocalizations.of(context)!.dish_name,
             hintText: AppLocalizations.of(context)!.dish_name,
             onChanged: (value) {
-              familyManager.addDishRequestModel.dishName = value;
+              familyManager.dishName = value;
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -114,7 +114,7 @@ class AddNewDish extends StatelessWidget {
             title: AppLocalizations.of(context)!.dish_description,
             hintText: AppLocalizations.of(context)!.dish_description,
             onChanged: (value) {
-              familyManager.addDishRequestModel.description = value;
+              familyManager.dishDescription = value;
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -128,8 +128,7 @@ class AddNewDish extends StatelessWidget {
             title: AppLocalizations.of(context)!.price,
             hintText: AppLocalizations.of(context)!.price,
             onChanged: (value) {
-              familyManager.addDishRequestModel.dishPrice =
-                  double.tryParse(value);
+              familyManager.dishPrice = double.tryParse(value);
             },
             keyboardType: TextInputType.number,
             validator: (value) {
@@ -140,62 +139,19 @@ class AddNewDish extends StatelessWidget {
             },
           ),
           SizedBox(height: AppSize.heightSize(20, context)),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  title: AppLocalizations.of(context)!.hour,
-                  hintText: '00',
-                  onChanged: (value) {
-                    //familyManager.preparationHours = int.tryParse(value) ?? 0;
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (familyManager.preparationTime == null) {
-                      return AppLocalizations.of(context)!
-                          .enter_preparation_time;
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              SizedBox(width: AppSize.widthSize(10, context)),
-              Expanded(
-                child: CustomTextField(
-                  title: AppLocalizations.of(context)!.minute,
-                  hintText: '00',
-                  onChanged: (value) {
-                    //familyManager.preparationMinutes = int.tryParse(value) ?? 0;
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (familyManager.preparationTime == null) {
-                      return AppLocalizations.of(context)!
-                          .enter_preparation_time;
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              SizedBox(width: AppSize.widthSize(10, context)),
-              Expanded(
-                child: CustomTextField(
-                  title: AppLocalizations.of(context)!.second,
-                  hintText: '00',
-                  onChanged: (value) {
-                    //familyManager.preparationSeconds = int.tryParse(value) ?? 0;
-                  },
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (familyManager.preparationTime == null) {
-                      return AppLocalizations.of(context)!
-                          .enter_preparation_time;
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ],
+          CustomTextField(
+            title: AppLocalizations.of(context)!.minute,
+            hintText: '15',
+            onChanged: (value) {
+              familyManager.preparationTime = int.tryParse(value);
+            },
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return AppLocalizations.of(context)!.enter_preparation_time;
+              }
+              return null;
+            },
           ),
           SizedBox(height: AppSize.heightSize(30, context)),
           ElevatedButton(

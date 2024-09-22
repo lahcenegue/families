@@ -29,7 +29,11 @@ class ApiMethods {
   static const String sendMessageFromUser = 'send_message_from_user';
   static const String getUserMessages = 'retrieve_messages_with_user';
   static const String getStoreMessages = 'retrieve_messages_with_store';
+  static const String ulpadImage = 'upload_image';
+  static const String deleteDish = 'delete_store_item';
 
+// static const String = '';
+// static const String = '';
 // static const String = '';
 // static const String = '';
 }

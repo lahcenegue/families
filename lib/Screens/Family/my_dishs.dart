@@ -54,7 +54,7 @@ class MyDishsScreen extends StatelessWidget {
                   SizedBox(height: AppSize.heightSize(20, context)),
               itemBuilder: (context, index) {
                 MyDishViewModel item = familyManager.myDishs!.items[index];
-                return _buildDishItem(context, item);
+                return _buildDismissibleDishItem(context, item, familyManager);
               },
             ),
           ),
@@ -82,6 +82,64 @@ class MyDishsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDismissibleDishItem(BuildContext context, MyDishViewModel item,
+      FamilyManagerProvider familyManager) {
+    return Dismissible(
+      key: Key(item.itemId.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(left: AppSize.widthSize(20, context)),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
+        ),
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: AppSize.iconSize(30, context),
+        ),
+      ),
+      onDismissed: (direction) {
+        familyManager.deleteDish(item.itemId!);
+      },
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'تأكيد الحذف',
+                style: AppStyles.styleBold(16, context),
+              ),
+              content: Text(
+                'هل تريد حقا حدف الطبق بشكل دائم؟',
+                style: AppStyles.styleRegular(14, context),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(
+                    'إلغاء',
+                    style: AppStyles.styleBold(14, context),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(
+                    'تأكيد الحذف',
+                    style: AppStyles.styleRegular(12, context),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: _buildDishItem(context, item),
     );
   }
 

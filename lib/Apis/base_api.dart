@@ -21,7 +21,7 @@ Future<BaseModel> baseApi({
       body: convert.jsonEncode(requestModel.toJson()),
     );
 
-    print('delete account');
+    print('delete dish');
     print(convert.jsonEncode(requestModel.toJson()));
     print(response.body);
 
