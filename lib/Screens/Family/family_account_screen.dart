@@ -212,17 +212,20 @@ class FamilyAccountScreen extends StatelessWidget {
             return AlertDialog(
               title: Text(
                 'تأكيد الحذف',
-                style: AppStyles.styleBold(16, context),
+                style: AppStyles.styleBold(16, context)
+                    .copyWith(color: Colors.black),
               ),
               content: Text(
                 'هل تريد حقًا حذف حسابك بشكل دائم؟',
-                style: AppStyles.styleRegular(14, context),
+                style: AppStyles.styleRegular(14, context)
+                    .copyWith(color: Colors.black),
               ),
               actions: <Widget>[
                 TextButton(
                   child: Text(
                     'إلغاء',
-                    style: AppStyles.styleBold(14, context),
+                    style: AppStyles.styleBold(14, context)
+                        .copyWith(color: Colors.black),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -231,7 +234,8 @@ class FamilyAccountScreen extends StatelessWidget {
                 TextButton(
                   child: Text(
                     'تأكيد الحذف',
-                    style: AppStyles.styleRegular(12, context),
+                    style: AppStyles.styleRegular(12, context)
+                        .copyWith(color: Colors.black),
                   ),
                   onPressed: () {
                     print('Account deletion confirmed');

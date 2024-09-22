@@ -364,18 +364,10 @@ class FamilyTermsAndConditionsPage extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(
-        top: AppSize.heightSize(30, context),
-        bottom: AppSize.heightSize(10, context),
-      ),
-      decoration: const BoxDecoration(
-        color: Color(0xFFd9d9d9),
-      ),
+      margin: const EdgeInsets.only(top: 12),
       child: Text(
         title,
-        style: AppStyles.styleBold(16, context).copyWith(
-          color: Colors.black,
-        ),
+        style: AppStyles.styleBold(18, context),
       ),
     );
   }
@@ -385,7 +377,8 @@ class FamilyTermsAndConditionsPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Text(
         text,
-        style: AppStyles.styleRegular(16, context),
+        textAlign: TextAlign.justify,
+        style: AppStyles.styleMedium(14, context),
       ),
     );
   }
@@ -398,13 +391,13 @@ class FamilyTermsAndConditionsPage extends StatelessWidget {
         children: [
           Text(
             "• ",
-            style: AppStyles.styleRegular(16, context),
+            style: AppStyles.styleRegular(14, context),
           ),
           Expanded(
             child: Text(
               text,
               textAlign: TextAlign.justify,
-              style: AppStyles.styleRegular(16, context),
+              style: AppStyles.styleRegular(14, context),
             ),
           ),
         ],
@@ -418,15 +411,12 @@ class FamilyTermsAndConditionsPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "   -  ",
-            style: AppStyles.styleRegular(16, context),
-          ),
+          Text("   -  ", style: AppStyles.styleRegular(14, context)),
           Expanded(
             child: Text(
               text,
               textAlign: TextAlign.justify,
-              style: AppStyles.styleRegular(16, context),
+              style: AppStyles.styleRegular(14, context),
             ),
           ),
         ],

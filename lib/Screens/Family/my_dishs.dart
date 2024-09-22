@@ -113,25 +113,29 @@ class MyDishsScreen extends StatelessWidget {
             return AlertDialog(
               title: Text(
                 'تأكيد الحذف',
-                style: AppStyles.styleBold(16, context),
+                style: AppStyles.styleBold(16, context)
+                    .copyWith(color: Colors.black),
               ),
               content: Text(
                 'هل تريد حقا حدف الطبق بشكل دائم؟',
-                style: AppStyles.styleRegular(14, context),
+                style: AppStyles.styleRegular(14, context)
+                    .copyWith(color: Colors.black),
               ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: Text(
                     'إلغاء',
-                    style: AppStyles.styleBold(14, context),
+                    style: AppStyles.styleBold(14, context)
+                        .copyWith(color: Colors.black),
                   ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: Text(
                     'تأكيد الحذف',
-                    style: AppStyles.styleRegular(12, context),
+                    style: AppStyles.styleRegular(12, context)
+                        .copyWith(color: Colors.black),
                   ),
                 ),
               ],
