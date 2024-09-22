@@ -451,9 +451,8 @@ class FamilyRegisterScreen extends StatelessWidget {
           Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
           ElevatedButton(
             onPressed: () async {
-              await registerManager
-                  .register()
-                  .then((value) => customSnackBar(context, value));
+              int? result = await registerManager.register();
+              safeShowErrorMessage(context, result);
             },
             child: Text(AppLocalizations.of(context)!.sign_up),
           ),

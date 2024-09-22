@@ -16,11 +16,9 @@ Future<UploadImageModel> uploadImageApi(
       },
       body: convert.jsonEncode(uploadImageRequest.toJson()),
     );
-    print('====== uloqd imqge====');
-    print(convert.jsonEncode(uploadImageRequest.toJson()));
+
     var body = convert.json.decode(response.body);
-    print(body);
-    print('====== uloqd imqge====');
+
     UploadImageModel uploadImageModel = UploadImageModel.fromJson(body);
     return uploadImageModel;
   } catch (e) {

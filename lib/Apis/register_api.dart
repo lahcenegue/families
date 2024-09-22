@@ -20,7 +20,6 @@ Future<RegisterResponseModel> registerApi({
       },
       body: convert.jsonEncode(registerRequestModel.toJson()),
     );
-    print(convert.jsonEncode(registerRequestModel.toJson()));
 
     var body = convert.json.decode(response.body);
 

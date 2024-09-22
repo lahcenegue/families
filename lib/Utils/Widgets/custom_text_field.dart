@@ -58,7 +58,7 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           style: textStyle ??
               AppStyles.styleMedium(14, context).copyWith(
-                color: isDark ? Colors.black : Colors.white,
+                color: isDark ? Colors.white : Colors.black,
               ),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(20),

@@ -82,7 +82,7 @@ class NavigationService {
     try {
       return navigatorKey.currentState!.pushNamed(routeName);
     } catch (e) {
-      print("Navigation error: $e");
+      debugPrint("Navigation error: $e");
       return Future.value(null);
     }
   }
@@ -92,7 +92,7 @@ class NavigationService {
       return navigatorKey.currentState!
           .pushNamedAndRemoveUntil(routeName, (route) => false);
     } catch (e) {
-      print("Navigation error: $e");
+      debugPrint("Navigation error: $e");
       return Future.value(null);
     }
   }
@@ -100,8 +100,6 @@ class NavigationService {
   static void goBack() {
     if (navigatorKey.currentState!.canPop()) {
       navigatorKey.currentState!.pop();
-    } else {
-      print("Cannot go back");
     }
   }
 }

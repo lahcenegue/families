@@ -18,11 +18,6 @@ Future<SearchModel> searchApi({required RequestModel searchRequest}) async {
       body: convert.jsonEncode(searchRequest.toJson()),
     );
 
-    print('search Api============');
-    print(convert.jsonEncode(searchRequest.toJson()));
-    print(response.body);
-    print(response.statusCode);
-
     var body = convert.json.decode(response.body);
 
     searchResult = SearchModel.fromJson(body);

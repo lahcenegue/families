@@ -17,12 +17,7 @@ Future<AddDishModel> addDishApi({required RequestModel addDishRequest}) async {
       body: convert.jsonEncode(addDishRequest.toJson()),
     );
 
-    print('==== Add New Dish======');
-    print(convert.jsonEncode(addDishRequest.toJson()));
-
     var body = convert.json.decode(response.body);
-    print(body);
-    print('==== Add New Dish======');
 
     AddDishModel addDishModel = AddDishModel.fromJson(body);
     return addDishModel;

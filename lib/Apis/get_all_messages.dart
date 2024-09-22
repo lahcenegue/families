@@ -19,8 +19,6 @@ Future<AllMessagesModel> getAllMessagesApi(
       },
       body: convert.jsonEncode(requestModel.toJson()),
     );
-    print('get all messages api');
-    print(convert.jsonEncode(requestModel.toJson()));
 
     var body = convert.json.decode(response.body);
 

@@ -10,9 +10,11 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Widgets/costum_snackbar.dart';
+import '../../../Utils/Widgets/app_messages.dart';
 import '../../../Utils/Widgets/custom_loading_indicator.dart';
 import '../../../View_models/families_store_viewmodel.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DisheView extends StatelessWidget {
   const DisheView({super.key});
@@ -222,15 +224,16 @@ class DisheView extends StatelessWidget {
         width: AppSize.widthSize(340, context),
         child: ElevatedButton(
           onPressed: () async {
-            await cartManager
-                .addToCart(
-                  itemId: dish.itemId!,
-                  amount: 1,
-                )
-                .then(
-                  (value) => customSnackBar(context, value),
-                );
-            ;
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
+            final appLocalizations = AppLocalizations.of(context);
+
+            int? result = await cartManager.addToCart(
+              itemId: dish.itemId!,
+              amount: 1,
+            );
+
+            String message = appErrorMessages(result, appLocalizations!);
+            scaffoldMessenger.showSnackBar(SnackBar(content: Text(message)));
           },
           child: const Text('اضف الى السلة'),
         ),

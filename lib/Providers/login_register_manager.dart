@@ -123,6 +123,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
       if (value.status == 'success') {
         otpToken = value.userData!.otpToken;
+
         NavigationService.navigateTo(AppRoutes.otpScreen);
         startTimer();
         await sendOtpForCreateAccount();
@@ -220,7 +221,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
       LoginResponseModel value =
           await loginApi(loginRequestModel: otpRequestModel);
 
-      if (value.status == 'success') {
+      if (value.status == 'Success') {
         await _handleSuccessfulLogin(value);
         NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
         return null;

@@ -19,9 +19,6 @@ Future<CartModel> getCartItemsApi({required RequestModel request}) async {
       body: convert.jsonEncode(request.toJson()),
     );
 
-    print(convert.jsonEncode(request.toJson()));
-    print(response.body);
-
     var body = convert.json.decode(response.body);
 
     cartModel = CartModel.fromJson(body);

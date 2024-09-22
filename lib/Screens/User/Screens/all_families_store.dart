@@ -70,9 +70,12 @@ class AllFamiliesStore extends StatelessWidget {
         return AllStoreBox(
           store: store,
           addToFavorite: () async {
-            await userManager
-                .addToFavorite(storeId: store.storeId!)
-                .then((value) => customSnackBar(context, value));
+            int? result =
+                await userManager.addToFavorite(storeId: store.storeId!);
+            safeShowErrorMessage(context, result);
+            // await userManager
+            //     .addToFavorite(storeId: store.storeId!)
+            //     .then((value) => customSnackBar(context, value));
           },
         );
       },

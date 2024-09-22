@@ -212,24 +212,24 @@ class CartScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-              child: ListTile(
-                title: Text(
-                  'Apple Pay',
-                  style: AppStyles.styleBold(12, context),
-                ),
-                leading: Radio<int>(
-                  activeColor: AppColors.primaryColor,
-                  value: 0,
-                  groupValue: cartManager.selectedPaymentMethod,
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      cartManager.setSelectedPaymentMethod(value);
-                    }
-                  },
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: ListTile(
+            //     title: Text(
+            //       'Apple Pay',
+            //       style: AppStyles.styleBold(12, context),
+            //     ),
+            //     leading: Radio<int>(
+            //       activeColor: AppColors.primaryColor,
+            //       value: 0,
+            //       groupValue: cartManager.selectedPaymentMethod,
+            //       onChanged: (int? value) {
+            //         if (value != null) {
+            //           cartManager.setSelectedPaymentMethod(value);
+            //         }
+            //       },
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: ListTile(
                 title: Text(

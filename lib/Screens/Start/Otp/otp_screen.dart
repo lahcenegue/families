@@ -93,9 +93,8 @@ class OtpScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: () async {
         if (otpManager.otpType == OTPType.confirm) {
-          await otpManager.confirmOTP().then((value) {
-            customSnackBar(context, value);
-          });
+          int? result = await otpManager.confirmOTP();
+          safeShowErrorMessage(context, result);
         } else {
           await otpManager.getResetToken();
           //TODO reset password

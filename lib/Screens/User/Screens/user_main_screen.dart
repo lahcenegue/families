@@ -37,10 +37,11 @@ class UserMainScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, UserManagerProvider userManager) {
     return AppBar(
+      centerTitle: false,
       title: ClipOval(
         child: CachedNetworkImage(
           imageUrl:
-              '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)!}',
+              '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)}',
           width: AppSize.widthSize(50, context),
           height: AppSize.widthSize(50, context),
           fit: BoxFit.fill,
@@ -91,13 +92,17 @@ class UserMainScreen extends StatelessWidget {
           return PopularStoreBox(
             store: userManager.popularFamiliesViewModel!.stores[index],
             addToFavorite: () async {
-              await userManager
-                  .addToFavorite(
-                      storeId: userManager
-                          .allFamiliesViewModel!.stores[index].storeId!)
-                  .then(
-                    (value) => customSnackBar(context, value),
-                  );
+              int? result = await userManager.addToFavorite(
+                  storeId:
+                      userManager.allFamiliesViewModel!.stores[index].storeId!);
+              safeShowErrorMessage(context, result);
+              // await userManager
+              //     .addToFavorite(
+              //         storeId: userManager
+              //             .allFamiliesViewModel!.stores[index].storeId!)
+              //     .then(
+              //       (value) => customSnackBar(context, value),
+              //     );
             },
           );
         },
@@ -118,11 +123,10 @@ class UserMainScreen extends StatelessWidget {
         itemBuilder: (context, index) => AllStoreBox(
           store: userManager.allFamiliesViewModel!.stores[index],
           addToFavorite: () async {
-            await userManager
-                .addToFavorite(
-                    storeId: userManager
-                        .allFamiliesViewModel!.stores[index].storeId!)
-                .then((value) => customSnackBar(context, value));
+            int? result = await userManager.addToFavorite(
+                storeId:
+                    userManager.allFamiliesViewModel!.stores[index].storeId!);
+            safeShowErrorMessage(context, result);
           },
         ),
       ),

@@ -174,8 +174,9 @@ class FamilyAccountScreen extends StatelessWidget {
 
   Widget _buildLogoutTile(BuildContext context) {
     return ListTile(
-      onTap: () {
-        Provider.of<LoginAndRegisterManager>(context, listen: false).lougOut();
+      onTap: () async {
+        await Provider.of<LoginAndRegisterManager>(context, listen: false)
+            .lougOut();
       },
       title: Text(
         AppLocalizations.of(context)!.logout,
@@ -238,7 +239,6 @@ class FamilyAccountScreen extends StatelessWidget {
                         .copyWith(color: Colors.black),
                   ),
                   onPressed: () {
-                    print('Account deletion confirmed');
                     deleteAccountManager.deleteAccount();
                     Navigator.of(context).pop();
                   },
