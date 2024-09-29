@@ -37,6 +37,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
       _initializeNotifications(),
     ]);
 
+    pageIndex = 0;
     //_isInitialized = true;
     notifyListeners();
     goToNextScreen();

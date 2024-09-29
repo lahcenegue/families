@@ -160,30 +160,22 @@ class RegisterScreen extends StatelessWidget {
         CustomTextField(
           title: AppLocalizations.of(context)!.name,
           hintText: AppLocalizations.of(context)!.name,
-          onChanged: (value) {
-            registerManager.registerRequestModel.userName = value;
-          },
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.name_entryPrompt;
-            }
-            return null;
-          },
+          onChanged: (value) =>
+              registerManager.registerRequestModel.userName = value,
+          validator: (value) => value?.isEmpty ?? true
+              ? AppLocalizations.of(context)!.name_entryPrompt
+              : null,
           keyboardType: TextInputType.text,
         ),
         SizedBox(height: AppSize.heightSize(20, context)),
         CustomTextField(
           title: AppLocalizations.of(context)!.phone,
           hintText: '050 505 505',
-          onChanged: (value) {
-            registerManager.registerRequestModel.phoneNumber = int.parse(value);
-          },
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.phone_entryPrompt;
-            }
-            return null;
-          },
+          onChanged: (value) => registerManager
+              .registerRequestModel.phoneNumber = int.tryParse(value),
+          validator: (value) => value?.isEmpty ?? true
+              ? AppLocalizations.of(context)!.phone_entryPrompt
+              : null,
           keyboardType: TextInputType.phone,
         ),
         SizedBox(height: AppSize.heightSize(20, context)),
@@ -194,18 +186,13 @@ class RegisterScreen extends StatelessWidget {
             registerManager.registerRequestModel.password = value;
             registerManager.firstPasword(value);
           },
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.password_entryPrompt;
-            }
-            return null;
-          },
+          validator: (value) => value?.isEmpty ?? true
+              ? AppLocalizations.of(context)!.password_entryPrompt
+              : null,
           suffixIcon: registerManager.isVisible
               ? Icons.visibility_off
               : Icons.visibility,
-          suffixChanged: () {
-            registerManager.toggleVisibility(fieldIndex: 1);
-          },
+          suffixChanged: () => registerManager.toggleVisibility(fieldIndex: 1),
           keyboardType: TextInputType.visiblePassword,
           obscureText: !registerManager.isVisible,
         ),
@@ -213,9 +200,9 @@ class RegisterScreen extends StatelessWidget {
         CustomTextField(
           title: AppLocalizations.of(context)!.retype_password,
           hintText: '*********',
-          onChanged: (value) {},
+          onChanged: (_) {},
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            if (value?.isEmpty ?? true) {
               return AppLocalizations.of(context)!.password_entryPrompt;
             }
             if (value != registerManager.checkPassrowd) {
@@ -226,9 +213,7 @@ class RegisterScreen extends StatelessWidget {
           suffixIcon: registerManager.isVisible2
               ? Icons.visibility_off
               : Icons.visibility,
-          suffixChanged: () {
-            registerManager.toggleVisibility(fieldIndex: 2);
-          },
+          suffixChanged: () => registerManager.toggleVisibility(fieldIndex: 2),
           keyboardType: TextInputType.visiblePassword,
           obscureText: !registerManager.isVisible2,
         ),
@@ -244,9 +229,7 @@ class RegisterScreen extends StatelessWidget {
       children: [
         Checkbox(
           value: registerManager.isAgree,
-          onChanged: (value) {
-            registerManager.toggleIsAgree(value!);
-          },
+          onChanged: (value) => registerManager.toggleIsAgree(value!),
         ),
         SizedBox(
           width: AppSize.widthSize(240, context),
@@ -270,9 +253,8 @@ class RegisterScreen extends StatelessWidget {
           Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
           ElevatedButton(
             onPressed: () async {
-              await registerManager
-                  .register()
-                  .then((value) => customSnackBar(context, value));
+              int? result = await registerManager.register();
+              safeShowErrorMessage(context, result);
             },
             child: Text(AppLocalizations.of(context)!.sign_up),
           ),
@@ -284,9 +266,7 @@ class RegisterScreen extends StatelessWidget {
                 style: AppStyles.styleMedium(13, context),
               ),
               TextButton(
-                onPressed: () {
-                  NavigationService.goBack();
-                },
+                onPressed: () => NavigationService.goBack(),
                 child: Text(
                   AppLocalizations.of(context)!.login,
                   style: AppStyles.styleMedium(13, context).copyWith(

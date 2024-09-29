@@ -37,9 +37,25 @@ class UserMainScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, UserManagerProvider userManager) {
     return AppBar(
+<<<<<<< HEAD
       title: userManager.isLoggedIn
           ? _buildUserProfileImage(context, userManager)
           : const SizedBox.shrink(),
+=======
+      centerTitle: false,
+      title: ClipOval(
+        child: CachedNetworkImage(
+          imageUrl:
+              '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)}',
+          width: AppSize.widthSize(50, context),
+          height: AppSize.widthSize(50, context),
+          fit: BoxFit.fill,
+          progressIndicatorBuilder: (context, url, progress) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      ),
+>>>>>>> c49be4b8de4e4010aba8dafbc1cd3fa651c088e7
       actions: [
         IconButton(
           onPressed: () {
@@ -105,6 +121,7 @@ class UserMainScreen extends StatelessWidget {
           return PopularStoreBox(
             store: userManager.popularFamiliesViewModel!.stores[index],
             addToFavorite: () async {
+<<<<<<< HEAD
               if (await userManager.checkLoginStatus()) {
                 await userManager
                     .addToFavorite(
@@ -116,6 +133,19 @@ class UserMainScreen extends StatelessWidget {
               } else {
                 _showLoginDialog(context, userManager);
               }
+=======
+              int? result = await userManager.addToFavorite(
+                  storeId:
+                      userManager.allFamiliesViewModel!.stores[index].storeId!);
+              safeShowErrorMessage(context, result);
+              // await userManager
+              //     .addToFavorite(
+              //         storeId: userManager
+              //             .allFamiliesViewModel!.stores[index].storeId!)
+              //     .then(
+              //       (value) => customSnackBar(context, value),
+              //     );
+>>>>>>> c49be4b8de4e4010aba8dafbc1cd3fa651c088e7
             },
           );
         },
@@ -136,6 +166,7 @@ class UserMainScreen extends StatelessWidget {
         itemBuilder: (context, index) => AllStoreBox(
           store: userManager.allFamiliesViewModel!.stores[index],
           addToFavorite: () async {
+<<<<<<< HEAD
             if (await userManager.checkLoginStatus()) {
               await userManager
                   .addToFavorite(
@@ -145,6 +176,12 @@ class UserMainScreen extends StatelessWidget {
             } else {
               _showLoginDialog(context, userManager);
             }
+=======
+            int? result = await userManager.addToFavorite(
+                storeId:
+                    userManager.allFamiliesViewModel!.stores[index].storeId!);
+            safeShowErrorMessage(context, result);
+>>>>>>> c49be4b8de4e4010aba8dafbc1cd3fa651c088e7
           },
         ),
       ),

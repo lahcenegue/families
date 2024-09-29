@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Screens/Family/add_dish.dart';
 import '../../Screens/Family/family_home_screen.dart';
+import '../../Screens/Family/my_dishs.dart';
 import '../../Screens/Family/term_condition.dart';
 import '../../Screens/Start/Register/family_register_screen.dart';
 import '../../Screens/Start/Splash/splash.dart';
@@ -40,6 +41,7 @@ class AppRoutes {
   static const String familyTermsConditions = '/familyTermsConditions';
   static const String userTermsConditions = '/userTermsConditions';
   static const String userAllMessages = '/userallMessages';
+  static const String myDishsScreen = '/myDishsScreen';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -67,6 +69,7 @@ class AppRoutes {
       userTermsConditions: (BuildContext context) =>
           const UserTermsAndConditionsPage(),
       userAllMessages: (BuildContext context) => const UserAllMessages(),
+      myDishsScreen: (BuildContext context) => const MyDishsScreen(),
     };
   }
 }
@@ -79,7 +82,7 @@ class NavigationService {
     try {
       return navigatorKey.currentState!.pushNamed(routeName);
     } catch (e) {
-      print("Navigation error: $e");
+      debugPrint("Navigation error: $e");
       return Future.value(null);
     }
   }
@@ -89,7 +92,7 @@ class NavigationService {
       return navigatorKey.currentState!
           .pushNamedAndRemoveUntil(routeName, (route) => false);
     } catch (e) {
-      print("Navigation error: $e");
+      debugPrint("Navigation error: $e");
       return Future.value(null);
     }
   }
@@ -97,8 +100,6 @@ class NavigationService {
   static void goBack() {
     if (navigatorKey.currentState!.canPop()) {
       navigatorKey.currentState!.pop();
-    } else {
-      print("Cannot go back");
     }
   }
 }

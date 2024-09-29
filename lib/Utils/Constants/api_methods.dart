@@ -7,6 +7,7 @@ class ApiMethods {
   static const String restPasswordOtp = 'send_otp_reset';
   static const String getResetToken = 'aquire_reset_token';
   static const String resetPassword = 'reset_password';
+  static const String deleteAccount = 'delete_account';
 
   static const String getBannerMethod = 'retrieve_banners';
   static const String getPopularFamilies = 'retrieve_popular_stores';
@@ -27,7 +28,11 @@ class ApiMethods {
   static const String sendMessageFromUser = 'send_message_from_user';
   static const String getUserMessages = 'retrieve_messages_with_user';
   static const String getStoreMessages = 'retrieve_messages_with_store';
+  static const String ulpadImage = 'upload_image';
+  static const String deleteDish = 'delete_store_item';
 
+// static const String = '';
+// static const String = '';
 // static const String = '';
 // static const String = '';
 }

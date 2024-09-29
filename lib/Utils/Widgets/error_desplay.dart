@@ -7,17 +7,17 @@ class ErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (errorMessage == null) return SizedBox.shrink();
+    if (errorMessage == null) return const SizedBox.shrink();
     return Center(
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Colors.red.withOpacity(0.8),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Text(
           errorMessage!,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),

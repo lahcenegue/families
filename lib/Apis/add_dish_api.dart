@@ -6,8 +6,6 @@ import '../Models/request_model.dart';
 import '../Utils/Constants/app_links.dart';
 
 Future<AddDishModel> addDishApi({required RequestModel addDishRequest}) async {
-  AddDishModel addDishModel = AddDishModel();
-
   try {
     Uri url = Uri.parse(AppLinks.api);
 
@@ -21,10 +19,9 @@ Future<AddDishModel> addDishApi({required RequestModel addDishRequest}) async {
 
     var body = convert.json.decode(response.body);
 
-    addDishModel = AddDishModel.fromJson(body);
-
+    AddDishModel addDishModel = AddDishModel.fromJson(body);
     return addDishModel;
   } catch (e) {
-    throw Exception(e);
+    throw Exception('Failed to add dish: $e');
   }
 }

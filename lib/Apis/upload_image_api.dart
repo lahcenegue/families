@@ -1,32 +1,27 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-import '../Models/register_model.dart';
 import '../Models/request_model.dart';
+import '../Models/ulpoad_image_model.dart';
 import '../Utils/Constants/app_links.dart';
 
-Future<RegisterResponseModel> registerApi({
-  required RequestModel registerRequestModel,
-}) async {
-  RegisterResponseModel registerResponse = RegisterResponseModel();
-
+Future<UploadImageModel> uploadImageApi(
+    {required RequestModel uploadImageRequest}) async {
   try {
     Uri url = Uri.parse(AppLinks.api);
-
     http.Response response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: convert.jsonEncode(registerRequestModel.toJson()),
+      body: convert.jsonEncode(uploadImageRequest.toJson()),
     );
 
     var body = convert.json.decode(response.body);
 
-    registerResponse = RegisterResponseModel.fromJson(body);
-
-    return registerResponse;
+    UploadImageModel uploadImageModel = UploadImageModel.fromJson(body);
+    return uploadImageModel;
   } catch (e) {
-    throw Exception(e);
+    throw Exception('Failed to upload image: $e');
   }
 }

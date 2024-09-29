@@ -20,8 +20,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginAndRegisterManager>(
-      builder: (context, loginManager, _) {
+    return Consumer2<AppSettingsProvider, LoginAndRegisterManager>(
+      builder: (context, appSettings, loginManager, _) {
         return Scaffold(
           body: SafeArea(
             child: Stack(
@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
                       slivers: [
                         _buildHeader(context),
                         _buildLoginForm(context, loginManager),
-                        _buildFooter(context, loginManager),
+                        _buildFooter(context, loginManager, appSettings),
                       ],
                     ),
                   ),
@@ -93,11 +93,7 @@ class LoginScreen extends StatelessWidget {
             title: AppLocalizations.of(context)!.phone,
             hintText: '050 505 505',
             onChanged: (value) {
-              //print(value);
-              if (value.isNotEmpty) {
-                print(value);
-                loginManager.loginRequestModel.phoneNumber = int.parse(value);
-              }
+              loginManager.loginRequestModel.phoneNumber = int.tryParse(value);
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -144,8 +140,8 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFooter(
-      BuildContext context, LoginAndRegisterManager loginManager) {
+  Widget _buildFooter(BuildContext context,
+      LoginAndRegisterManager loginManager, AppSettingsProvider appSettings) {
     return SliverFillRemaining(
       hasScrollBody: false,
       child: Column(
@@ -153,9 +149,12 @@ class LoginScreen extends StatelessWidget {
           Expanded(child: SizedBox(height: AppSize.heightSize(50, context))),
           ElevatedButton(
             onPressed: () async {
-              await loginManager
-                  .login()
-                  .then((value) => customSnackBar(context, value));
+              appSettings.setPageIndex(0);
+              int? result = await loginManager.login();
+
+              if (result != null && result != 20) {
+                safeShowErrorMessage(context, result);
+              }
             },
             child: Text(AppLocalizations.of(context)!.login),
           ),

@@ -21,8 +21,12 @@ Future<LoginResponseModel> loginApi({
       body: convert.jsonEncode(loginRequestModel.toJson()),
     );
 
-    var body = convert.json.decode(response.body);
+    print(
+      convert.jsonEncode(loginRequestModel.toJson()),
+    );
 
+    var body = convert.json.decode(response.body);
+    print(body);
     loginResponse = LoginResponseModel.fromJson(body);
 
     return loginResponse;

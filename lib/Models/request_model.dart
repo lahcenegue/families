@@ -20,13 +20,15 @@ class RequestModel {
   String? document;
   String? category;
   String? description;
-  double? preparationTime;
+  int? preparationTime;
   String? dishName;
   double? dishPrice;
+  List<String>? dishImages;
   int? userId;
   String? message;
   int? messageId;
   String? oneSignalId;
+  String? image;
 
   RequestModel({
     this.method,
@@ -53,10 +55,12 @@ class RequestModel {
     this.preparationTime,
     this.dishName,
     this.dishPrice,
+    this.dishImages,
     this.userId,
     this.message,
     this.messageId,
     this.oneSignalId,
+    this.image,
   });
 
   Map<String, dynamic> toJson() {
@@ -89,6 +93,8 @@ class RequestModel {
       if (message != null) 'Message': message!.trim(),
       if (messageId != null) 'MessageId': messageId!,
       if (oneSignalId != null) 'OneSignalId': oneSignalId!.trim(),
+      if (image != null) 'Image': image!.trim(),
+      if (dishImages != null) 'Images': dishImages!,
     };
   }
 }

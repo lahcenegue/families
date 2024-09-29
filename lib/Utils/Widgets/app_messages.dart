@@ -1,84 +1,36 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-String appMessages(BuildContext context, int code) {
-  String appMessage;
+String appErrorMessages(int? code, AppLocalizations appLocalizations) {
+  if (code == null) return '';
+
   switch (code) {
     case 0:
-      {
-        appMessage = AppLocalizations.of(context)!.missing_data;
-      }
-      break;
-
+      return appLocalizations.missing_data;
     case 1:
-      {
-        appMessage = AppLocalizations.of(context)!.record_conflict;
-      }
-      break;
-
+      return appLocalizations.record_conflict;
     case 2:
-      {
-        appMessage = AppLocalizations.of(context)!.incomplete_data;
-      }
-      break;
-
+      return appLocalizations.incomplete_data;
     case 3:
-      {
-        appMessage = AppLocalizations.of(context)!.wrong_credentials;
-      }
-      break;
+      return appLocalizations.wrong_credentials;
     case 4:
-      {
-        appMessage = AppLocalizations.of(context)!.token_expired;
-      }
-      break;
+      return appLocalizations.token_expired;
     case 5:
-      {
-        appMessage = AppLocalizations.of(context)!.unauthenticated;
-      }
-      break;
+      return appLocalizations.unauthenticated;
     case 6:
-      {
-        appMessage = AppLocalizations.of(context)!.otp_delay;
-      }
-      break;
+      return appLocalizations.otp_delay;
     case 7:
-      {
-        appMessage = AppLocalizations.of(context)!.wrong_format;
-      }
-      break;
+      return appLocalizations.wrong_format;
     case 8:
-      {
-        appMessage = AppLocalizations.of(context)!.upload_error;
-      }
-      break;
+      return appLocalizations.upload_error;
     case 10:
-      {
-        appMessage = AppLocalizations.of(context)!.agree_terms_conditions;
-      }
-      break;
+      return appLocalizations.agree_terms_conditions;
     case 11:
-      {
-        appMessage = 'تمت إضافة الطبق إلى السلة بنجاح!';
-      }
-      break;
+      return 'تمت إضافة الطبق إلى السلة بنجاح!';
     case 12:
-      {
-        appMessage = 'فشل في إضافة الطبق إلى السلة.';
-      }
-      break;
+      return 'فشل في إضافة الطبق إلى السلة.';
     case 13:
-      {
-        appMessage = 'حدث خطأ أثناء إضافة الطبق إلى السلة.';
-      }
-      break;
-
+      return 'حدث خطأ أثناء إضافة الطبق إلى السلة.';
     default:
-      {
-        appMessage = 'error';
-      }
-      break;
+      return 'error';
   }
-
-  return appMessage;
 }

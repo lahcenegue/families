@@ -21,7 +21,6 @@ class AddDishModel extends BaseModel {
 class DishItem {
   int? itemId;
   int? storeId;
-  int? categoryId;
   String? itemName;
   double? price;
   String? description;
@@ -31,7 +30,6 @@ class DishItem {
   DishItem({
     this.itemId,
     this.storeId,
-    this.categoryId,
     this.itemName,
     this.price,
     this.description,
@@ -43,9 +41,8 @@ class DishItem {
     return DishItem(
       itemId: json['ItemId'],
       storeId: json['StoreId'],
-      categoryId: json['CategoryId'],
       itemName: json['ItemName'],
-      price: json['Price'].toDouble(),
+      price: (json['Price'] as num).toDouble(),
       description: json['Description'],
       preparationTime: json['PreparationTime'],
       images: List<String>.from(json['Images'] ?? []),

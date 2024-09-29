@@ -21,19 +21,12 @@ Future<BaseModel> baseApi({
       body: convert.jsonEncode(requestModel.toJson()),
     );
 
-    print('send a new messag');
-    print(convert.jsonEncode(requestModel.toJson()));
-    print(response.body);
+    var body = convert.json.decode(response.body);
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var body = convert.json.decode(response.body);
+    baseResponse = BaseModel.fromJson(body);
 
-      baseResponse = BaseModel.fromJson(body);
-
-      return baseResponse;
-    }
+    return baseResponse;
   } catch (e) {
-    throw Exception(e);
-  } finally {}
-  return baseResponse;
+    throw Exception('Failed to add dish: $e');
+  }
 }

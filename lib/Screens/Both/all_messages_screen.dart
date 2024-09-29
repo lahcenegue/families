@@ -32,7 +32,10 @@ class AllMessagesScreen extends StatelessWidget {
     if (chatManager.allMessages == null ||
         chatManager.allMessages!.messages.isEmpty) {
       return Center(
-        child: Text(AppLocalizations.of(context)!.no_messages),
+        child: Text(
+          AppLocalizations.of(context)!.no_messages,
+          style: AppStyles.styleBold(16, context),
+        ),
       );
     } else {
       return Container(

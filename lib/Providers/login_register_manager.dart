@@ -51,6 +51,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   RequestModel registerRequestModel = RequestModel();
   RequestModel otpRequestModel = RequestModel();
   RequestModel resetRequestModel = RequestModel();
+  RequestModel deleteAccountModel = RequestModel();
 
   String storeClassification = 'حلويات';
   String? checkPassrowd;
@@ -92,6 +93,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
       if (value.status == 'success') {
         await _handleSuccessfulLogin(value);
         return null;
+      } else if (value.status == 'Unverified') {
+        NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
+        return 20;
       } else {
         return value.errorCode;
       }
@@ -119,6 +123,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
       if (value.status == 'success') {
         otpToken = value.userData!.otpToken;
+
         NavigationService.navigateTo(AppRoutes.otpScreen);
         startTimer();
         await sendOtpForCreateAccount();
@@ -144,11 +149,40 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
 
     if (_prefs != null) {
-      await _prefs!.clear();
+      await _prefs!.remove(PrefKeys.token);
+      await _prefs!.remove(
+        PrefKeys.profilImage,
+      );
+      await _prefs!.remove(PrefKeys.phoneNumber);
+      await _prefs!.remove(PrefKeys.storeName);
+      await _prefs!.remove(PrefKeys.storeLocation);
+      await _prefs!.remove(PrefKeys.userName);
       NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
     } else {
       print('Error: SharedPreferences _prefs is null.');
     }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      deleteAccountModel.method = ApiMethods.deleteAccount;
+      deleteAccountModel.token = _prefs!.getString(PrefKeys.token);
+      deleteAccountModel.accountType = accountType;
+
+      BaseModel value = await baseApi(requestModel: deleteAccountModel);
+      if (value.status == 'Success') {
+        deleteAccountModel = RequestModel();
+        await _prefs!.remove(PrefKeys.token);
+        await _prefs!.remove(
+          PrefKeys.profilImage,
+        );
+        await _prefs!.remove(PrefKeys.phoneNumber);
+        await _prefs!.remove(PrefKeys.storeName);
+        await _prefs!.remove(PrefKeys.storeLocation);
+        await _prefs!.remove(PrefKeys.userName);
+        NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+      }
+    } catch (e) {}
   }
 
   // send otp for create account
@@ -187,10 +221,13 @@ class LoginAndRegisterManager extends ChangeNotifier {
       LoginResponseModel value =
           await loginApi(loginRequestModel: otpRequestModel);
 
-      if (value.status == 'success') {
+      if (value.status == 'Success') {
         await _handleSuccessfulLogin(value);
         NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
         return null;
+      } else if (value.status == 'Unverified') {
+        NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
+        return 20;
       } else {
         return value.errorCode;
       }
@@ -337,46 +374,12 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
   }
 
-  // Future<void> selectLocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //   String address = await _getAddressFromCoordinates(
-  //     position.latitude,
-  //     position.longitude,
-  //   );
-  //   locationController.text = address;
-  //   notifyListeners();
-  // }
-
-  // Future<String> _getAddressFromCoordinates(
-  //     double latitude, double longitude) async {
-  //   List<Placemark> placemarks =
-  //       await placemarkFromCoordinates(latitude, longitude);
-  //   if (placemarks.isNotEmpty) {
-  //     final Placemark place = placemarks.first;
-  //     return "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-  //   }
-  //   return "Unknown location";
-  // }
+  void removeMedicalCertificate() {
+    medicalCertificate = null;
+    medicalCertificateBase64 = '';
+    registerRequestModel.document = null;
+    notifyListeners();
+  }
 
   Future<void> saveUserData(dynamic value) async {
     print('save data after login ${value.userData!.token}');

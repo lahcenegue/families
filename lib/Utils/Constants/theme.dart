@@ -66,19 +66,19 @@ abstract class AppThemes {
     //Elevated Button Style
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.primaryColor),
-        elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 60)),
-        shape: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(AppColors.primaryColor),
+        elevation: WidgetStateProperty.all(0),
+        minimumSize: WidgetStateProperty.all(const Size(double.infinity, 60)),
+        shape: WidgetStateProperty.all(
           const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12))),
         ),
-        foregroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
             return Colors.white;
           },
         ),
-        textStyle: MaterialStateProperty.all(
+        textStyle: WidgetStateProperty.all(
           const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 14,
@@ -90,9 +90,9 @@ abstract class AppThemes {
     // TextButton theme
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        foregroundColor:
+            WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return AppColors.primaryColor.withOpacity(0.6);
           }
           return Colors.black;
@@ -188,19 +188,19 @@ abstract class AppThemes {
     //Elevated Button Style
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.primaryColor),
-        elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 60)),
-        shape: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(AppColors.primaryColor),
+        elevation: WidgetStateProperty.all(0),
+        minimumSize: WidgetStateProperty.all(const Size(double.infinity, 60)),
+        shape: WidgetStateProperty.all(
           const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12))),
         ),
-        foregroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
             return Colors.black;
           },
         ),
-        textStyle: MaterialStateProperty.all(
+        textStyle: WidgetStateProperty.all(
           const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w700,
@@ -213,9 +213,9 @@ abstract class AppThemes {
     // TextButton theme
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
+        foregroundColor:
+            WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.disabled)) {
             return AppColors.primaryColor.withOpacity(0.6);
           }
           return Colors.white;
