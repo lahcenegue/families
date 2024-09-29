@@ -16,24 +16,35 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class DisheBox extends StatelessWidget {
   final DishItemViewModel dish;
 
-  const DisheBox({super.key, required this.dish});
+  const DisheBox({
+    super.key,
+    required this.dish,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
+    return Consumer<UserManagerProvider>(builder: (context, userManager, _) {
+      return GestureDetector(
+        onTap: () {
+          userManager.setSelectedDish(dish);
+          NavigationService.navigateTo(AppRoutes.disheView);
+        },
+        child: Stack(
           children: [
-            _buildImage(context),
-            SizedBox(height: AppSize.heightSize(50, context)),
+            Column(
+              children: [
+                _buildImage(context),
+                SizedBox(height: AppSize.heightSize(50, context)),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              child: _buildBottomPanel(context, userManager),
+            ),
           ],
         ),
-        Positioned(
-          bottom: 0,
-          child: _buildBottomPanel(context),
-        ),
-      ],
-    );
+      );
+    });
   }
 
   Widget _buildImage(BuildContext context) {
@@ -54,7 +65,8 @@ class DisheBox extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomPanel(BuildContext context) {
+  Widget _buildBottomPanel(
+      BuildContext context, UserManagerProvider userManager) {
     final appSettings = Provider.of<AppSettingsProvider>(context);
     return Container(
       width: AppSize.widthSize(230, context),
@@ -70,7 +82,7 @@ class DisheBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildDishName(context),
-          _buildPriceAndButton(context),
+          _buildPriceAndButton(context, userManager),
         ],
       ),
     );
@@ -83,7 +95,8 @@ class DisheBox extends StatelessWidget {
     );
   }
 
-  Widget _buildPriceAndButton(BuildContext context) {
+  Widget _buildPriceAndButton(
+      BuildContext context, UserManagerProvider userManager) {
     return Row(
       children: [
         Expanded(
@@ -99,8 +112,7 @@ class DisheBox extends StatelessWidget {
           width: AppSize.widthSize(80, context),
           child: ElevatedButton(
             onPressed: () {
-              Provider.of<UserManagerProvider>(context, listen: false)
-                  .setSelectedDish(dish);
+              userManager.setSelectedDish(dish);
               NavigationService.navigateTo(AppRoutes.disheView);
             },
             child: FittedBox(

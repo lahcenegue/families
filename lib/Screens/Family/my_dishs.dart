@@ -12,6 +12,8 @@ import '../../View_models/my_dishs_viewmodel.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'edit_dish_screen.dart';
+
 class MyDishsScreen extends StatelessWidget {
   const MyDishsScreen({super.key});
 
@@ -85,12 +87,25 @@ class MyDishsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDismissibleDishItem(BuildContext context, MyDishViewModel item,
+  Widget _buildDismissibleDishItem(BuildContext context, MyDishViewModel dish,
       FamilyManagerProvider familyManager) {
     return Dismissible(
-      key: Key(item.itemId.toString()),
-      direction: DismissDirection.endToStart,
+      key: Key(dish.itemId.toString()),
+      direction: DismissDirection.horizontal,
       background: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: AppSize.widthSize(20, context)),
+        decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
+        ),
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+          size: AppSize.iconSize(30, context),
+        ),
+      ),
+      secondaryBackground: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left: AppSize.widthSize(20, context)),
         decoration: BoxDecoration(
@@ -104,46 +119,28 @@ class MyDishsScreen extends StatelessWidget {
         ),
       ),
       onDismissed: (direction) {
-        familyManager.deleteDish(item.itemId!);
+        if (direction == DismissDirection.endToStart) {
+          familyManager.deleteDish(dish.itemId!);
+        }
       },
       confirmDismiss: (direction) async {
-        return await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                'تأكيد الحذف',
-                style: AppStyles.styleBold(16, context)
-                    .copyWith(color: Colors.black),
+        if (direction == DismissDirection.endToStart) {
+          return await showDeleteConfirmationDialog(context);
+        } else if (direction == DismissDirection.startToEnd) {
+          bool? shouldEdit = await showEditConfirmationDialog(context);
+          if (shouldEdit == true) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditDishScreen(dish: dish),
               ),
-              content: Text(
-                'هل تريد حقا حدف الطبق بشكل دائم؟',
-                style: AppStyles.styleRegular(14, context)
-                    .copyWith(color: Colors.black),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(
-                    'إلغاء',
-                    style: AppStyles.styleBold(14, context)
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(
-                    'تأكيد الحذف',
-                    style: AppStyles.styleRegular(12, context)
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-              ],
             );
-          },
-        );
+          }
+          return false;
+        }
+        return false;
       },
-      child: _buildDishItem(context, item),
+      child: _buildDishItem(context, dish),
     );
   }
 
@@ -200,6 +197,84 @@ class MyDishsScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<bool?> showDeleteConfirmationDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'تأكيد الحذف',
+            style:
+                AppStyles.styleBold(16, context).copyWith(color: Colors.black),
+          ),
+          content: Text(
+            'هل تريد حقا حذف الطبق بشكل دائم؟',
+            style: AppStyles.styleRegular(14, context)
+                .copyWith(color: Colors.black),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'إلغاء',
+                style: AppStyles.styleBold(14, context)
+                    .copyWith(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'تأكيد الحذف',
+                style: AppStyles.styleRegular(12, context)
+                    .copyWith(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> showEditConfirmationDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'تأكيد التعديل',
+            style:
+                AppStyles.styleBold(16, context).copyWith(color: Colors.black),
+          ),
+          content: Text(
+            'هل تريد حقا تعديل الطبق؟',
+            style: AppStyles.styleRegular(14, context)
+                .copyWith(color: Colors.black),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'إلغاء',
+                style: AppStyles.styleBold(14, context)
+                    .copyWith(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                'تأكيد التعديل',
+                style: AppStyles.styleRegular(12, context)
+                    .copyWith(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -76,9 +76,7 @@
   "enter_dish_description": "Please enter a description for the dish",
   "price": "Price",
   "enter_price": "Please enter the price",
-  "hour": "Hour",
-  "enter_preparation_time": "Please enter the preparation time",
-  "minute": "Minute",
-  "second": "Second",
+   "enter_preparation_time": "Please enter the preparation time",
+  "time": "Dish preparation time",
   "add": "Add"
 }

@@ -259,7 +259,7 @@ class UserAccountScreen extends StatelessWidget {
   Widget _buildLoginTile(BuildContext context) {
     return ListTile(
       onTap: () {
-        NavigationService.navigateTo(AppRoutes.loginScreen);
+        NavigationService.navigateTo(AppRoutes.accountTypeScreen);
       },
       title: Text(
         AppLocalizations.of(context)!.login,

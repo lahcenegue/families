@@ -25,23 +25,33 @@ class DisheView extends StatelessWidget {
       builder: (context, userManager, cartManager, _) {
         final dish = userManager.selectedDish;
         if (dish == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            body: Center(
+              child: Text(
+                'لم يتم اختيار طبق',
+                style: AppStyles.styleBold(16, context),
+              ),
+            ),
           );
         }
 
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text(
+              dish.dishName ?? '',
+              style: AppStyles.styleBold(18, context),
+            ),
+          ),
           body: Stack(
             children: [
               _buildContent(context, userManager, dish),
               CustomLoadingIndicator(
-                isVisible: cartManager.isApiCallProcess,
+                isVisible: userManager.isApiCallProcess,
               ),
             ],
           ),
           bottomNavigationBar:
-              _buildAddToCartButton(context, cartManager, dish),
+              _buildAddToCartButton(context, userManager, cartManager, dish),
         );
       },
     );
@@ -215,6 +225,7 @@ class DisheView extends StatelessWidget {
 
   Widget _buildAddToCartButton(
     BuildContext context,
+    UserManagerProvider userManager,
     CartProvider cartManager,
     DishItemViewModel dish,
   ) {
@@ -227,15 +238,55 @@ class DisheView extends StatelessWidget {
             final scaffoldMessenger = ScaffoldMessenger.of(context);
             final appLocalizations = AppLocalizations.of(context);
 
-            int? result = await cartManager.addToCart(
-              itemId: dish.itemId!,
-              amount: 1,
-            );
-
-            String message = appErrorMessages(result, appLocalizations!);
-            scaffoldMessenger.showSnackBar(SnackBar(content: Text(message)));
+            if (userManager.isLoggedIn) {
+              int? result = await cartManager.addToCart(
+                itemId: dish.itemId!,
+                amount: 1,
+              );
+              String message = appErrorMessages(result, appLocalizations!);
+              scaffoldMessenger.showSnackBar(SnackBar(content: Text(message)));
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: Text(
+                          'تسجيل الدخول مطلوب',
+                          textAlign: TextAlign.center,
+                          style: AppStyles.styleBold(16, context),
+                        ),
+                        content: Text(
+                          'يرجى تسجيل الدخول لتتمكن من إضافة المنتج إلى السلة وإتمام عملية الشراء',
+                          textAlign: TextAlign.center,
+                          style: AppStyles.styleMedium(14, context),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: Text(
+                              'رجوع',
+                              style: AppStyles.styleMedium(14, context),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('تسجيل',
+                                style: AppStyles.styleBold(14, context)),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              NavigationService.navigateTo(
+                                  AppRoutes.accountTypeScreen);
+                            },
+                          ),
+                        ]);
+                  });
+            }
           },
-          child: const Text('اضف الى السلة'),
+          child: Text(
+            'اضف الى السلة',
+            style: AppStyles.styleBold(12, context),
+          ),
         ),
       ),
     );

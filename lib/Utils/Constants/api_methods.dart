@@ -30,8 +30,8 @@ class ApiMethods {
   static const String getStoreMessages = 'retrieve_messages_with_store';
   static const String ulpadImage = 'upload_image';
   static const String deleteDish = 'delete_store_item';
+  static const String editDish = 'edit_item';
 
-// static const String = '';
 // static const String = '';
 // static const String = '';
 // static const String = '';

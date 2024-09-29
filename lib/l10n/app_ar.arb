@@ -76,9 +76,7 @@
   "enter_dish_description": "أرجو إدخال وصف للطبق",
   "price": "السعر",
   "enter_price": "أرجو إدخال السعر",
-  "hour": "ساعة",
-  "enter_preparation_time": "أرجو إدخال وقت التحضير",
-  "minute": "دقيقة",
-  "second": "ثانية",
+    "enter_preparation_time": "أرجو إدخال وقت التحضير",
+  "time": "وقت تحضير الطبق",
   "add": "إضافة"
 }

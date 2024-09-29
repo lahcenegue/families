@@ -63,7 +63,7 @@ class StoreView extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: '${AppLinks.url}$imageUrl',
         width: AppSize.width(context),
-        height: AppSize.heightSize(225, context),
+        height: AppSize.heightSize(230, context),
         fit: BoxFit.fill,
         progressIndicatorBuilder: (context, url, progress) =>
             const Center(child: CircularProgressIndicator()),
@@ -134,14 +134,6 @@ class StoreView extends StatelessWidget {
               'الاطباق',
               style: AppStyles.styleBold(16, context),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'عرض الكل',
-                style: AppStyles.styleBold(10, context)
-                    .copyWith(color: AppColors.primaryColor),
-              ),
-            ),
           ],
         ),
         SizedBox(height: AppSize.heightSize(8, context)),
@@ -152,7 +144,7 @@ class StoreView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: store.dishs.length,
             separatorBuilder: (context, index) =>
-                SizedBox(width: AppSize.widthSize(14, context)),
+                SizedBox(width: AppSize.widthSize(15, context)),
             itemBuilder: (context, index) => DisheBox(dish: store.dishs[index]),
           ),
         ),

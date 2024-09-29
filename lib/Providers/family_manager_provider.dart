@@ -43,6 +43,7 @@ class FamilyManagerProvider extends ChangeNotifier {
   String? dishDescription;
 
   final GlobalKey<FormState> addDishFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> editDishFormKey = GlobalKey<FormState>();
 
   FamilyManagerProvider() {
     initializeData();
@@ -161,7 +162,7 @@ class FamilyManagerProvider extends ChangeNotifier {
         if (response.status == 'Success') {
           await fetchMyDishs();
           clearDishData();
-          NavigationService.navigateToAndReplace(AppRoutes.myDishsScreen);
+          NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
           notifyListeners();
         } else {
           print('Failed to add dish: ${response.errorCode}');
@@ -173,6 +174,52 @@ class FamilyManagerProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  Future<void> editDishFunction(int dishId) async {
+    if (editDishFormKey.currentState!.validate()) {
+      isApiCallProcess = true;
+      notifyListeners();
+
+      try {
+        RequestModel addDishRequest = RequestModel(
+          method: ApiMethods.editDish,
+          token: token,
+          itemId: dishId,
+          dishImages: uploadedImages,
+          preparationTime: preparationTime,
+          dishName: dishName,
+          dishPrice: dishPrice,
+          description: dishDescription,
+        );
+
+        AddDishModel response =
+            await addDishApi(addDishRequest: addDishRequest);
+
+        if (response.status == 'Success') {
+          await fetchMyDishs();
+          clearDishData();
+          NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
+          notifyListeners();
+        } else {
+          print('Failed to edit dish: ${response.errorCode}');
+        }
+      } catch (e) {
+        print('Error editing dish: $e');
+      } finally {
+        isApiCallProcess = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  void initEditDishData(MyDishViewModel dish) {
+    dishName = dish.itemName;
+    dishDescription = dish.description;
+    dishPrice = dish.price;
+    preparationTime = dish.preparationTime;
+    uploadedImages = dish.images ?? [];
+    notifyListeners();
   }
 
   Future<void> pickDishImage() async {

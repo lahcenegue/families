@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? titleStyle;
   final TextStyle? textStyle;
   final TextStyle? hintStyle;
+  final String? initialValue;
 
   const CustomTextField({
     required this.title,
@@ -30,6 +31,7 @@ class CustomTextField extends StatelessWidget {
     this.titleStyle,
     this.textStyle,
     this.hintStyle,
+    this.initialValue,
     super.key,
   });
 
@@ -62,7 +64,7 @@ class CustomTextField extends StatelessWidget {
               ),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(20),
-            hintText: hintText,
+            hintText: initialValue ?? hintText,
             hintStyle: hintStyle ??
                 AppStyles.styleRegular(14, context).copyWith(
                   color: AppColors.hintColor,
