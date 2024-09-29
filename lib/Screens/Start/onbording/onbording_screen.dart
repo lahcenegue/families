@@ -21,21 +21,21 @@ class OnBordingScreen extends StatelessWidget {
     final List<Onboard> demoData = [
       Onboard(
         image: AppImages.onBordingImage1,
-        title: 'title 1',
+        title: '',
         description:
-            '1 ipsum dolor sit amet consectetur. Donec at turpis semper neque.',
+            'هل أنتِ صاحبة مشروع منزلي؟ سجلي الآن في تطبيق مأكول وعرضي منتجاتك .',
       ),
       Onboard(
         image: AppImages.onBordingImage2,
-        title: 'title 1',
+        title: '',
         description:
-            '2 ipsum dolor sit amet consectetur. Donec at turpis semper neque.',
+            'مأكول أول تطبيق في القصيم يركز على دعم الأسر المنتجة. لا تفوتوا فرصة الانضمام إلينا.',
       ),
       Onboard(
         image: AppImages.onBordingImage3,
-        title: 'title 1',
+        title: '',
         description:
-            '3 ipsum dolor sit amet consectetur. Donec at turpis semper neque.',
+            'مأكول يوفر لكِ المنصة المثالية لعرض منتجاتك الفريدة وتوسيع قاعدة عملائك',
       ),
     ];
     return Consumer<AppSettingsProvider>(
@@ -72,7 +72,7 @@ Widget _buildTopRow(
         child: TextButton(
           onPressed: () {
             appsettings.saveData(key: PrefKeys.onBording, value: 'watched');
-            NavigationService.navigateTo(AppRoutes.accountTypeScreen);
+            NavigationService.navigateTo(AppRoutes.userHomeScreen);
           },
           child: Text(
             AppLocalizations.of(context)!.skip,
@@ -162,7 +162,7 @@ Widget _buildNextButton(BuildContext context, AppSettingsProvider appsettings,
         curve: Curves.ease,
       );
       if (appsettings.pageIndex == demoData.length - 1) {
-        NavigationService.navigateTo(AppRoutes.accountTypeScreen);
+        NavigationService.navigateTo(AppRoutes.userHomeScreen);
         appsettings.saveData(key: PrefKeys.onBording, value: 'watched');
       }
     },

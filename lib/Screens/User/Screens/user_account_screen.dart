@@ -40,13 +40,9 @@ class UserAccountScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildProfileImage(context, userManager),
-                      SizedBox(height: AppSize.heightSize(20, context)),
-                      _buildProfileName(context, userManager),
-                      SizedBox(height: AppSize.heightSize(10, context)),
-                      _buildPhoneNumber(context, userManager),
+                      _buildProfileSection(context, userManager),
                       SizedBox(height: AppSize.heightSize(50, context)),
-                      _buildSettingsCard(context, appSettings),
+                      _buildSettingsCard(context, appSettings, userManager),
                     ],
                   ),
                 ),
@@ -56,6 +52,45 @@ class UserAccountScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget _buildProfileSection(
+      BuildContext context, UserManagerProvider userManager) {
+    if (userManager.isLoggedIn) {
+      return Column(
+        children: [
+          _buildProfileImage(context, userManager),
+          SizedBox(height: AppSize.heightSize(20, context)),
+          _buildProfileName(context, userManager),
+          SizedBox(height: AppSize.heightSize(10, context)),
+          _buildPhoneNumber(context, userManager),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Icon(
+            Icons.account_circle,
+            size: AppSize.iconSize(100, context),
+            color: AppColors.primaryColor,
+          ),
+          SizedBox(height: AppSize.heightSize(20, context)),
+          Text(
+            'زائر',
+            style: AppStyles.styleBold(16, context),
+          ),
+          SizedBox(height: AppSize.heightSize(20, context)),
+          ElevatedButton(
+            onPressed: () =>
+                NavigationService.navigateTo(AppRoutes.accountTypeScreen),
+            child: Text(
+              'تسجيل الدخول أو التسجيل',
+              style: AppStyles.styleBold(12, context),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildProfileImage(
@@ -90,8 +125,8 @@ class UserAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsCard(
-      BuildContext context, AppSettingsProvider appSettings) {
+  Widget _buildSettingsCard(BuildContext context,
+      AppSettingsProvider appSettings, UserManagerProvider userManager) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSize.widthSize(5, context)),
       decoration: BoxDecoration(
@@ -105,15 +140,19 @@ class UserAccountScreen extends StatelessWidget {
         children: [
           _buildDarkModeTile(context, appSettings),
           _buildDivider(),
-          _buildFavoritesTile(context),
-          _buildDivider(),
-          _buildPurchasesTile(context),
-          _buildDivider(),
-          _buildChatTile(context),
-          _buildDivider(),
+          if (userManager.isLoggedIn) ...[
+            _buildFavoritesTile(context),
+            _buildDivider(),
+            _buildPurchasesTile(context),
+            _buildDivider(),
+            _buildChatTile(context),
+            _buildDivider(),
+          ],
           _buildTermsConditionsTile(context),
           _buildDivider(),
-          _buildLogoutTile(context),
+          userManager.isLoggedIn
+              ? _buildLogoutTile(context)
+              : _buildLoginTile(context),
         ],
       ),
     );
@@ -215,5 +254,18 @@ class UserAccountScreen extends StatelessWidget {
 
   Widget _buildDivider() {
     return Divider(color: const Color(0xff9DB2CE).withOpacity(0.4));
+  }
+
+  Widget _buildLoginTile(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        NavigationService.navigateTo(AppRoutes.loginScreen);
+      },
+      title: Text(
+        AppLocalizations.of(context)!.login,
+        style: AppStyles.styleBold(12, context)
+            .copyWith(color: AppColors.primaryColor),
+      ),
+    );
   }
 }

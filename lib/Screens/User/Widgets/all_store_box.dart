@@ -59,7 +59,7 @@ class AllStoreBox extends StatelessWidget {
             imageUrl: '${AppLinks.url}${store.storeImage}',
             width: AppSize.width(context),
             height: AppSize.heightSize(150, context),
-            fit: BoxFit.fill,
+            fit: BoxFit.fitHeight,
             progressIndicatorBuilder: (context, url, progress) => const Center(
               child: CircularProgressIndicator(),
             ),
@@ -120,7 +120,7 @@ class AllStoreBox extends StatelessWidget {
       ),
       child: Center(
         child: IconButton(
-          icon: store.favorite!
+          icon: (store.favorite ?? false)
               ? Icon(
                   Icons.favorite,
                   color: Colors.red,

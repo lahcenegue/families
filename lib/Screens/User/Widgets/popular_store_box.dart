@@ -37,9 +37,9 @@ class PopularStoreBox extends StatelessWidget {
                   ),
                   child: CachedNetworkImage(
                     imageUrl: '${AppLinks.url}${store.storeImage}',
-                    width: AppSize.widthSize(230, context),
-                    height: AppSize.heightSize(120, context),
-                    fit: BoxFit.fill,
+                    width: AppSize.widthSize(220, context),
+                    height: AppSize.heightSize(130, context),
+                    fit: BoxFit.fitHeight,
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -69,7 +69,7 @@ class PopularStoreBox extends StatelessWidget {
   Widget _buildRatingAndFavorite(
       BuildContext context, UserManagerProvider userManager) {
     return Container(
-      width: AppSize.widthSize(230, context),
+      width: AppSize.widthSize(220, context),
       padding: EdgeInsets.symmetric(horizontal: AppSize.widthSize(8, context)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -111,7 +111,7 @@ class PopularStoreBox extends StatelessWidget {
         color: Colors.white,
       ),
       child: IconButton(
-        icon: store.favorite!
+        icon: (store.favorite ?? false)
             ? const Icon(
                 Icons.favorite,
                 color: Colors.red,
@@ -127,7 +127,7 @@ class PopularStoreBox extends StatelessWidget {
 
   Widget _buildBottomPanel(BuildContext context) {
     return Container(
-      width: AppSize.widthSize(230, context),
+      width: AppSize.widthSize(220, context),
       padding: EdgeInsets.all(AppSize.widthSize(8, context)),
       decoration: BoxDecoration(
         color: Provider.of<AppSettingsProvider>(context).isDark

@@ -37,18 +37,9 @@ class UserMainScreen extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context, UserManagerProvider userManager) {
     return AppBar(
-      title: ClipOval(
-        child: CachedNetworkImage(
-          imageUrl:
-              '${AppLinks.url}${userManager.prefs!.getString(PrefKeys.profilImage)!}',
-          width: AppSize.widthSize(50, context),
-          height: AppSize.widthSize(50, context),
-          fit: BoxFit.fill,
-          progressIndicatorBuilder: (context, url, progress) =>
-              const Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        ),
-      ),
+      title: userManager.isLoggedIn
+          ? _buildUserProfileImage(context, userManager)
+          : const SizedBox.shrink(),
       actions: [
         IconButton(
           onPressed: () {
@@ -60,6 +51,29 @@ class UserMainScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildUserProfileImage(
+      BuildContext context, UserManagerProvider userManager) {
+    final String? profileImageUrl =
+        userManager.prefs?.getString(PrefKeys.profilImage);
+
+    return Visibility(
+      visible: profileImageUrl != null,
+      child: profileImageUrl != null
+          ? ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: '${AppLinks.url}$profileImageUrl',
+                width: AppSize.widthSize(50, context),
+                height: AppSize.widthSize(50, context),
+                fit: BoxFit.fill,
+                progressIndicatorBuilder: (context, url, progress) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -86,18 +100,22 @@ class UserMainScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: userManager.popularFamiliesViewModel!.stores.length,
         separatorBuilder: (context, index) =>
-            SizedBox(width: AppSize.widthSize(10, context)),
+            SizedBox(width: AppSize.widthSize(15, context)),
         itemBuilder: (context, index) {
           return PopularStoreBox(
             store: userManager.popularFamiliesViewModel!.stores[index],
             addToFavorite: () async {
-              await userManager
-                  .addToFavorite(
-                      storeId: userManager
-                          .allFamiliesViewModel!.stores[index].storeId!)
-                  .then(
-                    (value) => customSnackBar(context, value),
-                  );
+              if (await userManager.checkLoginStatus()) {
+                await userManager
+                    .addToFavorite(
+                        storeId: userManager
+                            .popularFamiliesViewModel!.stores[index].storeId!)
+                    .then(
+                      (value) => customSnackBar(context, value),
+                    );
+              } else {
+                _showLoginDialog(context, userManager);
+              }
             },
           );
         },
@@ -118,11 +136,15 @@ class UserMainScreen extends StatelessWidget {
         itemBuilder: (context, index) => AllStoreBox(
           store: userManager.allFamiliesViewModel!.stores[index],
           addToFavorite: () async {
-            await userManager
-                .addToFavorite(
-                    storeId: userManager
-                        .allFamiliesViewModel!.stores[index].storeId!)
-                .then((value) => customSnackBar(context, value));
+            if (await userManager.checkLoginStatus()) {
+              await userManager
+                  .addToFavorite(
+                      storeId: userManager
+                          .allFamiliesViewModel!.stores[index].storeId!)
+                  .then((value) => customSnackBar(context, value));
+            } else {
+              _showLoginDialog(context, userManager);
+            }
           },
         ),
       ),
@@ -157,6 +179,47 @@ class UserMainScreen extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSize.heightSize(15, context)),
       child: Text(title, style: AppStyles.styleBold(20, context)),
+    );
+  }
+
+  void _showLoginDialog(BuildContext context, UserManagerProvider userManager) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'تسجيل الدخول مطلوب',
+            textAlign: TextAlign.center,
+            style: AppStyles.styleBold(16, context),
+          ),
+          content: Text(
+            'يرجى تسجيل الدخول لإتمام هذا الإجراء',
+            textAlign: TextAlign.center,
+            style: AppStyles.styleMedium(14, context),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'رجوع',
+                style: AppStyles.styleMedium(14, context),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                AppLocalizations.of(context)!.login,
+                style: AppStyles.styleBold(14, context),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                NavigationService.navigateTo(AppRoutes.accountTypeScreen);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

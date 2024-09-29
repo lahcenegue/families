@@ -157,7 +157,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
         NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
       } else {
         if (token == null) {
-          NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+          NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
         } else {
           if (accountType == AppStrings.family) {
             NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);

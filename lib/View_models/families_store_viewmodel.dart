@@ -25,7 +25,7 @@ class StoreItemViewModel {
   String? get storeImage => _store.storeImage;
   double? get deliveryCost => _store.deliveryCost;
   String? get storeRating => _store.storeRating;
-  bool? get favorite => _store.isFavorite;
+  bool? get favorite => _store.isFavorite ?? false;
 
   List<DishItemViewModel> get dishs =>
       _store.dishs!.map((dish) => DishItemViewModel(dish: dish)).toList();
@@ -53,14 +53,4 @@ class DishItemViewModel {
   void updateAmount(int newAmount) {
     _dish.amount = newAmount;
   }
-
-  // void incrementQuantity() {
-  //   currentQuantity++;
-  // }
-
-  // void decrementQuantity() {
-  //   if (currentQuantity > 1) {
-  //     currentQuantity--;
-  //   }
-  // }
 }

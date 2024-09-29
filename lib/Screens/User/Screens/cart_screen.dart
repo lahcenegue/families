@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/cart_provider.dart';
+import '../../../Providers/user_manager_provider.dart';
 import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
+import '../../../Utils/Helprs/navigation_service.dart';
 import '../../../View_models/families_store_viewmodel.dart';
 import '../Widgets/product_counter.dart';
 
@@ -16,8 +18,11 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(
-      builder: (context, cartManager, _) {
+    return Consumer2<CartProvider, UserManagerProvider>(
+      builder: (context, cartManager, userManager, _) {
+        if (!userManager.isLoggedIn) {
+          return _buildUnregisteredUserView(context);
+        }
         if (cartManager.cartViewModel == null) {
           return const Scaffold(
             body: Center(
@@ -76,11 +81,49 @@ class CartScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildUnregisteredUserView(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.account_circle,
+              size: AppSize.iconSize(64, context),
+              color: AppColors.primaryColor,
+            ),
+            SizedBox(height: AppSize.heightSize(20, context)),
+            Text(
+              'يرجى التسجيل لعرض سلة التسوق الخاصة بك',
+              style: AppStyles.styleBold(18, context),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: AppSize.heightSize(20, context)),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.widthSize(10, context)),
+              child: ElevatedButton(
+                onPressed: () {
+                  NavigationService.navigateTo(AppRoutes.accountTypeScreen);
+                },
+                child: Text(
+                  'تسجيل',
+                  style: AppStyles.styleBold(12, context),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildDismissibleCartItem(
       BuildContext context, DishItemViewModel item, CartProvider cartManager) {
     return Dismissible(
       key: UniqueKey(),
-      direction: DismissDirection.startToEnd,
+      direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         cartManager.removeFromCart(cartItemId: item.cartItemId!);
       },
@@ -171,11 +214,11 @@ class CartScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.dishName ?? 'Unknown Item',
+                  item.dishName ?? '',
                   style: AppStyles.styleBold(14, context),
                 ),
                 Text(
-                  item.dishDescription ?? 'No description',
+                  item.dishDescription ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppStyles.styleRegular(10, context),
@@ -212,24 +255,24 @@ class CartScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-              child: ListTile(
-                title: Text(
-                  'Apple Pay',
-                  style: AppStyles.styleBold(12, context),
-                ),
-                leading: Radio<int>(
-                  activeColor: AppColors.primaryColor,
-                  value: 0,
-                  groupValue: cartManager.selectedPaymentMethod,
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      cartManager.setSelectedPaymentMethod(value);
-                    }
-                  },
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: ListTile(
+            //     title: Text(
+            //       'Apple Pay',
+            //       style: AppStyles.styleBold(12, context),
+            //     ),
+            //     leading: Radio<int>(
+            //       activeColor: AppColors.primaryColor,
+            //       value: 0,
+            //       groupValue: cartManager.selectedPaymentMethod,
+            //       onChanged: (int? value) {
+            //         if (value != null) {
+            //           cartManager.setSelectedPaymentMethod(value);
+            //         }
+            //       },
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: ListTile(
                 title: Text(

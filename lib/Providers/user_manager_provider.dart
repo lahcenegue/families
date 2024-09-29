@@ -25,6 +25,7 @@ class UserManagerProvider extends ChangeNotifier {
   bool isApiCallProcess = false;
   bool isDataInitialized = false;
   bool isLoading = false;
+  bool isLoggedIn = false;
 
   String? errorMessage;
 
@@ -54,6 +55,7 @@ class UserManagerProvider extends ChangeNotifier {
 
       prefs = await SharedPreferences.getInstance();
       token = prefs!.getString(PrefKeys.token);
+      isLoggedIn = token != null;
 
       await getBannerImages();
       await getFamilyStores(StoreType.popular);
@@ -63,6 +65,12 @@ class UserManagerProvider extends ChangeNotifier {
       isDataInitialized = true;
       notifyListeners();
     }
+  }
+
+  Future<bool> checkLoginStatus() async {
+    if (isLoggedIn) return true;
+
+    return false;
   }
 
   // Get Banner Images =============================================
