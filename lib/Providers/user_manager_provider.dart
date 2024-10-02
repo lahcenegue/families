@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,20 +50,38 @@ class UserManagerProvider extends ChangeNotifier {
   DishItemViewModel? get selectedDish => _selectedDish;
 
   Future<void> initializeData() async {
-    if (!isDataInitialized) {
-      isApiCallProcess = true;
-      notifyListeners();
+    print('=============================> reloading data');
+    isApiCallProcess = true;
+    errorMessage = null;
+    isDataInitialized = false;
+    notifyListeners();
 
-      prefs = await SharedPreferences.getInstance();
-      token = prefs!.getString(PrefKeys.token);
-      isLoggedIn = token != null;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        prefs = await SharedPreferences.getInstance();
+        token = prefs!.getString(PrefKeys.token);
+        isLoggedIn = token != null;
 
-      await getBannerImages();
-      await getFamilyStores(StoreType.popular);
-      await getFamilyStores(StoreType.all);
+        await getBannerImages();
+        await fetchAllFamilyData();
 
+        isDataInitialized = true;
+        errorMessage = null;
+      } else {
+        throw const SocketException('No Internet connection');
+      }
+    } on SocketException catch (_) {
+      print('No Internet connection');
+      errorMessage =
+          'No Internet connection. Please check your network settings and try again.';
+      isDataInitialized = false;
+    } catch (e) {
+      print('Error initializing data: $e');
+      errorMessage = 'Error loading data. Please try again.';
+      isDataInitialized = false;
+    } finally {
       isApiCallProcess = false;
-      isDataInitialized = true;
       notifyListeners();
     }
   }
@@ -94,32 +113,59 @@ class UserManagerProvider extends ChangeNotifier {
 
   // Get Stores =========================================================
   Future<void> getFamilyStores(StoreType type) async {
+    final String method = type == StoreType.popular
+        ? ApiMethods.getPopularFamilies
+        : ApiMethods.getAllFamilies;
+
     RequestModel requestModel = RequestModel(
-      method: type == StoreType.popular
-          ? ApiMethods.getPopularFamilies
-          : ApiMethods.getAllFamilies,
+      method: method,
       token: token,
     );
 
     try {
+      isLoading = true;
+      notifyListeners();
+
       StoreModel storeModel =
           await getFamilyStoresApi(getFamilyStoresRequest: requestModel);
 
-      if (storeModel.status == 'Success') {
+      if (storeModel.status == 'Success' && storeModel.data != null) {
+        final viewModel = FamiliesStoreViewModel(storeModel: storeModel);
+
         if (type == StoreType.popular) {
-          popularFamiliesViewModel =
-              FamiliesStoreViewModel(storeModel: storeModel);
+          popularFamiliesViewModel = viewModel;
         } else {
-          allFamiliesViewModel = FamiliesStoreViewModel(storeModel: storeModel);
+          allFamiliesViewModel = viewModel;
         }
-        notifyListeners();
       } else {
-        print(
-            'Failed to fetch ${type == StoreType.popular ? 'popular' : 'all'} family stores');
+        throw Exception(
+            'Failed to fetch ${type == StoreType.popular ? 'popular' : 'all'} family stores. Status: ${storeModel.status}');
       }
+    } on SocketException catch (_) {
+      errorMessage =
+          'No Internet connection. Please check your network settings and try again.';
     } catch (e) {
-      print('Error fetching family stores: $e');
+      print(
+          'Error fetching ${type == StoreType.popular ? 'popular' : 'all'} family stores: $e');
+      errorMessage = 'Error fetching data. Please try again.';
+    } finally {
+      isLoading = false;
+      if (errorMessage != null) {
+        final emptyViewModel =
+            FamiliesStoreViewModel(storeModel: StoreModel(data: []));
+        if (type == StoreType.popular) {
+          popularFamiliesViewModel = emptyViewModel;
+        } else {
+          allFamiliesViewModel = emptyViewModel;
+        }
+      }
+      notifyListeners();
     }
+  }
+
+  Future<void> fetchAllFamilyData() async {
+    await getFamilyStores(StoreType.popular);
+    await getFamilyStores(StoreType.all);
   }
 
   Future<int?> addToFavorite({required int storeId}) async {
@@ -196,5 +242,23 @@ class UserManagerProvider extends ChangeNotifier {
     return dishReviewViewModel!.items
         .where((review) => review.rating == selectedRating)
         .toList();
+  }
+
+  Future<void> reset() async {
+    isApiCallProcess = false;
+    isDataInitialized = false;
+    isLoading = false;
+    isLoggedIn = false;
+    errorMessage = null;
+    bannerImages = null;
+    popularFamiliesViewModel = null;
+    allFamiliesViewModel = null;
+    dishReviewViewModel = null;
+    selectedRating = 0;
+    _selectedStore = null;
+    _selectedDish = null;
+    token = null;
+    notifyListeners();
+    initializeData();
   }
 }

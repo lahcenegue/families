@@ -18,11 +18,8 @@ Future<MessagesModel> getUserMessagesApi(
       },
       body: convert.jsonEncode(getUserMessagesRequest.toJson()),
     );
-    print('get User Messages');
-    print(convert.jsonEncode(getUserMessagesRequest.toJson()));
 
     var body = convert.json.decode(response.body);
-    print(body);
 
     userMessages = MessagesModel.fromJson(body);
     return userMessages;

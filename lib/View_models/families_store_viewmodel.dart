@@ -47,7 +47,7 @@ class DishItemViewModel {
   double? get dishPrice => _dish.dishPrice;
   String? get dishDescription => _dish.dishDescription;
   List<String>? get dishsImages => _dish.dishImages;
-  int? get dishRating => _dish.dishRating;
+  double? get dishRating => _dish.dishRating;
   int? get preparationTime => _dish.preparationTime;
 
   void updateAmount(int newAmount) {

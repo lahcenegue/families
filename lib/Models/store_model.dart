@@ -71,7 +71,7 @@ class DishModel {
   double? dishPrice;
   String? dishDescription;
   List<String>? dishImages;
-  int? dishRating;
+  double? dishRating;
   int? preparationTime;
 
   DishModel({
@@ -107,7 +107,7 @@ class DishModel {
       dishPrice: (json['Price'] as num?)?.toDouble() ?? 0.0,
       dishDescription: json['Description'] ?? 'No description available',
       dishImages: images.isNotEmpty ? images : ['default_image_url'],
-      dishRating: json['ItemRating'] ?? 0,
+      dishRating: (json['ItemRating'] as num?)?.toDouble() ?? 0.0,
       preparationTime: json['PreparationTime'] ?? 0,
     );
   }

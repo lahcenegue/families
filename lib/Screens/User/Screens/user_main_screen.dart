@@ -26,9 +26,10 @@ class UserMainScreen extends StatelessWidget {
           padding: EdgeInsets.only(top: AppSize.heightSize(20, context)),
           child: Scaffold(
             appBar: _buildAppBar(context, userManager),
-            body: userManager.isApiCallProcess
-                ? const Center(child: CircularProgressIndicator())
-                : _buildContent(context, userManager),
+            body: RefreshIndicator(
+              onRefresh: () => userManager.initializeData(),
+              child: _buildBody(context, userManager),
+            ),
           ),
         );
       },
@@ -51,6 +52,53 @@ class UserMainScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBody(BuildContext context, UserManagerProvider userManager) {
+    if (userManager.isApiCallProcess) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (userManager.errorMessage != null) {
+      return _buildErrorWidget(context, userManager);
+    }
+    return _buildContent(context, userManager);
+  }
+
+  Widget _buildErrorWidget(
+      BuildContext context, UserManagerProvider userManager) {
+    return Center(
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.all(AppSize.widthSize(20, context)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: AppSize.iconSize(60, context),
+                color: Colors.red,
+              ),
+              SizedBox(height: AppSize.heightSize(40, context)),
+              Text(
+                'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
+                style: AppStyles.styleMedium(16, context),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: AppSize.heightSize(40, context)),
+              ElevatedButton.icon(
+                onPressed: () => userManager.initializeData(),
+                icon: const Icon(Icons.refresh),
+                label: Text(
+                  'إعادة المحاولة',
+                  style: AppStyles.styleBold(14, context),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -79,6 +127,7 @@ class UserMainScreen extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, UserManagerProvider userManager) {
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.all(AppSize.heightSize(20, context)),
       children: [
         _buildBannerImages(context, userManager),
@@ -93,6 +142,19 @@ class UserMainScreen extends StatelessWidget {
 
   Widget _buildPopularFamilies(
       BuildContext context, UserManagerProvider userManager) {
+    if (userManager.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (userManager.popularFamiliesViewModel == null ||
+        userManager.popularFamiliesViewModel!.stores.isEmpty) {
+      return Center(
+        child: Text(
+          'لا توجد عائلات شعبية متاحة',
+          style: AppStyles.styleMedium(14, context),
+        ),
+      );
+    }
     return SizedBox(
       height: AppSize.heightSize(180, context),
       width: AppSize.width(context),
@@ -125,6 +187,19 @@ class UserMainScreen extends StatelessWidget {
 
   Widget _buildAllFamilies(
       BuildContext context, UserManagerProvider userManager) {
+    if (userManager.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (userManager.allFamiliesViewModel == null ||
+        userManager.allFamiliesViewModel!.stores.isEmpty) {
+      return Center(
+        child: Text(
+          'لا توجد عائلات متاحة',
+          style: AppStyles.styleMedium(14, context),
+        ),
+      );
+    }
     return SizedBox(
       width: AppSize.width(context),
       child: ListView.separated(
@@ -153,6 +228,9 @@ class UserMainScreen extends StatelessWidget {
 
   Widget _buildBannerImages(
       BuildContext context, UserManagerProvider userManager) {
+    if (userManager.bannerImages == null || userManager.bannerImages!.isEmpty) {
+      return SizedBox(height: AppSize.heightSize(100, context));
+    }
     return CarouselSlider.builder(
       options: CarouselOptions(
         viewportFraction: 1,

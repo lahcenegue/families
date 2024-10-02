@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -157,7 +156,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
       await _prefs!.remove(PrefKeys.storeName);
       await _prefs!.remove(PrefKeys.storeLocation);
       await _prefs!.remove(PrefKeys.userName);
-      NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+
+      NavigationService.navigateToAndReplace(AppRoutes.splashScreen);
     } else {
       print('Error: SharedPreferences _prefs is null.');
     }
@@ -426,39 +426,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
     loginRequestModel = RequestModel();
     notifyListeners();
     await saveUserData(value);
-    if (accountType == AppStrings.user) {
-      NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-    } else {
-      NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
-    }
+    await NavigationService.navigateToAndReplace(AppRoutes.splashScreen);
   }
 }
-
-// Future<void> pickImageFromCamera() async {
-//   final ImagePicker picker = ImagePicker();
-//   XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-//   storeImage = File(image!.path);
-//   Uint8List storeImagebytes = storeImage!.readAsBytesSync();
-//   storeImageBase64 = base64Encode(storeImagebytes);
-//   notifyListeners();
-// }
-
-// Future<void> uploadImages() async {
-//   final pickedFile = await ImagePicker().pickMultiImage();
-//   List<XFile> xfilePick = pickedFile;
-
-//   if (xfilePick.isNotEmpty) {
-//     for (var i = 0; i < xfilePick.length; i++) {
-//       selectedImages.add(File(xfilePick[i].path));
-//     }
-
-//     Uint8List imagebytes = selectedImages[mainImage].readAsBytesSync();
-
-//     mainImageBase64 = base64Encode(imagebytes);
-//     // addAdsRequest.image = mainImageBase64;
-//     notifyListeners();
-//   } else {
-//     //Get.snackbar(AppStrings.appName, 'لم يتم اختيار الصور');
-//   }
-// }

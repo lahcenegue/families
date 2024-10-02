@@ -1,4 +1,5 @@
 import 'package:families/Providers/app_settings_provider.dart';
+import 'package:families/Providers/user_manager_provider.dart';
 import 'package:families/Utils/Constants/app_size.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,21 +9,44 @@ import '../../../Utils/Constants/app_images.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<AppSettingsProvider>(builder: (context, appSettings, _) {
-      return Scaffold(
-        body: Center(
-          child: _buildContent(context, appSettings),
-        ),
-      );
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Delay the execution to ensure the widget tree is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeApp();
     });
   }
 
-  Widget _buildContent(BuildContext context, AppSettingsProvider appSettings) {
+  Future<void> _initializeApp() async {
+    final userManager =
+        Provider.of<UserManagerProvider>(context, listen: false);
+    final appSettings =
+        Provider.of<AppSettingsProvider>(context, listen: false);
+
+    await userManager.reset();
+    appSettings.goToNextScreen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: _buildContent(context),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    final appSettings = Provider.of<AppSettingsProvider>(context);
     return SizedBox(
       width: AppSize.width(context),
       child: Column(

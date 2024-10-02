@@ -59,9 +59,36 @@ class UserHomeScreen extends StatelessWidget {
         } else {
           return Scaffold(
             body: Center(
-              child: Text(
-                AppLocalizations.of(context)!.error_loading_data,
-                style: AppStyles.styleMedium(14, context),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.all(AppSize.widthSize(20, context)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: AppSize.iconSize(60, context),
+                        color: Colors.red,
+                      ),
+                      SizedBox(height: AppSize.heightSize(40, context)),
+                      Text(
+                        'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
+                        style: AppStyles.styleMedium(16, context),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: AppSize.heightSize(40, context)),
+                      ElevatedButton.icon(
+                        onPressed: () => userManager.initializeData(),
+                        icon: const Icon(Icons.refresh),
+                        label: Text(
+                          'إعادة المحاولة',
+                          style: AppStyles.styleBold(14, context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           );
