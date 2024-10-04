@@ -19,8 +19,9 @@ class UserAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppSettingsProvider, UserManagerProvider>(
-      builder: (context, appSettings, userManager, _) {
+    return Consumer3<AppSettingsProvider, UserManagerProvider,
+        LoginAndRegisterManager>(
+      builder: (context, appSettings, userManager, deleteAccountManager, _) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -42,7 +43,8 @@ class UserAccountScreen extends StatelessWidget {
                     children: [
                       _buildProfileSection(context, userManager),
                       SizedBox(height: AppSize.heightSize(50, context)),
-                      _buildSettingsCard(context, appSettings, userManager),
+                      _buildSettingsCard(context, appSettings, userManager,
+                          deleteAccountManager),
                     ],
                   ),
                 ),
@@ -125,8 +127,12 @@ class UserAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsCard(BuildContext context,
-      AppSettingsProvider appSettings, UserManagerProvider userManager) {
+  Widget _buildSettingsCard(
+    BuildContext context,
+    AppSettingsProvider appSettings,
+    UserManagerProvider userManager,
+    LoginAndRegisterManager deleteAccountManager,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: AppSize.widthSize(5, context)),
       decoration: BoxDecoration(
@@ -150,6 +156,14 @@ class UserAccountScreen extends StatelessWidget {
           ],
           _buildTermsConditionsTile(context),
           _buildDivider(),
+          userManager.isLoggedIn
+              ? Column(
+                  children: [
+                    _deleteAccount(context, deleteAccountManager),
+                    _buildDivider(),
+                  ],
+                )
+              : SizedBox(),
           userManager.isLoggedIn
               ? _buildLogoutTile(context)
               : _buildLoginTile(context),
@@ -177,7 +191,11 @@ class UserAccountScreen extends StatelessWidget {
 
   Widget _buildFavoritesTile(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        Provider.of<UserManagerProvider>(context, listen: false)
+            .fetchMyFavoriteStores();
+        NavigationService.navigateTo(AppRoutes.myFavoriteScreen);
+      },
       title: Text(
         AppLocalizations.of(context)!.favorites,
         style: AppStyles.styleBold(12, context),
@@ -192,7 +210,9 @@ class UserAccountScreen extends StatelessWidget {
 
   Widget _buildPurchasesTile(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        NavigationService.navigateTo(AppRoutes.myOrdersScreen);
+      },
       title: Text(
         AppLocalizations.of(context)!.purchases,
         style: AppStyles.styleBold(12, context),
@@ -265,6 +285,58 @@ class UserAccountScreen extends StatelessWidget {
         AppLocalizations.of(context)!.login,
         style: AppStyles.styleBold(12, context)
             .copyWith(color: AppColors.primaryColor),
+      ),
+    );
+  }
+
+  Widget _deleteAccount(
+      BuildContext context, LoginAndRegisterManager deleteAccountManager) {
+    return ListTile(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'تأكيد الحذف',
+                style: AppStyles.styleBold(16, context)
+                    .copyWith(color: Colors.black),
+              ),
+              content: Text(
+                'هل تريد حقًا حذف حسابك بشكل دائم؟',
+                style: AppStyles.styleRegular(14, context)
+                    .copyWith(color: Colors.black),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'إلغاء',
+                    style: AppStyles.styleBold(14, context)
+                        .copyWith(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'تأكيد الحذف',
+                    style: AppStyles.styleRegular(12, context)
+                        .copyWith(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    deleteAccountManager.deleteAccount();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+      title: Text(
+        'حذف الحساب',
+        style: AppStyles.styleBold(12, context),
       ),
     );
   }

@@ -5,18 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apis/add_to_favorite.dart';
+import '../Apis/base_api.dart';
 import '../Apis/get_banner_images.dart';
 import '../Apis/get_dish_review_api.dart';
 import '../Apis/get_family_stores_api.dart';
+import '../Apis/get_my_orders.dart';
 import '../Models/banner_images.dart';
 import '../Models/base_model.dart';
 import '../Models/dish_review_model.dart';
+import '../Models/my_ordres_model.dart';
 import '../Models/request_model.dart';
 import '../Models/store_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
 import '../View_models/dish_review_viewmodel.dart';
 import '../View_models/families_store_viewmodel.dart';
+import '../View_models/my_ordres_viewmodel.dart';
 
 enum StoreType { popular, all }
 
@@ -33,7 +37,9 @@ class UserManagerProvider extends ChangeNotifier {
   List<String>? bannerImages;
   FamiliesStoreViewModel? popularFamiliesViewModel;
   FamiliesStoreViewModel? allFamiliesViewModel;
+  FamiliesStoreViewModel? favoriteFamiliesViewModel;
   DishReviewViewModel? dishReviewViewModel;
+  MyOrdersViewModel? myOrders;
 
   int selectedRating = 0;
 
@@ -50,7 +56,6 @@ class UserManagerProvider extends ChangeNotifier {
   DishItemViewModel? get selectedDish => _selectedDish;
 
   Future<void> initializeData() async {
-    print('=============================> reloading data');
     isApiCallProcess = true;
     errorMessage = null;
     isDataInitialized = false;
@@ -65,6 +70,10 @@ class UserManagerProvider extends ChangeNotifier {
 
         await getBannerImages();
         await fetchAllFamilyData();
+
+        if (token != null) {
+          await fetchMyOrders();
+        }
 
         isDataInitialized = true;
         errorMessage = null;
@@ -101,7 +110,6 @@ class UserManagerProvider extends ChangeNotifier {
 
       if (value.status == 'Success') {
         bannerImages = value.data!;
-        print(value.data);
         notifyListeners();
       } else {
         print('Failed to fetch banner images');
@@ -198,16 +206,6 @@ class UserManagerProvider extends ChangeNotifier {
     return null;
   }
 
-  void setSelectedStore(StoreItemViewModel store) {
-    _selectedStore = store;
-    notifyListeners();
-  }
-
-  void setSelectedDish(DishItemViewModel dish) {
-    _selectedDish = dish;
-    notifyListeners();
-  }
-
   Future<void> getDishReviews({required int itemID}) async {
     RequestModel requestModel = RequestModel(
       method: ApiMethods.dishReviews,
@@ -244,21 +242,97 @@ class UserManagerProvider extends ChangeNotifier {
         .toList();
   }
 
-  Future<void> reset() async {
-    isApiCallProcess = false;
-    isDataInitialized = false;
-    isLoading = false;
-    isLoggedIn = false;
-    errorMessage = null;
-    bannerImages = null;
-    popularFamiliesViewModel = null;
-    allFamiliesViewModel = null;
-    dishReviewViewModel = null;
-    selectedRating = 0;
-    _selectedStore = null;
-    _selectedDish = null;
-    token = null;
-    notifyListeners();
-    initializeData();
+  Future<void> fetchMyFavoriteStores() async {
+    print('fetch favorite stores ================');
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.getFavoriteStores,
+      token: token,
+    );
+
+    try {
+      isApiCallProcess = true;
+      notifyListeners();
+
+      StoreModel storeModel =
+          await getFamilyStoresApi(getFamilyStoresRequest: requestModel);
+
+      if (storeModel.status == 'Success') {
+        final viewModel = FamiliesStoreViewModel(storeModel: storeModel);
+        favoriteFamiliesViewModel = viewModel;
+      }
+    } catch (e) {
+      print('error fetch favorite list $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
+    }
   }
+
+  Future<void> fetchMyOrders() async {
+    print('fetch my orders');
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.getMyOrders,
+      token: token,
+    );
+
+    try {
+      MyOrdersModel value =
+          await getMyOrdersApi(getMyOredesRequest: requestModel);
+      if (value.status == 'Success') {
+        myOrders = MyOrdersViewModel(responseModel: value);
+        notifyListeners();
+      } else {
+        print('Failed to fetch my ordres');
+      }
+    } catch (e) {
+      print('Error fetching my orders: $e');
+    }
+  }
+
+  Future<String?> fulfillOrder(int cartItemId) async {
+    String? message;
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.fulfillOder,
+      cartItemId: cartItemId,
+      token: token,
+    );
+    try {
+      isApiCallProcess = true;
+      notifyListeners();
+
+      BaseModel value = await baseApi(requestModel: requestModel);
+
+      if (value.status == 'Success') {
+        message = 'تم استلام طلبك بنجاح';
+        return message;
+      } else {
+        message = 'حدث خطأ في عملية الاستلام يرجى اعادة المحاولة';
+        return message;
+      }
+    } catch (e) {
+      print('error fulfill order $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
+    }
+    return message;
+  }
+
+  // Future<void> reset() async {
+  //   isApiCallProcess = false;
+  //   isDataInitialized = false;
+  //   isLoading = false;
+  //   isLoggedIn = false;
+  //   errorMessage = null;
+  //   bannerImages = null;
+  //   popularFamiliesViewModel = null;
+  //   allFamiliesViewModel = null;
+  //   dishReviewViewModel = null;
+  //   selectedRating = 0;
+  //   _selectedStore = null;
+  //   _selectedDish = null;
+  //   token = null;
+  //   notifyListeners();
+  //   initializeData();
+  // }
 }

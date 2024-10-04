@@ -11,19 +11,16 @@ import '../../../View_models/families_store_viewmodel.dart';
 import '../Widgets/dishe_box.dart';
 
 class StoreView extends StatelessWidget {
-  const StoreView({super.key});
+  final StoreItemViewModel store;
+  const StoreView({
+    required this.store,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Consumer<UserManagerProvider>(
       builder: (context, userManager, _) {
-        final store = userManager.selectedStore;
-        if (store == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,

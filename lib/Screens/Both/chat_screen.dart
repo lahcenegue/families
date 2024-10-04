@@ -7,14 +7,15 @@ import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/Constants/app_size.dart';
 import '../../Utils/Constants/app_strings.dart';
 import '../../Utils/Constants/app_styles.dart';
-import '../../View_models/messages_viewmodel.dart';
 
 class ChatScreen extends StatelessWidget {
-  final MessageItemViewModel message;
+  final int id;
+  final String title;
 
   const ChatScreen({
     super.key,
-    required this.message,
+    required this.id,
+    required this.title,
   });
 
   @override
@@ -22,23 +23,28 @@ class ChatScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) {
         final chatManager = ChatManagerProvider();
-        chatManager.fetchUserMessages(
-            id: chatManager.accountType == AppStrings.family
-                ? message.userId!
-                : message.storeId!);
-        chatManager.startPolling(chatManager.accountType == AppStrings.family
-            ? message.userId!
-            : message.storeId!);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await chatManager.initializeData();
+          await chatManager.fetchUserMessages(id: id);
+          chatManager.startPolling(id);
+        });
+
         return chatManager;
       },
       child: Consumer<ChatManagerProvider>(
         builder: (context, chatManager, _) {
+          if (chatManager.error != null) {
+            return Scaffold(
+              appBar: AppBar(title: Text(title)),
+              body: Center(child: Text('Error: ${chatManager.error}')),
+            );
+          }
+
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                chatManager.accountType == AppStrings.user
-                    ? message.storeName!
-                    : message.userName!,
+                title,
                 style: AppStyles.styleBold(18, context),
               ),
             ),
@@ -52,9 +58,18 @@ class ChatScreen extends StatelessWidget {
                           itemCount: chatManager.messages.length,
                           itemBuilder: (context, index) {
                             final message = chatManager.messages[index];
-                            // final isUserAccount =
-                            //     chatManager.accountType == AppStrings.user;
-                            final isMe = message.sentByUser == 1;
+
+                            bool? isMe;
+                            if (chatManager.accountType == AppStrings.family &&
+                                message.sentByUser == 0) {
+                              isMe = true;
+                            } else if (chatManager.accountType ==
+                                    AppStrings.user &&
+                                message.sentByUser == 1) {
+                              isMe = true;
+                            } else {
+                              isMe = false;
+                            }
 
                             return _buildMessageItem(context, message, isMe);
                           },
@@ -137,9 +152,10 @@ class ChatScreen extends StatelessWidget {
               onPressed: () {
                 if (chatManager.messageController.text.isNotEmpty) {
                   chatManager.sendMessage(
-                    id: chatManager.accountType == AppStrings.family
-                        ? message.userId!
-                        : message.storeId!,
+                    id: id,
+                    // id: chatManager.accountType == AppStrings.family
+                    //     ? message.userId!
+                    //     : message.storeId!,
                     message: chatManager.messageController.text,
                   );
                   chatManager.messageController.clear();

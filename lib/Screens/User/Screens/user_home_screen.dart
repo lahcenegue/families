@@ -21,79 +21,90 @@ class UserHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AppSettingsProvider, UserManagerProvider>(
-      builder: (context, appSettings, userManager, _) {
-        if (userManager.isApiCallProcess) {
-          return Scaffold(
-            body: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: AppSize.widthSize(30, context)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return ChangeNotifierProvider(
+      create: (_) {
+        final userManager = UserManagerProvider();
+
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await userManager.initializeData();
+        });
+
+        return userManager;
+      },
+      child: Consumer2<AppSettingsProvider, UserManagerProvider>(
+        builder: (context, appSettings, userManager, _) {
+          if (userManager.isApiCallProcess) {
+            return Scaffold(
+              body: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.widthSize(30, context)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const LinearProgressIndicator(),
+                    SizedBox(height: AppSize.heightSize(20, context)),
+                    Text(
+                      AppLocalizations.of(context)!.loading_data,
+                      style: AppStyles.styleMedium(14, context),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (userManager.isDataInitialized) {
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              bottomNavigationBar:
+                  _buildBottomNavigationBar(context, appSettings),
+              body: Stack(
                 children: [
-                  const LinearProgressIndicator(),
-                  SizedBox(height: AppSize.heightSize(20, context)),
-                  Text(
-                    AppLocalizations.of(context)!.loading_data,
-                    style: AppStyles.styleMedium(14, context),
-                  ),
+                  Center(child: _getPage(appSettings.pageIndex)),
+                  if (userManager.isLoading)
+                    const CustomLoadingIndicator(isVisible: true),
+                  if (userManager.errorMessage != null)
+                    ErrorDisplay(errorMessage: userManager.errorMessage),
                 ],
               ),
-            ),
-          );
-        } else if (userManager.isDataInitialized) {
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            bottomNavigationBar:
-                _buildBottomNavigationBar(context, appSettings),
-            body: Stack(
-              children: [
-                Center(child: _getPage(appSettings.pageIndex)),
-                if (userManager.isLoading)
-                  const CustomLoadingIndicator(isVisible: true),
-                if (userManager.errorMessage != null)
-                  ErrorDisplay(errorMessage: userManager.errorMessage),
-              ],
-            ),
-          );
-        } else {
-          return Scaffold(
-            body: Center(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.all(AppSize.widthSize(20, context)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: AppSize.iconSize(60, context),
-                        color: Colors.red,
-                      ),
-                      SizedBox(height: AppSize.heightSize(40, context)),
-                      Text(
-                        'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
-                        style: AppStyles.styleMedium(16, context),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: AppSize.heightSize(40, context)),
-                      ElevatedButton.icon(
-                        onPressed: () => userManager.initializeData(),
-                        icon: const Icon(Icons.refresh),
-                        label: Text(
-                          'إعادة المحاولة',
-                          style: AppStyles.styleBold(14, context),
+            );
+          } else {
+            return Scaffold(
+              body: Center(
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSize.widthSize(20, context)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: AppSize.iconSize(60, context),
+                          color: Colors.red,
                         ),
-                      ),
-                    ],
+                        SizedBox(height: AppSize.heightSize(40, context)),
+                        Text(
+                          'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
+                          style: AppStyles.styleMedium(16, context),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: AppSize.heightSize(40, context)),
+                        ElevatedButton.icon(
+                          onPressed: () => userManager.initializeData(),
+                          icon: const Icon(Icons.refresh),
+                          label: Text(
+                            'إعادة المحاولة',
+                            style: AppStyles.styleBold(14, context),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 

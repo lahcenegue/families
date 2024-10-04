@@ -14,13 +14,14 @@ import '../View_models/cart_view_model.dart';
 class CartProvider extends ChangeNotifier {
   SharedPreferences? _prefs;
   bool isApiCallProcess = false;
+  bool addTocartProcess = false;
   String? token;
 
   CartViewModel? cartViewModel;
 
   Map<int, int> itemQuantities = {};
 
-  int _selectedPaymentMethod = 0; // 0 for Apple Pay, 1 for Cash on Delivery
+  int _selectedPaymentMethod = 1; // 0 for Apple Pay, 1 for Cash on Delivery
 
   CartProvider() {
     initial();
@@ -30,7 +31,9 @@ class CartProvider extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     token = _prefs!.getString(PrefKeys.token);
 
-    await getCartItems();
+    if (token != null) {
+      await getCartItems();
+    }
   }
 
   int get selectedPaymentMethod => _selectedPaymentMethod;
@@ -58,6 +61,8 @@ class CartProvider extends ChangeNotifier {
         notifyListeners();
       } else {
         print('Failed to fetch cart items');
+        isApiCallProcess = false;
+        notifyListeners();
       }
     } catch (e) {
       print('Error fetching cart items: $e');
@@ -85,7 +90,7 @@ class CartProvider extends ChangeNotifier {
     required int itemId,
     required int amount,
   }) async {
-    isApiCallProcess = true;
+    addTocartProcess = true;
     notifyListeners();
 
     RequestModel requestModel = RequestModel(
@@ -98,16 +103,16 @@ class CartProvider extends ChangeNotifier {
       BaseModel value = await baseApi(requestModel: requestModel);
       if (value.status == 'Success') {
         await getCartItems();
-        isApiCallProcess = false;
+        addTocartProcess = false;
         notifyListeners();
         return 11;
       } else {
-        isApiCallProcess = false;
+        addTocartProcess = false;
         notifyListeners();
         return value.errorCode ?? 12;
       }
     } catch (e) {
-      isApiCallProcess = false;
+      addTocartProcess = false;
       notifyListeners();
       print('Error fetching cart items: $e');
       return 13;
@@ -149,5 +154,30 @@ class CartProvider extends ChangeNotifier {
   void setSelectedPaymentMethod(int value) {
     _selectedPaymentMethod = value;
     notifyListeners();
+  }
+
+  Future<void> checkout() async {
+    isApiCallProcess = true;
+    notifyListeners();
+
+    try {
+      RequestModel checkoutRequest = RequestModel(
+        method: ApiMethods.checkout,
+        token: token,
+        paymentMethode: _selectedPaymentMethod == 1 ? 'CashOnDelivery' : '',
+      );
+
+      BaseModel value = await baseApi(requestModel: checkoutRequest);
+      if (value.status == 'Success') {
+        await getCartItems();
+      } else {
+        print('Failed to checkout: ${value.errorCode}');
+      }
+    } catch (e) {
+      print('Error checkout: $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
+    }
   }
 }

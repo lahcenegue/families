@@ -1,4 +1,4 @@
-import 'package:families/Screens/Family/edit_dish_screen.dart';
+import 'package:families/Screens/User/Screens/my_orders_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../Screens/Family/add_dish.dart';
@@ -14,9 +14,7 @@ import '../../Screens/Start/Account_type/account_type.dart';
 import '../../Screens/Start/Congratulations/congratulations_screen.dart';
 import '../../Screens/Start/Onbording/onbording_screen.dart';
 import '../../Screens/Start/Reset_password/reset_password.dart';
-import '../../Screens/User/Screens/dish_view.dart';
-import '../../Screens/User/Screens/feedbacks_screen.dart';
-import '../../Screens/User/Screens/store_view.dart';
+import '../../Screens/User/Screens/my_favorite_screen.dart';
 import '../../Screens/User/Screens/terms_conditions_user.dart';
 import '../../Screens/User/Screens/user_all_messages.dart';
 import '../../Screens/User/Screens/user_home_screen.dart';
@@ -33,16 +31,16 @@ class AppRoutes {
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String congratulationsScreen = '/congratulationsScreen';
   static const String userHomeScreen = '/userHomeScreen';
-  static const String storeView = '/storeView';
-  static const String disheView = '/disheView';
   static const String familyHomeScreen = '/familyHomeScreen';
   static const String searchScreen = '/search';
-  static const String feedbackScreen = '/feedbackScreen';
+
   static const String addNewDish = '/addNewDish';
   static const String familyTermsConditions = '/familyTermsConditions';
   static const String userTermsConditions = '/userTermsConditions';
   static const String userAllMessages = '/userallMessages';
   static const String myDishsScreen = '/myDishsScreen';
+  static const String myOrdersScreen = '/myOrdersScreen';
+  static const String myFavoriteScreen = '/myFavoriteStores';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -59,10 +57,7 @@ class AppRoutes {
       congratulationsScreen: (BuildContext context) =>
           const CongratulationsScreen(),
       userHomeScreen: (BuildContext context) => const UserHomeScreen(),
-      storeView: (BuildContext context) => const StoreView(),
-      disheView: (BuildContext context) => const DisheView(),
       searchScreen: (BuildContext context) => const CustomSearchPage(),
-      feedbackScreen: (BuildContext context) => const FeedbacksScreen(),
       familyHomeScreen: (BuildContext context) => const FamilyHomeScreen(),
       addNewDish: (BuildContext context) => const AddNewDish(),
       familyTermsConditions: (BuildContext context) =>
@@ -71,6 +66,8 @@ class AppRoutes {
           const UserTermsAndConditionsPage(),
       userAllMessages: (BuildContext context) => const UserAllMessages(),
       myDishsScreen: (BuildContext context) => const MyDishsScreen(),
+      myOrdersScreen: (BuildContext context) => const MyOredresScreen(),
+      myFavoriteScreen: (BuildContext context) => const MyFavoriteStores(),
     };
   }
 }

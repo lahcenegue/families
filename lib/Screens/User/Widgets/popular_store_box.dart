@@ -8,10 +8,11 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Helprs/navigation_service.dart';
 import '../../../View_models/families_store_viewmodel.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../Screens/store_view.dart';
 
 class PopularStoreBox extends StatelessWidget {
   final StoreItemViewModel store;
@@ -160,10 +161,9 @@ class PopularStoreBox extends StatelessWidget {
                 height: AppSize.heightSize(25, context),
                 width: AppSize.widthSize(80, context),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Provider.of<UserManagerProvider>(context, listen: false)
-                        .setSelectedStore(store);
-                    NavigationService.navigateTo(AppRoutes.storeView);
+                  onPressed: () async {
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => StoreView(store: store)));
                   },
                   child: FittedBox(
                     child: Text(AppLocalizations.of(context)!.discover),

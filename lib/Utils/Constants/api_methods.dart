@@ -31,7 +31,11 @@ class ApiMethods {
   static const String ulpadImage = 'upload_image';
   static const String deleteDish = 'delete_store_item';
   static const String editDish = 'edit_item';
+  static const String checkout = 'checkout_cart';
+  static const String getFavoriteStores = 'get_favourites';
+  static const String fulfillOder = 'fulfill_order';
 
+// static const String = '';
 // static const String = '';
 // static const String = '';
 // static const String = '';

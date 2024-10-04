@@ -41,7 +41,7 @@ class CartScreen extends StatelessWidget {
             padding: EdgeInsets.all(AppSize.widthSize(25, context)),
             child: RefreshIndicator(
               onRefresh: () async {
-                await cartManager.getCartItems();
+                await cartManager.initial();
               },
               child: cartManager.cartViewModel!.items.isEmpty
                   ? Center(
@@ -165,9 +165,9 @@ class CartScreen extends StatelessWidget {
       background: Container(
         color: Colors.red,
         child: Align(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.centerLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: AppSize.widthSize(20, context)),
+            padding: EdgeInsets.only(left: AppSize.widthSize(20, context)),
             child: Icon(
               Icons.delete,
               color: Colors.white,
@@ -313,7 +313,17 @@ class CartScreen extends StatelessWidget {
                 ],
               ),
               InkWell(
-                onTap: () {},
+                onTap: () async {
+                  await cartManager.checkout();
+
+                  if (context.mounted) {
+                    await Provider.of<UserManagerProvider>(context,
+                            listen: false)
+                        .fetchMyOrders();
+                    await NavigationService.navigateTo(
+                        AppRoutes.myOrdersScreen);
+                  }
+                },
                 child: Container(
                   width: AppSize.widthSize(100, context),
                   height: AppSize.heightSize(40, context),

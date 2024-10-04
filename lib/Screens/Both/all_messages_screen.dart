@@ -18,17 +18,25 @@ class AllMessagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ChatManagerProvider>(
       builder: (context, chatManager, _) {
-        return Scaffold(
-          body: chatManager.isApiCallProcess
-              ? const Center(child: CircularProgressIndicator())
-              : _buildMessagesContent(context, chatManager),
+        return RefreshIndicator(
+          onRefresh: () async {
+            print('refrech');
+            await chatManager.fetchAllMessages();
+          },
+          child: Scaffold(
+            body: chatManager.isApiCallProcess
+                ? const Center(child: CircularProgressIndicator())
+                : _buildMessagesContent(context, chatManager),
+          ),
         );
       },
     );
   }
 
   Widget _buildMessagesContent(
-      BuildContext context, ChatManagerProvider chatManager) {
+    BuildContext context,
+    ChatManagerProvider chatManager,
+  ) {
     if (chatManager.allMessages == null ||
         chatManager.allMessages!.messages.isEmpty) {
       return Center(
@@ -47,11 +55,16 @@ class AllMessagesScreen extends StatelessWidget {
           itemCount: chatManager.allMessages!.messages.length,
           itemBuilder: (context, index) {
             return ListTile(
-              onTap: () {
-                Navigator.of(context).push(
+              onTap: () async {
+                await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ChatScreen(
-                      message: chatManager.allMessages!.messages[index],
+                      id: chatManager.accountType == AppStrings.family
+                          ? chatManager.allMessages!.messages[index].userId!
+                          : chatManager.allMessages!.messages[index].storeId!,
+                      title: chatManager.accountType == AppStrings.family
+                          ? chatManager.allMessages!.messages[index].userName!
+                          : chatManager.allMessages!.messages[index].storeName!,
                     ),
                   ),
                 );

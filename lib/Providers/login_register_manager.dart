@@ -123,7 +123,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
       if (value.status == 'success') {
         otpToken = value.userData!.otpToken;
 
-        NavigationService.navigateTo(AppRoutes.otpScreen);
+        await NavigationService.navigateTo(AppRoutes.otpScreen);
         startTimer();
         await sendOtpForCreateAccount();
         return null;
@@ -135,11 +135,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
     } finally {
       await _setApiCallProcess(false);
     }
-  }
-
-  void firstPasword(String value) {
-    checkPassrowd = value;
-    notifyListeners();
   }
 
   Future<void> lougOut() async {
@@ -157,7 +152,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
       await _prefs!.remove(PrefKeys.storeLocation);
       await _prefs!.remove(PrefKeys.userName);
 
-      NavigationService.navigateToAndReplace(AppRoutes.splashScreen);
+      await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
     } else {
       print('Error: SharedPreferences _prefs is null.');
     }
@@ -170,6 +165,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
       deleteAccountModel.accountType = accountType;
 
       BaseModel value = await baseApi(requestModel: deleteAccountModel);
+
       if (value.status == 'Success') {
         deleteAccountModel = RequestModel();
         await _prefs!.remove(PrefKeys.token);
@@ -180,7 +176,8 @@ class LoginAndRegisterManager extends ChangeNotifier {
         await _prefs!.remove(PrefKeys.storeName);
         await _prefs!.remove(PrefKeys.storeLocation);
         await _prefs!.remove(PrefKeys.userName);
-        NavigationService.navigateToAndReplace(AppRoutes.accountTypeScreen);
+
+        await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
       }
     } catch (e) {}
   }
@@ -315,16 +312,17 @@ class LoginAndRegisterManager extends ChangeNotifier {
     }
   }
 
-  void toggleAccountType(String type) {
+  void toggleAccountType(String type) async {
     accountType = type;
     notifyListeners();
     _prefs!.setString(PrefKeys.accountType, type);
 
-    if (_prefs!.getString(PrefKeys.onBording) == null) {
-      NavigationService.navigateTo(AppRoutes.onBordingScreen);
-    } else {
-      NavigationService.navigateTo(AppRoutes.loginScreen);
-    }
+    await NavigationService.navigateTo(AppRoutes.loginScreen);
+  }
+
+  void firstPasword(String value) {
+    checkPassrowd = value;
+    notifyListeners();
   }
 
   void toggleVisibility({required int fieldIndex}) {
@@ -426,6 +424,10 @@ class LoginAndRegisterManager extends ChangeNotifier {
     loginRequestModel = RequestModel();
     notifyListeners();
     await saveUserData(value);
-    await NavigationService.navigateToAndReplace(AppRoutes.splashScreen);
+    if (accountType == AppStrings.user) {
+      await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
+    } else {
+      await NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
+    }
   }
 }

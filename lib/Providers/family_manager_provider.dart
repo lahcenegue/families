@@ -266,4 +266,27 @@ class FamilyManagerProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<String?> fulfillOrder(int cartItemId) async {
+    String? message;
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.fulfillOder,
+      cartItemId: cartItemId,
+      token: token,
+    );
+    try {
+      BaseModel value = await baseApi(requestModel: requestModel);
+
+      if (value.status == 'Success') {
+        message = 'تم ارسال الطلب بنجاح';
+        return message;
+      } else {
+        message = 'حدث خطأ في عملية الارسال يرجى اعادة المحاولة';
+        return message;
+      }
+    } catch (e) {
+      print('error fulfill order $e');
+    }
+    return message;
+  }
 }

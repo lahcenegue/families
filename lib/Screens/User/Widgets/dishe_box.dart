@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:families/Screens/User/Screens/dish_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,6 @@ import '../../../Utils/Constants/app_colors.dart';
 import '../../../Utils/Constants/app_links.dart';
 import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
-import '../../../Utils/Helprs/navigation_service.dart';
 import '../../../View_models/families_store_viewmodel.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,9 +25,9 @@ class DisheBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserManagerProvider>(builder: (context, userManager, _) {
       return GestureDetector(
-        onTap: () {
-          userManager.setSelectedDish(dish);
-          NavigationService.navigateTo(AppRoutes.disheView);
+        onTap: () async {
+          await Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => DisheView(dish: dish)));
         },
         child: Stack(
           children: [
@@ -111,9 +111,9 @@ class DisheBox extends StatelessWidget {
           height: AppSize.heightSize(25, context),
           width: AppSize.widthSize(80, context),
           child: ElevatedButton(
-            onPressed: () {
-              userManager.setSelectedDish(dish);
-              NavigationService.navigateTo(AppRoutes.disheView);
+            onPressed: () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DisheView(dish: dish)));
             },
             child: FittedBox(
               child: Text(AppLocalizations.of(context)!.discover),

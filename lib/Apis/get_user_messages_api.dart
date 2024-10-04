@@ -7,10 +7,10 @@ import '../Utils/Constants/app_links.dart';
 
 Future<MessagesModel> getUserMessagesApi(
     {required RequestModel getUserMessagesRequest}) async {
-  MessagesModel userMessages = MessagesModel(status: '', data: []);
-
   try {
     Uri url = Uri.parse(AppLinks.api);
+    print('Sending request to: $url');
+
     http.Response response = await http.post(
       url,
       headers: <String, String>{
@@ -19,11 +19,17 @@ Future<MessagesModel> getUserMessagesApi(
       body: convert.jsonEncode(getUserMessagesRequest.toJson()),
     );
 
-    var body = convert.json.decode(response.body);
+    print(
+        'Request body: ${convert.jsonEncode(getUserMessagesRequest.toJson())}');
+    print('Response status code: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-    userMessages = MessagesModel.fromJson(body);
-    return userMessages;
+    var body = convert.json.decode(response.body);
+    print(body);
+
+    return MessagesModel.fromJson(body);
   } catch (e) {
-    throw Exception(e);
+    print('Error in getUserMessagesApi: $e');
+    throw Exception('Error in getUserMessagesApi: $e');
   }
 }

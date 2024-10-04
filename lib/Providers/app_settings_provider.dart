@@ -19,16 +19,12 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   String? _osUserID;
   String? get osUserID => _osUserID;
 
-  // bool _isInitialized = false;
-
   AppSettingsProvider() {
     WidgetsBinding.instance.addObserver(this);
     _initializeAsync();
   }
 
   Future<void> _initializeAsync() async {
-    //if (_isInitialized) return;
-
     _prefs = await SharedPreferences.getInstance();
     pageController = PageController(initialPage: 0);
 
@@ -38,7 +34,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     ]);
 
     pageIndex = 0;
-    //_isInitialized = true;
+
     notifyListeners();
     goToNextScreen();
   }
@@ -153,21 +149,19 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     final accountType = getData(key: PrefKeys.accountType);
     final token = getData(key: PrefKeys.token);
 
-    Future.delayed(const Duration(milliseconds: 600), () {
-      if (onBoarding == null) {
-        NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
+    if (onBoarding == null) {
+      NavigationService.navigateToAndReplace(AppRoutes.onBordingScreen);
+    } else {
+      if (token == null) {
+        NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
       } else {
-        if (token == null) {
-          NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
+        if (accountType == AppStrings.family) {
+          NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
         } else {
-          if (accountType == AppStrings.family) {
-            NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
-          } else {
-            NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-          }
+          NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
         }
       }
-    });
+    }
   }
 
   void setPageIndex(int index) {

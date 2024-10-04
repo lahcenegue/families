@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:families/Utils/Constants/app_colors.dart';
-import 'package:families/Utils/Constants/app_links.dart';
-import 'package:families/Utils/Constants/app_size.dart';
-import 'package:families/Utils/Constants/app_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Providers/app_settings_provider.dart';
 import '../../../Providers/user_manager_provider.dart';
-import '../../../Utils/Helprs/navigation_service.dart';
+import '../../../Utils/Constants/app_colors.dart';
+import '../../../Utils/Constants/app_links.dart';
+import '../../../Utils/Constants/app_size.dart';
+import '../../../Utils/Constants/app_styles.dart';
 import '../../../View_models/families_store_viewmodel.dart';
+import '../Screens/store_view.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -172,10 +173,12 @@ class AllStoreBox extends StatelessWidget {
                 height: AppSize.heightSize(25, context),
                 width: AppSize.widthSize(100, context),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Provider.of<UserManagerProvider>(context, listen: false)
-                        .setSelectedStore(store);
-                    NavigationService.navigateTo(AppRoutes.storeView);
+                  onPressed: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => StoreView(store: store),
+                      ),
+                    );
                   },
                   child: FittedBox(
                     child: Text(AppLocalizations.of(context)!.discover),

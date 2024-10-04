@@ -13,13 +13,17 @@ import '../../../View_models/dish_review_viewmodel.dart';
 import '../../../View_models/families_store_viewmodel.dart';
 
 class FeedbacksScreen extends StatelessWidget {
-  const FeedbacksScreen({super.key});
+  final DishItemViewModel dish;
+
+  const FeedbacksScreen({
+    required this.dish,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Consumer<UserManagerProvider>(
       builder: (context, userManager, _) {
-        final dish = userManager.selectedDish;
         final reviews = userManager.filteredReviews;
 
         if (userManager.dishReviewViewModel == null) {

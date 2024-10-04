@@ -27,30 +27,51 @@ class MyOrdersModel extends BaseModel {
 }
 
 class Item {
+  int? cartItemId;
   int? userId;
+  int? storeId;
   int? itemId;
   int? amount;
+  int? status;
   String? itemName;
   List<String>? images;
   String? userName;
+  String? method;
+  int? date;
+  String? orderStatus;
+  String? storeName;
 
   Item({
+    this.cartItemId,
     this.userId,
+    this.storeId,
     this.itemId,
     this.amount,
+    this.status,
     this.itemName,
     this.images,
     this.userName,
+    this.method,
+    this.date,
+    this.orderStatus,
+    this.storeName,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
+      cartItemId: json['CartItemId'],
       userId: json['UserId'],
+      storeId: json['StoreId'],
       itemId: json['ItemId'],
       amount: json['Amount'],
+      status: json['Status'],
       itemName: json['ItemName'],
       images: parseImages(json['Images']),
       userName: json['UserName'],
+      method: json['Method'],
+      date: json['Time'],
+      orderStatus: json['OrderStatus'],
+      storeName: json['StoreName'],
     );
   }
 

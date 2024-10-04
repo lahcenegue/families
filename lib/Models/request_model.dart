@@ -29,6 +29,7 @@ class RequestModel {
   int? messageId;
   String? oneSignalId;
   String? image;
+  String? paymentMethode;
 
   RequestModel({
     this.method,
@@ -61,6 +62,7 @@ class RequestModel {
     this.messageId,
     this.oneSignalId,
     this.image,
+    this.paymentMethode,
   });
 
   Map<String, dynamic> toJson() {
@@ -95,6 +97,7 @@ class RequestModel {
       if (oneSignalId != null) 'OneSignalId': oneSignalId!.trim(),
       if (image != null) 'Image': image!.trim(),
       if (dishImages != null) 'Images': dishImages!,
+      if (paymentMethode != null) 'payment': paymentMethode!.trim(),
     };
   }
 }

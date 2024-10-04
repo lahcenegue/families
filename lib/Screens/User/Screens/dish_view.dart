@@ -16,25 +16,20 @@ import '../../../View_models/families_store_viewmodel.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'feedbacks_screen.dart';
+
 class DisheView extends StatelessWidget {
-  const DisheView({super.key});
+  final DishItemViewModel dish;
+
+  const DisheView({
+    required this.dish,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Consumer2<UserManagerProvider, CartProvider>(
       builder: (context, userManager, cartManager, _) {
-        final dish = userManager.selectedDish;
-        if (dish == null) {
-          return Scaffold(
-            body: Center(
-              child: Text(
-                'لم يتم اختيار طبق',
-                style: AppStyles.styleBold(16, context),
-              ),
-            ),
-          );
-        }
-
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -46,7 +41,7 @@ class DisheView extends StatelessWidget {
             children: [
               _buildContent(context, userManager, dish),
               CustomLoadingIndicator(
-                isVisible: userManager.isApiCallProcess,
+                isVisible: cartManager.addTocartProcess,
               ),
             ],
           ),
@@ -195,7 +190,8 @@ class DisheView extends StatelessWidget {
           IconButton(
             onPressed: () async {
               userManager.getDishReviews(itemID: dish.itemId!);
-              NavigationService.navigateTo(AppRoutes.feedbackScreen);
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FeedbacksScreen(dish: dish)));
             },
             icon: Icon(
               Icons.arrow_forward,

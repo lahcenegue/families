@@ -15,6 +15,7 @@ import '../View_models/messages_viewmodel.dart';
 
 class ChatManagerProvider extends ChangeNotifier {
   SharedPreferences? _prefs;
+
   String? accountType;
   List<MessageData> messages = [];
   MessageViewModel? allMessages;
@@ -23,22 +24,23 @@ class ChatManagerProvider extends ChangeNotifier {
   bool isPolling = false;
 
   String? token;
+  String? error;
 
   final TextEditingController messageController = TextEditingController();
 
   Timer? _pollingTimer;
+  bool _disposed = false;
 
   ChatManagerProvider() {
     initializeData();
   }
 
   Future<void> initializeData() async {
-    if (!isDataInitialized) {
+    if (!isDataInitialized && !_disposed) {
       isApiCallProcess = true;
       notifyListeners();
 
       _prefs = await SharedPreferences.getInstance();
-      //token = 'g76yesQxYc';
       accountType = _prefs!.getString(PrefKeys.accountType);
       token = _prefs!.getString(PrefKeys.token);
 
@@ -46,11 +48,12 @@ class ChatManagerProvider extends ChangeNotifier {
 
       isApiCallProcess = false;
       isDataInitialized = true;
-      notifyListeners();
+      if (!_disposed) notifyListeners();
     }
   }
 
   Future<void> fetchAllMessages() async {
+    print('fetch all messages');
     RequestModel requestModel = RequestModel(
       method: accountType == AppStrings.user
           ? ApiMethods.getAllMessagesForUser
@@ -73,9 +76,10 @@ class ChatManagerProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUserMessages({required int id}) async {
-    print('++++++++++++ fecth user messages+++++++++++');
+    print('Fetching user messages for id: $id');
     if (!isPolling) {
       isApiCallProcess = true;
+      error = null;
       notifyListeners();
     }
 
@@ -89,15 +93,23 @@ class ChatManagerProvider extends ChangeNotifier {
       messageId: 0,
     );
 
+    print('Request token: ${getUserMessagesRequest.token}');
+
     try {
+      print('Sending request: ${getUserMessagesRequest.toJson()}');
       MessagesModel response = await getUserMessagesApi(
           getUserMessagesRequest: getUserMessagesRequest);
+      print('Received response: ${response.toJson()}');
+
       if (response.status == 'Success') {
-        messages = response.data!;
-        notifyListeners();
+        messages = response.data ?? [];
+      } else {
+        error = 'Failed to fetch messages: ${response.status}';
+        print(error);
       }
     } catch (e) {
-      print('Error fetching messages: $e');
+      error = 'Error fetching messages: $e';
+      print(error);
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -146,8 +158,25 @@ class ChatManagerProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     stopPolling();
     messageController.dispose();
     super.dispose();
+  }
+
+  // void reset() {
+  //   messages.clear();
+  //   isDataInitialized = false;
+  //   isApiCallProcess = false;
+  //   isPolling = false;
+  //   error = null;
+  //   _disposed = false;
+  // }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
   }
 }
