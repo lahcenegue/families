@@ -34,8 +34,8 @@ class ApiMethods {
   static const String checkout = 'checkout_cart';
   static const String getFavoriteStores = 'get_favourites';
   static const String fulfillOder = 'fulfill_order';
+  static const String getStoreStats = 'get_store_stats';
 
-// static const String = '';
 // static const String = '';
 // static const String = '';
 // static const String = '';

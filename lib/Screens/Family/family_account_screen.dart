@@ -12,9 +12,11 @@ import '../../../Utils/Constants/app_styles.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../Models/store_stats_model .dart';
 import '../../Providers/family_manager_provider.dart';
 import '../../Utils/Constants/app_links.dart';
 import '../../Utils/Constants/app_strings.dart';
+import '../../View_models/store_stats_view_model.dart';
 
 class FamilyAccountScreen extends StatelessWidget {
   const FamilyAccountScreen({super.key});
@@ -48,7 +50,9 @@ class FamilyAccountScreen extends StatelessWidget {
                       _buildProfileName(context, familyManager),
                       SizedBox(height: AppSize.heightSize(10, context)),
                       _buildPhoneNumber(context, familyManager),
-                      SizedBox(height: AppSize.heightSize(50, context)),
+                      SizedBox(height: AppSize.heightSize(30, context)),
+                      _buildStoreStats(context, appSettings, familyManager),
+                      SizedBox(height: AppSize.heightSize(30, context)),
                       _buildSettingsCard(
                           context, appSettings, deleteAccountManager),
                     ],
@@ -91,6 +95,59 @@ class FamilyAccountScreen extends StatelessWidget {
     return Text(
       familyManager.prefs!.getString(PrefKeys.phoneNumber)!,
       style: AppStyles.styleBold(16, context),
+    );
+  }
+
+  Widget _buildStoreStats(
+    BuildContext context,
+    AppSettingsProvider appSettings,
+    FamilyManagerProvider familyManager,
+  ) {
+    StoreStatsViewModel stats = familyManager.storeStatsViewModel!;
+
+    return Container(
+      padding: EdgeInsets.all(AppSize.widthSize(16, context)),
+      decoration: BoxDecoration(
+        color: appSettings.isDark
+            ? AppColors.darkContainerBackground
+            : Colors.white,
+        borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
+        border: Border.all(color: const Color(0xff9DB2CE).withOpacity(0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'إحصائيات المتجر',
+            style: AppStyles.styleBold(18, context),
+          ),
+          SizedBox(height: AppSize.heightSize(16, context)),
+          _buildStatRow(
+            context,
+            'جميع الطلبات',
+            stats.total.totalOrders.toString(),
+          ),
+          _buildStatRow(
+              context, 'مجموع الربح', '${stats.total.totalSales} ريال'),
+          _buildStatRow(context, 'الطلبات الشهرية',
+              stats.thisMonth.totalOrders.toString()),
+          _buildStatRow(context, 'المبيعات الشهرية',
+              '${stats.thisMonth.totalSales} ريال'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatRow(BuildContext context, String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: AppSize.widthSize(5, context)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: AppStyles.styleBold(12, context)),
+          Text(value, style: AppStyles.styleBold(14, context)),
+        ],
+      ),
     );
   }
 
@@ -142,35 +199,35 @@ class FamilyAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfermationTile(BuildContext context) {
-    return ListTile(
-      onTap: () {},
-      title: Text(
-        'معلومات الخساب الشخصي',
-        style: AppStyles.styleBold(12, context),
-      ),
-      trailing: Icon(
-        Icons.arrow_forward_ios_rounded,
-        color: Theme.of(context).iconTheme.color,
-        size: AppSize.iconSize(20, context),
-      ),
-    );
-  }
+  // Widget _buildInfermationTile(BuildContext context) {
+  //   return ListTile(
+  //     onTap: () {},
+  //     title: Text(
+  //       'معلومات الخساب الشخصي',
+  //       style: AppStyles.styleBold(12, context),
+  //     ),
+  //     trailing: Icon(
+  //       Icons.arrow_forward_ios_rounded,
+  //       color: Theme.of(context).iconTheme.color,
+  //       size: AppSize.iconSize(20, context),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildFeedbackTile(BuildContext context) {
-    return ListTile(
-      onTap: () {},
-      title: Text(
-        'التقييمات',
-        style: AppStyles.styleBold(12, context),
-      ),
-      trailing: Icon(
-        Icons.arrow_forward_ios_rounded,
-        color: Theme.of(context).iconTheme.color,
-        size: AppSize.iconSize(20, context),
-      ),
-    );
-  }
+  // Widget _buildFeedbackTile(BuildContext context) {
+  //   return ListTile(
+  //     onTap: () {},
+  //     title: Text(
+  //       'التقييمات',
+  //       style: AppStyles.styleBold(12, context),
+  //     ),
+  //     trailing: Icon(
+  //       Icons.arrow_forward_ios_rounded,
+  //       color: Theme.of(context).iconTheme.color,
+  //       size: AppSize.iconSize(20, context),
+  //     ),
+  //   );
+  // }
 
   Widget _buildLogoutTile(BuildContext context) {
     return ListTile(

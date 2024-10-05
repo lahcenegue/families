@@ -226,9 +226,10 @@ class FamilyMainScreen extends StatelessWidget {
           (AppSize.heightSize(100, context) + AppSize.heightSize(20, context)),
       child: ListView.separated(
         scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: items.length,
         separatorBuilder: (context, index) =>
-            SizedBox(width: AppSize.widthSize(20, context)),
+            SizedBox(height: AppSize.widthSize(20, context)),
         itemBuilder: (context, index) =>
             _buildOrderItemCard(context, items[index]),
       ),

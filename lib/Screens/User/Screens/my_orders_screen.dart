@@ -166,7 +166,7 @@ class MyOredresScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _buildItemImage(context, item.firstImage!),
-          SizedBox(width: AppSize.widthSize(10, context)),
+          SizedBox(width: AppSize.widthSize(8, context)),
           _buildItemDetails(context, item),
         ],
       ),
@@ -191,7 +191,10 @@ class MyOredresScreen extends StatelessWidget {
   Widget _buildItemDetails(BuildContext context, ItemViewModel item) {
     return Container(
       width: AppSize.widthSize(200, context),
-      padding: EdgeInsets.only(left: AppSize.widthSize(5, context)),
+      padding: EdgeInsets.only(
+        left: AppSize.widthSize(5, context),
+        bottom: AppSize.widthSize(5, context),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -210,11 +213,18 @@ class MyOredresScreen extends StatelessWidget {
                       .copyWith(color: Colors.black),
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.rate_review_outlined,
-                  size: AppSize.iconSize(25, context),
+              GestureDetector(
+                onTap: () {},
+                child: SizedBox(
+                  height: AppSize.widthSize(30, context),
+                  width: AppSize.widthSize(30, context),
+                  child: Center(
+                    child: Icon(
+                      Icons.rate_review_outlined,
+                      color: Colors.black,
+                      size: AppSize.iconSize(25, context),
+                    ),
+                  ),
                 ),
               ),
             ],

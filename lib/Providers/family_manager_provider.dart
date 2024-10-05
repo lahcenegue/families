@@ -12,17 +12,20 @@ import '../Apis/add_dish_api.dart';
 import '../Apis/base_api.dart';
 import '../Apis/get_my_dishs.dart';
 import '../Apis/get_my_orders.dart';
+import '../Apis/get_store_stats_api.dart';
 import '../Apis/upload_image_api.dart';
 import '../Models/add_dish_mode.dart';
 import '../Models/base_model.dart';
 import '../Models/my_dishs_model.dart';
 import '../Models/my_ordres_model.dart';
 import '../Models/request_model.dart';
+import '../Models/store_stats_model .dart';
 import '../Models/ulpoad_image_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
 import '../View_models/my_dishs_viewmodel.dart';
 import '../View_models/my_ordres_viewmodel.dart';
+import '../View_models/store_stats_view_model.dart';
 
 class FamilyManagerProvider extends ChangeNotifier {
   SharedPreferences? prefs;
@@ -33,6 +36,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
   MyOrdersViewModel? myOrders;
   MyDishsViewmodel? myDishs;
+  StoreStatsViewModel? storeStatsViewModel;
 
   File? dishImage;
   List<String> uploadedImages = [];
@@ -59,6 +63,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
       await fetchMyOrders();
       await fetchMyDishs();
+      await fetchStoreStats();
 
       isApiCallProcess = false;
       isDataInitialized = true;
@@ -102,6 +107,22 @@ class FamilyManagerProvider extends ChangeNotifier {
       }
     } catch (e) {
       print('Error fetching my dishs: $e');
+    }
+  }
+
+  Future<void> fetchStoreStats() async {
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.getStoreStats,
+      token: token,
+    );
+
+    try {
+      StoreStatsModel storeStats =
+          await getStoreStatsApi(request: requestModel);
+      storeStatsViewModel = StoreStatsViewModel(model: storeStats);
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching store stats: $e');
     }
   }
 
