@@ -10,6 +10,7 @@ import '../../../Utils/Constants/app_size.dart';
 import '../../../Utils/Constants/app_styles.dart';
 import '../../../View_models/my_ordres_viewmodel.dart';
 import '../../Both/chat_screen.dart';
+import 'review_screen.dart';
 
 class MyOredresScreen extends StatelessWidget {
   const MyOredresScreen({super.key});
@@ -50,7 +51,11 @@ class MyOredresScreen extends StatelessWidget {
     UserManagerProvider userManager,
     ChatManagerProvider chatManager,
   ) {
-    if (userManager.myOrders == null || userManager.myOrders!.ordres.isEmpty) {
+    if (userManager.myOrders == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (userManager.myOrders!.ordres.isEmpty) {
       return Center(
         child: Text(
           'لا توجد طلبات',
@@ -214,7 +219,13 @@ class MyOredresScreen extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddReviewScreen(item: item),
+                    ),
+                  );
+                },
                 child: SizedBox(
                   height: AppSize.widthSize(30, context),
                   width: AppSize.widthSize(30, context),

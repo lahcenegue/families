@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Apis/add_review_api.dart';
 import '../Apis/add_to_favorite.dart';
 import '../Apis/base_api.dart';
 import '../Apis/get_banner_images.dart';
 import '../Apis/get_dish_review_api.dart';
 import '../Apis/get_family_stores_api.dart';
 import '../Apis/get_my_orders.dart';
+import '../Models/add_review_model.dart';
 import '../Models/banner_images.dart';
 import '../Models/base_model.dart';
 import '../Models/dish_review_model.dart';
@@ -18,6 +20,7 @@ import '../Models/request_model.dart';
 import '../Models/store_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
+import '../View_models/add_review_view_model.dart';
 import '../View_models/dish_review_viewmodel.dart';
 import '../View_models/families_store_viewmodel.dart';
 import '../View_models/my_ordres_viewmodel.dart';
@@ -33,6 +36,7 @@ class UserManagerProvider extends ChangeNotifier {
   bool isLoggedIn = false;
 
   String? errorMessage;
+  String reviewText = '';
 
   List<String>? bannerImages;
   FamiliesStoreViewModel? popularFamiliesViewModel;
@@ -40,6 +44,7 @@ class UserManagerProvider extends ChangeNotifier {
   FamiliesStoreViewModel? favoriteFamiliesViewModel;
   DishReviewViewModel? dishReviewViewModel;
   MyOrdersViewModel? myOrders;
+  ReviewViewModel? reviewViewModel;
 
   int selectedRating = 0;
 
@@ -316,6 +321,45 @@ class UserManagerProvider extends ChangeNotifier {
       notifyListeners();
     }
     return message;
+  }
+
+  Future<void> submitReview({
+    required int itemId,
+    required int rating,
+  }) async {
+    print('+++++ submitReview function');
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    RequestModel requestModel = RequestModel(
+      method: ApiMethods.reviewItem,
+      token: token,
+      itemId: itemId,
+      rating: rating,
+      message: reviewText,
+    );
+
+    try {
+      ReviewModel reviewModel =
+          await submitReviewApi(reviewRequest: requestModel);
+      if (reviewModel.status == 'Success') {
+        reviewViewModel = ReviewViewModel(model: reviewModel);
+        print('Review submitted successfully');
+      } else {
+        errorMessage = 'Failed to submit review';
+      }
+    } catch (e) {
+      errorMessage = 'Error submitting review: $e';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setReviewText(String text) {
+    reviewText = text;
+    notifyListeners();
   }
 
   // Future<void> reset() async {

@@ -35,8 +35,8 @@ class ApiMethods {
   static const String getFavoriteStores = 'get_favourites';
   static const String fulfillOder = 'fulfill_order';
   static const String getStoreStats = 'get_store_stats';
+  static const String reviewItem = 'review_item';
 
-// static const String = '';
 // static const String = '';
 // static const String = '';
 }
