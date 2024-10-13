@@ -194,177 +194,182 @@ class MyOredresScreen extends StatelessWidget {
   }
 
   Widget _buildItemDetails(BuildContext context, ItemViewModel item) {
-    return Container(
-      width: AppSize.widthSize(200, context),
-      padding: EdgeInsets.only(
-        left: AppSize.widthSize(5, context),
-        bottom: AppSize.widthSize(5, context),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: AppSize.widthSize(130, context),
-                child: Text(
-                  item.itemName!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  softWrap: false,
-                  style: AppStyles.styleBold(12, context)
-                      .copyWith(color: Colors.black),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AddReviewScreen(item: item),
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: AppSize.widthSize(30, context),
-                  width: AppSize.widthSize(30, context),
-                  child: Center(
-                    child: Icon(
-                      Icons.rate_review_outlined,
-                      color: Colors.black,
-                      size: AppSize.iconSize(25, context),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${item.amount} اطباق',
-                style: AppStyles.styleRegular(10, context)
-                    .copyWith(color: Colors.black),
-              ),
-              Text(
-                item.date!,
-                style: AppStyles.styleRegular(10, context)
-                    .copyWith(color: Colors.black),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: AppSize.widthSize(90, context),
-                height: AppSize.heightSize(30, context),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.primaryColor,
-                  ),
-                  borderRadius:
-                      BorderRadius.circular(AppSize.widthSize(10, context)),
-                ),
-                child: Center(
+    return InkWell(
+      child: Container(
+        width: AppSize.width(context) - AppSize.widthSize(180, context),
+        padding: EdgeInsets.only(
+          left: AppSize.widthSize(5, context),
+          bottom: AppSize.widthSize(5, context),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: AppSize.widthSize(130, context),
                   child: Text(
-                    item.statusText,
-                    style: AppStyles.styleRegular(10, context)
+                    item.itemName!,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: AppStyles.styleBold(12, context)
                         .copyWith(color: Colors.black),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: AppSize.widthSize(90, context),
-                height: AppSize.heightSize(30, context),
-                child: ElevatedButton(
-                  onPressed: () {
-                    item.status == 2
-                        ? null
-                        : showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(
-                                  'تأكيد الاستلام',
-                                  style: AppStyles.styleBold(16, context)
-                                      .copyWith(color: Colors.black),
-                                ),
-                                content: Text(
-                                  'هل تم إستلام طلبك بنجاح؟',
-                                  style: AppStyles.styleRegular(14, context)
-                                      .copyWith(color: Colors.black),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: Text(
-                                      'ليس بعد',
-                                      style: AppStyles.styleBold(14, context)
-                                          .copyWith(color: Colors.black),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text(
-                                      'تأكيد الاستلام',
-                                      style: AppStyles.styleRegular(12, context)
-                                          .copyWith(color: Colors.black),
-                                    ),
-                                    onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (BuildContext context) {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        },
-                                      );
-
-                                      String? result = await Provider.of<
-                                                  UserManagerProvider>(context,
-                                              listen: false)
-                                          .fulfillOrder(item.cartItemId!);
-
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop();
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                result ?? 'An error occurred'),
-                                            duration:
-                                                const Duration(seconds: 3),
-                                          ),
-                                        );
-
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddReviewScreen(item: item),
+                      ),
+                    );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        item.status == 2 ? Colors.grey : AppColors.primaryColor,
-                  ),
-                  child: Text(
-                    'استلام',
-                    style: AppStyles.styleBold(10, context),
+                  child: SizedBox(
+                    height: AppSize.widthSize(30, context),
+                    width: AppSize.widthSize(30, context),
+                    child: Center(
+                      child: Icon(
+                        Icons.rate_review_outlined,
+                        color: Colors.black,
+                        size: AppSize.iconSize(25, context),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${item.amount} اطباق',
+                  style: AppStyles.styleRegular(10, context)
+                      .copyWith(color: Colors.black),
+                ),
+                Text(
+                  item.date!,
+                  style: AppStyles.styleRegular(10, context)
+                      .copyWith(color: Colors.black),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: AppSize.widthSize(90, context),
+                  height: AppSize.heightSize(30, context),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.primaryColor,
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(AppSize.widthSize(10, context)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      item.statusText,
+                      style: AppStyles.styleRegular(10, context)
+                          .copyWith(color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: AppSize.widthSize(90, context),
+                  height: AppSize.heightSize(30, context),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      item.status == 2
+                          ? null
+                          : showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'تأكيد الاستلام',
+                                    style: AppStyles.styleBold(16, context)
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  content: Text(
+                                    'هل تم إستلام طلبك بنجاح؟',
+                                    style: AppStyles.styleRegular(14, context)
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(
+                                        'ليس بعد',
+                                        style: AppStyles.styleBold(14, context)
+                                            .copyWith(color: Colors.black),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        'تأكيد الاستلام',
+                                        style:
+                                            AppStyles.styleRegular(12, context)
+                                                .copyWith(color: Colors.black),
+                                      ),
+                                      onPressed: () async {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          },
+                                        );
+
+                                        String? result = await Provider.of<
+                                                    UserManagerProvider>(
+                                                context,
+                                                listen: false)
+                                            .fulfillOrder(item.cartItemId!);
+
+                                        if (context.mounted) {
+                                          Navigator.of(context).pop();
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(result ??
+                                                  'An error occurred'),
+                                              duration:
+                                                  const Duration(seconds: 3),
+                                            ),
+                                          );
+
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: item.status == 2
+                          ? Colors.grey
+                          : AppColors.primaryColor,
+                    ),
+                    child: Text(
+                      'استلام',
+                      style: AppStyles.styleBold(10, context),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

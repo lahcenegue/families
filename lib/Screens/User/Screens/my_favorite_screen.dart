@@ -7,8 +7,21 @@ import '../../../Utils/Constants/app_styles.dart';
 import '../../../Utils/Widgets/costum_snackbar.dart';
 import '../Widgets/all_store_box.dart';
 
-class MyFavoriteStores extends StatelessWidget {
+class MyFavoriteStores extends StatefulWidget {
   const MyFavoriteStores({super.key});
+
+  @override
+  State<MyFavoriteStores> createState() => _MyFavoriteStoresState();
+}
+
+class _MyFavoriteStoresState extends State<MyFavoriteStores> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<UserManagerProvider>().fetchMyFavoriteStores();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +35,24 @@ class MyFavoriteStores extends StatelessWidget {
               left: AppSize.widthSize(25, context),
               right: AppSize.widthSize(25, context),
             ),
-            child: userManager.favoriteFamiliesViewModel == null
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : _buildStoreList(context, userManager),
+            child: _buildContent(context, userManager),
           ),
         );
       },
     );
+  }
+
+  Widget _buildContent(BuildContext context, UserManagerProvider userManager) {
+    if (userManager.isApiCallProcess) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (userManager.errorMessage != null) {
+      return Center(child: Text(userManager.errorMessage!));
+    } else if (userManager.favoriteFamiliesViewModel == null ||
+        userManager.favoriteFamiliesViewModel!.stores.isEmpty) {
+      return const Center(child: Text('لم يتم العثور على المتاجر المفضلة.'));
+    } else {
+      return _buildStoreList(context, userManager);
+    }
   }
 
   AppBar _buildAppBar(BuildContext context) {

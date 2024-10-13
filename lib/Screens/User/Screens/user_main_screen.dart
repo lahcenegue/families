@@ -274,18 +274,21 @@ class UserMainScreen extends StatelessWidget {
           title: Text(
             'تسجيل الدخول مطلوب',
             textAlign: TextAlign.center,
-            style: AppStyles.styleBold(16, context),
+            style:
+                AppStyles.styleBold(16, context).copyWith(color: Colors.black),
           ),
           content: Text(
             'يرجى تسجيل الدخول لإتمام هذا الإجراء',
             textAlign: TextAlign.center,
-            style: AppStyles.styleMedium(14, context),
+            style: AppStyles.styleMedium(14, context)
+                .copyWith(color: Colors.black),
           ),
           actions: <Widget>[
             TextButton(
               child: Text(
                 'رجوع',
-                style: AppStyles.styleMedium(14, context),
+                style: AppStyles.styleMedium(14, context)
+                    .copyWith(color: Colors.black),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -294,7 +297,8 @@ class UserMainScreen extends StatelessWidget {
             TextButton(
               child: Text(
                 AppLocalizations.of(context)!.login,
-                style: AppStyles.styleBold(14, context),
+                style: AppStyles.styleBold(14, context)
+                    .copyWith(color: Colors.black),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

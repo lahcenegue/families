@@ -153,7 +153,9 @@ class LoginScreen extends StatelessWidget {
               int? result = await loginManager.login();
 
               if (result != null && result != 20) {
-                safeShowErrorMessage(context, result);
+                if (context.mounted) {
+                  safeShowErrorMessage(context, result);
+                }
               }
             },
             child: Text(AppLocalizations.of(context)!.login),

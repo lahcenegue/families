@@ -61,6 +61,7 @@ class UserManagerProvider extends ChangeNotifier {
   DishItemViewModel? get selectedDish => _selectedDish;
 
   Future<void> initializeData() async {
+    print('initialize user manager');
     isApiCallProcess = true;
     errorMessage = null;
     isDataInitialized = false;
@@ -249,6 +250,7 @@ class UserManagerProvider extends ChangeNotifier {
 
   Future<void> fetchMyFavoriteStores() async {
     print('fetch favorite stores ================');
+    print(token);
     RequestModel requestModel = RequestModel(
       method: ApiMethods.getFavoriteStores,
       token: token,
@@ -264,6 +266,10 @@ class UserManagerProvider extends ChangeNotifier {
       if (storeModel.status == 'Success') {
         final viewModel = FamiliesStoreViewModel(storeModel: storeModel);
         favoriteFamiliesViewModel = viewModel;
+
+        notifyListeners();
+      } else {
+        print('Failed to fetch favorite stores: ${storeModel.status}');
       }
     } catch (e) {
       print('error fetch favorite list $e');

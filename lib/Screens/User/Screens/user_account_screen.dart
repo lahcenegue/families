@@ -191,10 +191,10 @@ class UserAccountScreen extends StatelessWidget {
 
   Widget _buildFavoritesTile(BuildContext context) {
     return ListTile(
-      onTap: () {
-        Provider.of<UserManagerProvider>(context, listen: false)
+      onTap: () async {
+        await Provider.of<UserManagerProvider>(context, listen: false)
             .fetchMyFavoriteStores();
-        NavigationService.navigateTo(AppRoutes.myFavoriteScreen);
+        await NavigationService.navigateTo(AppRoutes.myFavoriteScreen);
       },
       title: Text(
         AppLocalizations.of(context)!.favorites,

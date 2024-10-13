@@ -26,7 +26,7 @@ class UserHomeScreen extends StatelessWidget {
         final userManager = UserManagerProvider();
 
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await userManager.initializeData();
+          await userManager.fetchMyFavoriteStores();
         });
 
         return userManager;

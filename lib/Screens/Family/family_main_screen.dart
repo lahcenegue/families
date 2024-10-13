@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:families/Screens/Both/chat_screen.dart';
-import 'package:families/View_models/messages_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/all_messages_model.dart';
 import '../../Providers/app_settings_provider.dart';
 import '../../Providers/chat_manager_provider.dart';
 import '../../Providers/family_manager_provider.dart';
@@ -226,6 +224,7 @@ class FamilyMainScreen extends StatelessWidget {
           (AppSize.heightSize(100, context) + AppSize.heightSize(20, context)),
       child: ListView.separated(
         scrollDirection: Axis.vertical,
+        reverse: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: items.length,
         separatorBuilder: (context, index) =>
