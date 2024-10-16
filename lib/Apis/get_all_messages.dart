@@ -20,12 +20,7 @@ Future<AllMessagesModel> getAllMessagesApi(
       body: convert.jsonEncode(requestModel.toJson()),
     );
 
-    print('fetch all messages =======================');
-    print(convert.jsonEncode(requestModel.toJson()));
-
     var body = convert.json.decode(response.body);
-    print(body);
-    print('fetch all messages =======================');
 
     messages = AllMessagesModel.fromJson(body);
 

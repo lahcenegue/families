@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import '../Models/request_model.dart';
-import '../Models/store_stats_model .dart';
+import '../Models/store_stats_model.dart';
 import '../Utils/Constants/app_links.dart';
 
 Future<StoreStatsModel> getStoreStatsApi(

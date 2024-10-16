@@ -1,4 +1,4 @@
-import '../Models/store_stats_model .dart';
+import '../Models/store_stats_model.dart';
 
 class StoreStatsViewModel {
   final StoreStatsModel _model;

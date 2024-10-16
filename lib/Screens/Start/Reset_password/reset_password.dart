@@ -144,10 +144,8 @@ class ResetPasswordScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               int? result = await resetManager.resetPassword();
+              if (!context.mounted) return;
               safeShowErrorMessage(context, result);
-              // await resetManager
-              // .resetPassword()
-              // .then((value) => customSnackBar(context, value));
             },
             child: Text(AppLocalizations.of(context)!.rest_password),
           ),

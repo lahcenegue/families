@@ -129,12 +129,14 @@ class MyDishsScreen extends StatelessWidget {
         } else if (direction == DismissDirection.startToEnd) {
           bool? shouldEdit = await showEditConfirmationDialog(context);
           if (shouldEdit == true) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditDishScreen(dish: dish),
-              ),
-            );
+            if (context.mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditDishScreen(dish: dish),
+                ),
+              );
+            }
           }
           return false;
         }

@@ -72,10 +72,8 @@ class AllFamiliesStore extends StatelessWidget {
           addToFavorite: () async {
             int? result =
                 await userManager.addToFavorite(storeId: store.storeId!);
+            if (!context.mounted) return;
             safeShowErrorMessage(context, result);
-            // await userManager
-            //     .addToFavorite(storeId: store.storeId!)
-            //     .then((value) => customSnackBar(context, value));
           },
         );
       },

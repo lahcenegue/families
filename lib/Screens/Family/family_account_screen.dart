@@ -12,7 +12,6 @@ import '../../../Utils/Constants/app_styles.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../Models/store_stats_model .dart';
 import '../../Providers/family_manager_provider.dart';
 import '../../Utils/Constants/app_links.dart';
 import '../../Utils/Constants/app_strings.dart';

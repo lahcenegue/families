@@ -60,12 +60,12 @@ class CartProvider extends ChangeNotifier {
         isApiCallProcess = false;
         notifyListeners();
       } else {
-        print('Failed to fetch cart items');
+        debugPrint('Failed to fetch cart items');
         isApiCallProcess = false;
         notifyListeners();
       }
     } catch (e) {
-      print('Error fetching cart items: $e');
+      debugPrint('Error fetching cart items: $e');
     }
   }
 
@@ -114,7 +114,7 @@ class CartProvider extends ChangeNotifier {
     } catch (e) {
       addTocartProcess = false;
       notifyListeners();
-      print('Error fetching cart items: $e');
+      debugPrint('Error fetching cart items: $e');
       return 13;
     }
   }
@@ -138,7 +138,7 @@ class CartProvider extends ChangeNotifier {
         await getCartItems();
       }
     } catch (e) {
-      print('Error removing item from cart: $e');
+      debugPrint('Error removing item from cart: $e');
     }
   }
 
@@ -171,10 +171,10 @@ class CartProvider extends ChangeNotifier {
       if (value.status == 'Success') {
         await getCartItems();
       } else {
-        print('Failed to checkout: ${value.errorCode}');
+        debugPrint('Failed to checkout: ${value.errorCode}');
       }
     } catch (e) {
-      print('Error checkout: $e');
+      debugPrint('Error checkout: $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();

@@ -1,4 +1,3 @@
-// Create a new file named store_stats_model.dart
 import 'base_model.dart';
 
 class StoreStatsModel extends BaseModel {

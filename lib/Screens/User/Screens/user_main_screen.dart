@@ -222,8 +222,12 @@ class UserMainScreen extends StatelessWidget {
                   .addToFavorite(
                       storeId: userManager
                           .allFamiliesViewModel!.stores[index].storeId!)
-                  .then((value) => safeShowErrorMessage(context, value));
+                  .then((value) {
+                if (!context.mounted) return;
+                safeShowErrorMessage(context, value);
+              });
             } else {
+              if (!context.mounted) return;
               _showLoginDialog(context, userManager);
             }
           },

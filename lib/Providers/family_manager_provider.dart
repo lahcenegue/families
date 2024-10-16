@@ -19,7 +19,7 @@ import '../Models/base_model.dart';
 import '../Models/my_dishs_model.dart';
 import '../Models/my_ordres_model.dart';
 import '../Models/request_model.dart';
-import '../Models/store_stats_model .dart';
+import '../Models/store_stats_model.dart';
 import '../Models/ulpoad_image_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
@@ -122,7 +122,7 @@ class FamilyManagerProvider extends ChangeNotifier {
       storeStatsViewModel = StoreStatsViewModel(model: storeStats);
       notifyListeners();
     } catch (e) {
-      print('Error fetching store stats: $e');
+      debugPrint('Error fetching store stats: $e');
     }
   }
 
@@ -151,10 +151,10 @@ class FamilyManagerProvider extends ChangeNotifier {
         uploadedImages.add(response.data!.image!);
         notifyListeners();
       } else {
-        print('Failed to upload image: ${response.errorCode}');
+        debugPrint('Failed to upload image: ${response.errorCode}');
       }
     } catch (e) {
-      print('Error uploading image: $e');
+      debugPrint('Error uploading image: $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -186,10 +186,10 @@ class FamilyManagerProvider extends ChangeNotifier {
           NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
           notifyListeners();
         } else {
-          print('Failed to add dish: ${response.errorCode}');
+          debugPrint('Failed to add dish: ${response.errorCode}');
         }
       } catch (e) {
-        print('Error adding dish: $e');
+        debugPrint('Error adding dish: $e');
       } finally {
         isApiCallProcess = false;
         notifyListeners();
@@ -223,10 +223,10 @@ class FamilyManagerProvider extends ChangeNotifier {
           NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
           notifyListeners();
         } else {
-          print('Failed to edit dish: ${response.errorCode}');
+          debugPrint('Failed to edit dish: ${response.errorCode}');
         }
       } catch (e) {
-        print('Error editing dish: $e');
+        debugPrint('Error editing dish: $e');
       } finally {
         isApiCallProcess = false;
         notifyListeners();
@@ -278,10 +278,10 @@ class FamilyManagerProvider extends ChangeNotifier {
         await fetchMyDishs();
         notifyListeners();
       } else {
-        print('Failed to delete dish: ${value.errorCode}');
+        debugPrint('Failed to delete dish: ${value.errorCode}');
       }
     } catch (e) {
-      print('Error deleting dish: $e');
+      debugPrint('Error deleting dish: $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -306,7 +306,7 @@ class FamilyManagerProvider extends ChangeNotifier {
         return message;
       }
     } catch (e) {
-      print('error fulfill order $e');
+      debugPrint('error fulfill order $e');
     }
     return message;
   }

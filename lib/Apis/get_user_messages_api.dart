@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -9,7 +10,6 @@ Future<MessagesModel> getUserMessagesApi(
     {required RequestModel getUserMessagesRequest}) async {
   try {
     Uri url = Uri.parse(AppLinks.api);
-    print('Sending request to: $url');
 
     http.Response response = await http.post(
       url,
@@ -19,17 +19,11 @@ Future<MessagesModel> getUserMessagesApi(
       body: convert.jsonEncode(getUserMessagesRequest.toJson()),
     );
 
-    print(
-        'Request body: ${convert.jsonEncode(getUserMessagesRequest.toJson())}');
-    print('Response status code: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     var body = convert.json.decode(response.body);
-    print(body);
 
     return MessagesModel.fromJson(body);
   } catch (e) {
-    print('Error in getUserMessagesApi: $e');
+    debugPrint('Error in getUserMessagesApi: $e');
     throw Exception('Error in getUserMessagesApi: $e');
   }
 }

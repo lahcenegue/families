@@ -18,13 +18,7 @@ Future<ReviewModel> submitReviewApi(
       body: jsonEncode(reviewRequest.toJson()),
     );
 
-    print('=========== rreviews');
-    print(jsonEncode(reviewRequest.toJson()));
-
     var body = jsonDecode(response.body);
-
-    print(body);
-    print('=========== rreviews');
 
     return ReviewModel.fromJson(body);
   } catch (e) {

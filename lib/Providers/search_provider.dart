@@ -62,11 +62,11 @@ class SearchProvider extends ChangeNotifier {
         searchViewModel = SearchViewModel(searchModel: searchModel);
       } else {
         searchViewModel = null;
-        print('Failed to fetch search results');
+        debugPrint('Failed to fetch search results');
       }
     } catch (e) {
       searchViewModel = null;
-      print('Error fetching search results: $e');
+      debugPrint('Error fetching search results: $e');
     } finally {
       isSearching = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {

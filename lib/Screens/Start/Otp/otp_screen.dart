@@ -94,6 +94,7 @@ class OtpScreen extends StatelessWidget {
       onPressed: () async {
         if (otpManager.otpType == OTPType.confirm) {
           int? result = await otpManager.confirmOTP();
+          if (!context.mounted) return;
           safeShowErrorMessage(context, result);
         } else {
           await otpManager.getResetToken();

@@ -183,7 +183,9 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
         await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint('catch errur $e');
+    }
   }
 
   // send otp for create account

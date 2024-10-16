@@ -20,12 +20,7 @@ Future<MyOrdersModel> getMyOrdersApi(
       body: convert.jsonEncode(getMyOredesRequest.toJson()),
     );
 
-    print('===================================');
-    print(convert.jsonEncode(getMyOredesRequest.toJson()));
-
     var body = convert.json.decode(response.body);
-    print(body);
-    print('===================================');
 
     myOredersModel = MyOrdersModel.fromJson(body);
 

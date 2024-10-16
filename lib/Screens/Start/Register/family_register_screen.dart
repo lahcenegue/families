@@ -452,6 +452,7 @@ class FamilyRegisterScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               int? result = await registerManager.register();
+              if (!context.mounted) return;
               safeShowErrorMessage(context, result);
             },
             child: Text(AppLocalizations.of(context)!.sign_up),
