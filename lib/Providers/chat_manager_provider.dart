@@ -20,7 +20,6 @@ class ChatManagerProvider extends ChangeNotifier {
   List<MessageData> messages = [];
   MessageViewModel? allMessages;
   bool isApiCallProcess = false;
-  bool isDataInitialized = false;
   bool isPolling = false;
 
   String? token;
@@ -36,7 +35,7 @@ class ChatManagerProvider extends ChangeNotifier {
   }
 
   Future<void> initializeData() async {
-    if (!isDataInitialized && !_disposed) {
+    if (!_disposed) {
       isApiCallProcess = true;
       notifyListeners();
 
@@ -44,16 +43,16 @@ class ChatManagerProvider extends ChangeNotifier {
       accountType = _prefs!.getString(PrefKeys.accountType);
       token = _prefs!.getString(PrefKeys.token);
 
-      await fetchAllMessages();
-
       isApiCallProcess = false;
-      isDataInitialized = true;
+
       if (!_disposed) notifyListeners();
     }
   }
 
   Future<void> fetchAllMessages() async {
-    print('fetch all messages');
+    isApiCallProcess = true;
+    notifyListeners();
+
     RequestModel requestModel = RequestModel(
       method: accountType == AppStrings.user
           ? ApiMethods.getAllMessagesForUser
@@ -64,19 +63,21 @@ class ChatManagerProvider extends ChangeNotifier {
     try {
       AllMessagesModel value =
           await getAllMessagesApi(requestModel: requestModel);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         allMessages = MessageViewModel(messageModel: value);
         notifyListeners();
       } else {
-        print('Failed to fetch messages');
+        debugPrint('Failed to fetch messages');
       }
     } catch (e) {
-      print('Error fetching messages: $e');
+      debugPrint('Error fetching messages: $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
     }
   }
 
   Future<void> fetchUserMessages({required int id}) async {
-    print('Fetching user messages for id: $id');
     if (!isPolling) {
       isApiCallProcess = true;
       error = null;
@@ -93,23 +94,19 @@ class ChatManagerProvider extends ChangeNotifier {
       messageId: 0,
     );
 
-    print('Request token: ${getUserMessagesRequest.token}');
-
     try {
-      print('Sending request: ${getUserMessagesRequest.toJson()}');
       MessagesModel response = await getUserMessagesApi(
           getUserMessagesRequest: getUserMessagesRequest);
-      print('Received response: ${response.toJson()}');
 
-      if (response.status == 'Success') {
+      if (response.status == 'success') {
         messages = response.data ?? [];
       } else {
         error = 'Failed to fetch messages: ${response.status}';
-        print(error);
+        debugPrint(error);
       }
     } catch (e) {
       error = 'Error fetching messages: $e';
-      print(error);
+      debugPrint(error);
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -132,12 +129,12 @@ class ChatManagerProvider extends ChangeNotifier {
 
     try {
       final response = await baseApi(requestModel: requestModel);
-      if (response.status == 'Success') {
+      if (response.status == 'success') {
         fetchUserMessages(id: id);
         fetchAllMessages();
       }
     } catch (e) {
-      print('Error sending message: $e');
+      debugPrint('Error sending message: $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();

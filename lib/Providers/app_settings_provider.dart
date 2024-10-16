@@ -55,18 +55,13 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> _initializeOneSignal() async {
-    print('Initializing OneSignal...');
-
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     OneSignal.Debug.setAlertLevel(OSLogLevel.none);
 
     OneSignal.initialize(_oneSignalAppId);
     await OneSignal.Notifications.clearAll();
 
-    print('OneSignal initialized');
-
     OneSignal.User.pushSubscription.addObserver((state) {
-      print('Push subscription state changed');
       _osUserID = state.current.id;
       notifyListeners();
     });
@@ -84,7 +79,6 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     _osUserID = OneSignal.User.pushSubscription.id;
     await saveData(key: PrefKeys.onSignalID, value: _osUserID.toString());
 
-    print('OneSignal initialization completed');
     notifyListeners();
   }
 

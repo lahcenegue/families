@@ -163,7 +163,7 @@ class UserAccountScreen extends StatelessWidget {
                     _buildDivider(),
                   ],
                 )
-              : SizedBox(),
+              : const SizedBox(),
           userManager.isLoggedIn
               ? _buildLogoutTile(context)
               : _buildLoginTile(context),
@@ -192,8 +192,6 @@ class UserAccountScreen extends StatelessWidget {
   Widget _buildFavoritesTile(BuildContext context) {
     return ListTile(
       onTap: () async {
-        await Provider.of<UserManagerProvider>(context, listen: false)
-            .fetchMyFavoriteStores();
         await NavigationService.navigateTo(AppRoutes.myFavoriteScreen);
       },
       title: Text(
@@ -227,8 +225,8 @@ class UserAccountScreen extends StatelessWidget {
 
   Widget _buildChatTile(BuildContext context) {
     return ListTile(
-      onTap: () {
-        NavigationService.navigateTo(AppRoutes.userAllMessages);
+      onTap: () async {
+        await NavigationService.navigateTo(AppRoutes.userAllMessages);
       },
       title: Text(
         'الرسائل',

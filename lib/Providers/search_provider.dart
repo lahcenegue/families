@@ -58,7 +58,7 @@ class SearchProvider extends ChangeNotifier {
     try {
       SearchModel searchModel = await searchApi(searchRequest: requestModel);
 
-      if (searchModel.status == 'Success') {
+      if (searchModel.status == 'success') {
         searchViewModel = SearchViewModel(searchModel: searchModel);
       } else {
         searchViewModel = null;

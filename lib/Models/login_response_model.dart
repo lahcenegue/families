@@ -18,6 +18,7 @@ class LoginUserData {
   String? phoneNumber;
   String? userName;
   String? token;
+  String? otpToken;
   String? accountType;
   String? storeName;
   String? location;
@@ -25,6 +26,7 @@ class LoginUserData {
 
   LoginUserData({
     this.token,
+    this.otpToken,
     this.userName,
     this.phoneNumber,
     this.accountType,
@@ -38,6 +40,7 @@ class LoginUserData {
       phoneNumber: json['PhoneNumber'].toString(),
       userName: json['UserName'].toString(),
       token: json['Token'].toString(),
+      otpToken: json['OtpToken'],
       accountType: json['AccountType'].toString(),
       storeName: json['StoreName'].toString(),
       location: json['Location'].toString(),

@@ -61,7 +61,6 @@ class UserManagerProvider extends ChangeNotifier {
   DishItemViewModel? get selectedDish => _selectedDish;
 
   Future<void> initializeData() async {
-    print('initialize user manager');
     isApiCallProcess = true;
     errorMessage = null;
     isDataInitialized = false;
@@ -77,28 +76,28 @@ class UserManagerProvider extends ChangeNotifier {
         await getBannerImages();
         await fetchAllFamilyData();
 
-        if (token != null) {
-          await fetchMyOrders();
-        }
-
         isDataInitialized = true;
         errorMessage = null;
       } else {
         throw const SocketException('No Internet connection');
       }
     } on SocketException catch (_) {
-      print('No Internet connection');
       errorMessage =
-          'No Internet connection. Please check your network settings and try again.';
+          'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.';
       isDataInitialized = false;
     } catch (e) {
-      print('Error initializing data: $e');
-      errorMessage = 'Error loading data. Please try again.';
+      errorMessage = 'حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى.';
       isDataInitialized = false;
     } finally {
       isApiCallProcess = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _initializeToken() async {
+    prefs = await SharedPreferences.getInstance();
+    token = prefs!.getString(PrefKeys.token);
+    notifyListeners();
   }
 
   Future<bool> checkLoginStatus() async {
@@ -114,14 +113,14 @@ class UserManagerProvider extends ChangeNotifier {
         getBannerRequest: RequestModel(method: ApiMethods.getBannerMethod),
       );
 
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         bannerImages = value.data!;
         notifyListeners();
       } else {
-        print('Failed to fetch banner images');
+        debugPrint('Failed to fetch banner images');
       }
     } catch (e) {
-      print('Error fetching banner images: $e');
+      debugPrint('Error fetching banner images: $e');
     }
   }
 
@@ -143,7 +142,7 @@ class UserManagerProvider extends ChangeNotifier {
       StoreModel storeModel =
           await getFamilyStoresApi(getFamilyStoresRequest: requestModel);
 
-      if (storeModel.status == 'Success' && storeModel.data != null) {
+      if (storeModel.status == 'success' && storeModel.data != null) {
         final viewModel = FamiliesStoreViewModel(storeModel: storeModel);
 
         if (type == StoreType.popular) {
@@ -159,7 +158,7 @@ class UserManagerProvider extends ChangeNotifier {
       errorMessage =
           'No Internet connection. Please check your network settings and try again.';
     } catch (e) {
-      print(
+      debugPrint(
           'Error fetching ${type == StoreType.popular ? 'popular' : 'all'} family stores: $e');
       errorMessage = 'Error fetching data. Please try again.';
     } finally {
@@ -196,11 +195,11 @@ class UserManagerProvider extends ChangeNotifier {
     try {
       BaseModel value = await addToFavoriteApi(favoriteRequest: requestModel);
 
-      if (value.status == 'Success') {
-        print('Item added to favorites successfully');
+      if (value.status == 'success') {
+        debugPrint('Item added to favorites successfully');
         return null;
       } else {
-        print('Failed to add item to favorites');
+        debugPrint('Failed to add item to favorites');
         return value.errorCode;
       }
     } catch (e) {
@@ -223,15 +222,15 @@ class UserManagerProvider extends ChangeNotifier {
       DishReviewModel dishReviewModel =
           await getDishReviewsApi(request: requestModel);
 
-      if (dishReviewModel.status == 'Success') {
+      if (dishReviewModel.status == 'success') {
         dishReviewViewModel =
             DishReviewViewModel(dishReviewModel: dishReviewModel);
         notifyListeners();
       } else {
-        print('Failed to fetch dish reviews');
+        debugPrint('Failed to fetch dish reviews');
       }
     } catch (e) {
-      print('Error fetching dish reviews: $e');
+      debugPrint('Error fetching dish reviews: $e');
     }
   }
 
@@ -249,8 +248,6 @@ class UserManagerProvider extends ChangeNotifier {
   }
 
   Future<void> fetchMyFavoriteStores() async {
-    print('fetch favorite stores ================');
-    print(token);
     RequestModel requestModel = RequestModel(
       method: ApiMethods.getFavoriteStores,
       token: token,
@@ -263,16 +260,16 @@ class UserManagerProvider extends ChangeNotifier {
       StoreModel storeModel =
           await getFamilyStoresApi(getFamilyStoresRequest: requestModel);
 
-      if (storeModel.status == 'Success') {
+      if (storeModel.status == 'success') {
         final viewModel = FamiliesStoreViewModel(storeModel: storeModel);
         favoriteFamiliesViewModel = viewModel;
 
         notifyListeners();
       } else {
-        print('Failed to fetch favorite stores: ${storeModel.status}');
+        debugPrint('Failed to fetch favorite stores: ${storeModel.status}');
       }
     } catch (e) {
-      print('error fetch favorite list $e');
+      debugPrint('error fetch favorite list $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -280,23 +277,39 @@ class UserManagerProvider extends ChangeNotifier {
   }
 
   Future<void> fetchMyOrders() async {
-    print('fetch my orders');
+    isApiCallProcess = true;
+    notifyListeners();
+
+    if (token == null) {
+      debugPrint('Token is null. Attempting to reinitialize...');
+      await _initializeToken();
+      if (token == null) {
+        debugPrint('Failed to initialize token. Cannot fetch orders.');
+        return;
+      }
+    }
+
     RequestModel requestModel = RequestModel(
       method: ApiMethods.getMyOrders,
       token: token,
     );
 
     try {
+      debugPrint('Fetching orders with token: $token');
       MyOrdersModel value =
           await getMyOrdersApi(getMyOredesRequest: requestModel);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         myOrders = MyOrdersViewModel(responseModel: value);
-        notifyListeners();
+        debugPrint(
+            'Orders fetched successfully. Is empty: ${myOrders!.isEmpty}');
       } else {
-        print('Failed to fetch my ordres');
+        debugPrint('Failed to fetch my ordres');
       }
     } catch (e) {
-      print('Error fetching my orders: $e');
+      debugPrint('Error fetching my orders: $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
     }
   }
 
@@ -313,7 +326,7 @@ class UserManagerProvider extends ChangeNotifier {
 
       BaseModel value = await baseApi(requestModel: requestModel);
 
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         message = 'تم استلام طلبك بنجاح';
         return message;
       } else {
@@ -321,7 +334,7 @@ class UserManagerProvider extends ChangeNotifier {
         return message;
       }
     } catch (e) {
-      print('error fulfill order $e');
+      debugPrint('error fulfill order $e');
     } finally {
       isApiCallProcess = false;
       notifyListeners();
@@ -333,7 +346,6 @@ class UserManagerProvider extends ChangeNotifier {
     required int itemId,
     required int rating,
   }) async {
-    print('+++++ submitReview function');
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -349,9 +361,8 @@ class UserManagerProvider extends ChangeNotifier {
     try {
       ReviewModel reviewModel =
           await submitReviewApi(reviewRequest: requestModel);
-      if (reviewModel.status == 'Success') {
+      if (reviewModel.status == 'success') {
         reviewViewModel = ReviewViewModel(model: reviewModel);
-        print('Review submitted successfully');
       } else {
         errorMessage = 'Failed to submit review';
       }
@@ -367,22 +378,4 @@ class UserManagerProvider extends ChangeNotifier {
     reviewText = text;
     notifyListeners();
   }
-
-  // Future<void> reset() async {
-  //   isApiCallProcess = false;
-  //   isDataInitialized = false;
-  //   isLoading = false;
-  //   isLoggedIn = false;
-  //   errorMessage = null;
-  //   bannerImages = null;
-  //   popularFamiliesViewModel = null;
-  //   allFamiliesViewModel = null;
-  //   dishReviewViewModel = null;
-  //   selectedRating = 0;
-  //   _selectedStore = null;
-  //   _selectedDish = null;
-  //   token = null;
-  //   notifyListeners();
-  //   initializeData();
-  // }
 }

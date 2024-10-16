@@ -12,7 +12,7 @@ Future<BaseModel> baseApi({
 
   try {
     Uri url = Uri.parse(AppLinks.api);
-
+    print(url);
     http.Response response = await http.post(
       url,
       headers: <String, String>{
@@ -20,8 +20,11 @@ Future<BaseModel> baseApi({
       },
       body: convert.jsonEncode(requestModel.toJson()),
     );
-
+    print('========> sendOtpForCreateAccount');
+    print(convert.jsonEncode(requestModel.toJson()));
     var body = convert.json.decode(response.body);
+    print(body);
+    print('========> sendOtpForCreateAccount');
 
     baseResponse = BaseModel.fromJson(body);
 

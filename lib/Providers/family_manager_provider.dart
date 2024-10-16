@@ -80,14 +80,14 @@ class FamilyManagerProvider extends ChangeNotifier {
     try {
       MyOrdersModel value =
           await getMyOrdersApi(getMyOredesRequest: requestModel);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         myOrders = MyOrdersViewModel(responseModel: value);
         notifyListeners();
       } else {
-        print('Failed to fetch my ordres');
+        debugPrint('Failed to fetch my ordres');
       }
     } catch (e) {
-      print('Error fetching my orders: $e');
+      debugPrint('Error fetching my orders: $e');
     }
   }
 
@@ -99,14 +99,14 @@ class FamilyManagerProvider extends ChangeNotifier {
 
     try {
       MyDishsModel value = await getMyDishsApi(getItemsRequest: requestModel);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         myDishs = MyDishsViewmodel(myDishsModel: value);
         notifyListeners();
       } else {
-        print('Failed to fetch my dhishs');
+        debugPrint('Failed to fetch my dhishs');
       }
     } catch (e) {
-      print('Error fetching my dishs: $e');
+      debugPrint('Error fetching my dishs: $e');
     }
   }
 
@@ -147,7 +147,7 @@ class FamilyManagerProvider extends ChangeNotifier {
       UploadImageModel response =
           await uploadImageApi(uploadImageRequest: uploadImageRequest);
 
-      if (response.status == 'Success') {
+      if (response.status == 'success') {
         uploadedImages.add(response.data!.image!);
         notifyListeners();
       } else {
@@ -180,7 +180,7 @@ class FamilyManagerProvider extends ChangeNotifier {
         AddDishModel response =
             await addDishApi(addDishRequest: addDishRequest);
 
-        if (response.status == 'Success') {
+        if (response.status == 'success') {
           await fetchMyDishs();
           clearDishData();
           NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);
@@ -217,7 +217,7 @@ class FamilyManagerProvider extends ChangeNotifier {
         AddDishModel response =
             await addDishApi(addDishRequest: addDishRequest);
 
-        if (response.status == 'Success') {
+        if (response.status == 'success') {
           await fetchMyDishs();
           clearDishData();
           NavigationService.navigateToAndReplace(AppRoutes.familyHomeScreen);

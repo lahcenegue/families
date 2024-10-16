@@ -119,7 +119,10 @@ class FamilyMainScreen extends StatelessWidget {
       FamilyManagerProvider familyManager, ChatManagerProvider chatManager) {
     return TabBarView(
       children: [
-        _buildOrdersContent(context, familyManager, chatManager),
+        RefreshIndicator(
+          onRefresh: () => familyManager.fetchMyOrders(),
+          child: _buildOrdersContent(context, familyManager, chatManager),
+        ),
         const AllMessagesScreen(),
       ],
     );
@@ -130,8 +133,7 @@ class FamilyMainScreen extends StatelessWidget {
     FamilyManagerProvider familyManager,
     ChatManagerProvider chatManager,
   ) {
-    if (familyManager.myOrders == null ||
-        familyManager.myOrders!.ordres.isEmpty) {
+    if (familyManager.myOrders == null || familyManager.myOrders!.isEmpty) {
       return Center(
         child: Text(
           'لا توجد طلبات',
@@ -141,15 +143,15 @@ class FamilyMainScreen extends StatelessWidget {
     }
     return ListView.separated(
       padding: EdgeInsets.all(AppSize.widthSize(20, context)),
-      itemCount: familyManager.myOrders?.ordres.length ?? 0,
+      itemCount: familyManager.myOrders!.customerOrders.length,
       separatorBuilder: (context, index) =>
           SizedBox(height: AppSize.heightSize(20, context)),
       itemBuilder: (context, index) {
-        String userName = familyManager
-            .myOrders!.storeName[index]; // the key of the map in the response
-        List<ItemViewModel> userOrders =
-            familyManager.myOrders!.ordres[userName]!;
-        return _buildOrderCard(context, userName, userOrders, chatManager);
+        CustomerOrdersViewModel customerOrders =
+            familyManager.myOrders!.customerOrders[index];
+
+        return _buildOrderCard(context, customerOrders.customerName,
+            customerOrders.orders, chatManager);
       },
     );
   }
@@ -187,8 +189,6 @@ class FamilyMainScreen extends StatelessWidget {
                 height: AppSize.heightSize(30, context),
                 child: OutlinedButton(
                   onPressed: () async {
-                    print(chatManager.token);
-                    //chatManager.fetchUserMessages(id: userOrders.first.userId!);
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ChatScreen(
@@ -224,7 +224,6 @@ class FamilyMainScreen extends StatelessWidget {
           (AppSize.heightSize(100, context) + AppSize.heightSize(20, context)),
       child: ListView.separated(
         scrollDirection: Axis.vertical,
-        reverse: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: items.length,
         separatorBuilder: (context, index) =>
@@ -297,7 +296,7 @@ class FamilyMainScreen extends StatelessWidget {
                     .copyWith(color: Colors.black),
               ),
               Text(
-                item.date!,
+                item.formattedDate,
                 style: AppStyles.styleRegular(10, context)
                     .copyWith(color: Colors.black),
               )

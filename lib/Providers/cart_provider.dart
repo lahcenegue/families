@@ -55,7 +55,7 @@ class CartProvider extends ChangeNotifier {
         itemQuantities[item.itemId ?? 0] = item.amount ?? 1;
       }
 
-      if (cartModel.status == 'Success') {
+      if (cartModel.status == 'success') {
         cartViewModel = CartViewModel(cartModel: cartModel);
         isApiCallProcess = false;
         notifyListeners();
@@ -101,7 +101,7 @@ class CartProvider extends ChangeNotifier {
     );
     try {
       BaseModel value = await baseApi(requestModel: requestModel);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         await getCartItems();
         addTocartProcess = false;
         notifyListeners();
@@ -131,7 +131,7 @@ class CartProvider extends ChangeNotifier {
     try {
       BaseModel value = await baseApi(requestModel: requestModel);
 
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         cartViewModel?.items
             .removeWhere((item) => item.cartItemId == cartItemId);
         notifyListeners();

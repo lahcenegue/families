@@ -12,8 +12,21 @@ import '../../../View_models/my_ordres_viewmodel.dart';
 import '../../Both/chat_screen.dart';
 import 'review_screen.dart';
 
-class MyOredresScreen extends StatelessWidget {
+class MyOredresScreen extends StatefulWidget {
   const MyOredresScreen({super.key});
+
+  @override
+  State<MyOredresScreen> createState() => _MyOredresScreenState();
+}
+
+class _MyOredresScreenState extends State<MyOredresScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserManagerProvider>(context, listen: false).fetchMyOrders();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +64,16 @@ class MyOredresScreen extends StatelessWidget {
     UserManagerProvider userManager,
     ChatManagerProvider chatManager,
   ) {
-    if (userManager.myOrders == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
+    if (userManager.isApiCallProcess) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (userManager.myOrders == null) {
+      return Center(
+        child: Text(
+          'لا توجد بيانات متاحة',
+          style: AppStyles.styleBold(16, context),
+        ),
       );
-    } else if (userManager.myOrders!.ordres.isEmpty) {
+    } else if (userManager.myOrders!.customerOrders.isEmpty) {
       return Center(
         child: Text(
           'لا توجد طلبات',
@@ -65,15 +83,14 @@ class MyOredresScreen extends StatelessWidget {
     }
     return ListView.separated(
       padding: EdgeInsets.all(AppSize.widthSize(20, context)),
-      itemCount: userManager.myOrders?.ordres.length ?? 0,
+      itemCount: userManager.myOrders!.customerOrders.length,
       separatorBuilder: (context, index) =>
           SizedBox(height: AppSize.heightSize(20, context)),
       itemBuilder: (context, index) {
-        String storeName = userManager
-            .myOrders!.storeName[index]; // the key of the map in the response
-        List<ItemViewModel> storeOrders =
-            userManager.myOrders!.ordres[storeName]!;
-        return _buildOrderCard(context, storeName, storeOrders, chatManager);
+        CustomerOrdersViewModel customerOrders =
+            userManager.myOrders!.customerOrders[index];
+        return _buildOrderCard(context, customerOrders.customerName,
+            customerOrders.orders, chatManager);
       },
     );
   }
@@ -141,18 +158,9 @@ class MyOredresScreen extends StatelessWidget {
     BuildContext context,
     List<ItemViewModel> items,
   ) {
-    return SizedBox(
-      height: items.length *
-          (AppSize.heightSize(100, context) + AppSize.heightSize(20, context)),
-      child: ListView.separated(
-        scrollDirection: Axis.vertical,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: items.length,
-        separatorBuilder: (context, index) =>
-            SizedBox(height: AppSize.widthSize(20, context)),
-        itemBuilder: (context, index) =>
-            _buildOrderItemCard(context, items[index]),
-      ),
+    return Column(
+      children:
+          items.map((item) => _buildOrderItemCard(context, item)).toList(),
     );
   }
 
@@ -194,12 +202,12 @@ class MyOredresScreen extends StatelessWidget {
   }
 
   Widget _buildItemDetails(BuildContext context, ItemViewModel item) {
-    return InkWell(
+    return Expanded(
       child: Container(
-        width: AppSize.width(context) - AppSize.widthSize(180, context),
-        padding: EdgeInsets.only(
-          left: AppSize.widthSize(5, context),
-          bottom: AppSize.widthSize(5, context),
+        // width: AppSize.width(context) - AppSize.widthSize(180, context),
+        padding: EdgeInsets.symmetric(
+          vertical: AppSize.widthSize(5, context),
+          horizontal: AppSize.widthSize(5, context),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,8 +216,8 @@ class MyOredresScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: AppSize.widthSize(130, context),
+                Expanded(
+                  //width: AppSize.widthSize(130, context),
                   child: Text(
                     item.itemName!,
                     overflow: TextOverflow.ellipsis,
@@ -250,7 +258,7 @@ class MyOredresScreen extends StatelessWidget {
                       .copyWith(color: Colors.black),
                 ),
                 Text(
-                  item.date!,
+                  item.formattedDate,
                   style: AppStyles.styleRegular(10, context)
                       .copyWith(color: Colors.black),
                 )
@@ -277,95 +285,7 @@ class MyOredresScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: AppSize.widthSize(90, context),
-                  height: AppSize.heightSize(30, context),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      item.status == 2
-                          ? null
-                          : showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'تأكيد الاستلام',
-                                    style: AppStyles.styleBold(16, context)
-                                        .copyWith(color: Colors.black),
-                                  ),
-                                  content: Text(
-                                    'هل تم إستلام طلبك بنجاح؟',
-                                    style: AppStyles.styleRegular(14, context)
-                                        .copyWith(color: Colors.black),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(
-                                        'ليس بعد',
-                                        style: AppStyles.styleBold(14, context)
-                                            .copyWith(color: Colors.black),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(
-                                        'تأكيد الاستلام',
-                                        style:
-                                            AppStyles.styleRegular(12, context)
-                                                .copyWith(color: Colors.black),
-                                      ),
-                                      onPressed: () async {
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (BuildContext context) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          },
-                                        );
-
-                                        String? result = await Provider.of<
-                                                    UserManagerProvider>(
-                                                context,
-                                                listen: false)
-                                            .fulfillOrder(item.cartItemId!);
-
-                                        if (context.mounted) {
-                                          Navigator.of(context).pop();
-
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(result ??
-                                                  'An error occurred'),
-                                              duration:
-                                                  const Duration(seconds: 3),
-                                            ),
-                                          );
-
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: item.status == 2
-                          ? Colors.grey
-                          : AppColors.primaryColor,
-                    ),
-                    child: Text(
-                      'استلام',
-                      style: AppStyles.styleBold(10, context),
-                    ),
-                  ),
-                ),
+                _buildReceiveButton(context, item),
               ],
             ),
           ],
@@ -373,4 +293,180 @@ class MyOredresScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildReceiveButton(BuildContext context, ItemViewModel item) {
+    return SizedBox(
+      width: AppSize.widthSize(90, context),
+      height: AppSize.heightSize(30, context),
+      child: ElevatedButton(
+        onPressed: item.status == 2
+            ? null
+            : () => _showReceiveConfirmDialog(context, item),
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              item.status == 2 ? Colors.grey : AppColors.primaryColor,
+        ),
+        child: Text(
+          'استلام',
+          style: AppStyles.styleBold(10, context),
+        ),
+      ),
+    );
+  }
+
+  void _showReceiveConfirmDialog(BuildContext context, ItemViewModel item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'تأكيد الاستلام',
+            style:
+                AppStyles.styleBold(16, context).copyWith(color: Colors.black),
+          ),
+          content: Text(
+            'هل تم إستلام طلبك بنجاح؟',
+            style: AppStyles.styleRegular(14, context)
+                .copyWith(color: Colors.black),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'ليس بعد',
+                style: AppStyles.styleBold(14, context)
+                    .copyWith(color: Colors.black),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(
+                'تأكيد الاستلام',
+                style: AppStyles.styleRegular(12, context)
+                    .copyWith(color: Colors.black),
+              ),
+              onPressed: () => _confirmReceive(context, item),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmReceive(BuildContext context, ItemViewModel item) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    String? result =
+        await Provider.of<UserManagerProvider>(context, listen: false)
+            .fulfillOrder(item.cartItemId!);
+
+    if (context.mounted) {
+      Navigator.of(context).pop(); // Close loading dialog
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result ?? 'An error occurred'),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+
+      Navigator.of(context).pop(); // Close confirm dialog
+    }
+  }
 }
+
+
+  //  SizedBox(
+  //                 width: AppSize.widthSize(90, context),
+  //                 height: AppSize.heightSize(30, context),
+  //                 child: ElevatedButton(
+  //                   onPressed: () {
+  //                     item.status == 2
+  //                         ? null
+  //                         : showDialog(
+  //                             context: context,
+  //                             builder: (BuildContext context) {
+  //                               return AlertDialog(
+  //                                 title: Text(
+  //                                   'تأكيد الاستلام',
+  //                                   style: AppStyles.styleBold(16, context)
+  //                                       .copyWith(color: Colors.black),
+  //                                 ),
+  //                                 content: Text(
+  //                                   'هل تم إستلام طلبك بنجاح؟',
+  //                                   style: AppStyles.styleRegular(14, context)
+  //                                       .copyWith(color: Colors.black),
+  //                                 ),
+  //                                 actions: [
+  //                                   TextButton(
+  //                                     child: Text(
+  //                                       'ليس بعد',
+  //                                       style: AppStyles.styleBold(14, context)
+  //                                           .copyWith(color: Colors.black),
+  //                                     ),
+  //                                     onPressed: () {
+  //                                       Navigator.of(context).pop();
+  //                                     },
+  //                                   ),
+  //                                   TextButton(
+  //                                     child: Text(
+  //                                       'تأكيد الاستلام',
+  //                                       style:
+  //                                           AppStyles.styleRegular(12, context)
+  //                                               .copyWith(color: Colors.black),
+  //                                     ),
+  //                                     onPressed: () async {
+  //                                       showDialog(
+  //                                         context: context,
+  //                                         barrierDismissible: false,
+  //                                         builder: (BuildContext context) {
+  //                                           return const Center(
+  //                                               child:
+  //                                                   CircularProgressIndicator());
+  //                                         },
+  //                                       );
+
+  //                                       String? result = await Provider.of<
+  //                                                   UserManagerProvider>(
+  //                                               context,
+  //                                               listen: false)
+  //                                           .fulfillOrder(item.cartItemId!);
+
+  //                                       if (context.mounted) {
+  //                                         Navigator.of(context).pop();
+
+  //                                         ScaffoldMessenger.of(context)
+  //                                             .showSnackBar(
+  //                                           SnackBar(
+  //                                             content: Text(result ??
+  //                                                 'An error occurred'),
+  //                                             duration:
+  //                                                 const Duration(seconds: 3),
+  //                                           ),
+  //                                         );
+
+  //                                         Navigator.of(context).pop();
+  //                                       }
+  //                                     },
+  //                                   ),
+  //                                 ],
+  //                               );
+  //                             },
+  //                           );
+  //                   },
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: item.status == 2
+  //                         ? Colors.grey
+  //                         : AppColors.primaryColor,
+  //                   ),
+  //                   child: Text(
+  //                     'استلام',
+  //                     style: AppStyles.styleBold(10, context),
+  //                   ),
+  //                 ),
+  //               ),

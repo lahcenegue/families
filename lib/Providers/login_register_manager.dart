@@ -55,8 +55,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
   String storeClassification = 'حلويات';
   String? checkPassrowd;
 
-  //
-
   LoginAndRegisterManager() {
     _initPrefs();
   }
@@ -90,7 +88,15 @@ class LoginAndRegisterManager extends ChangeNotifier {
           await loginApi(loginRequestModel: loginRequestModel);
 
       if (value.status == 'success') {
-        await _handleSuccessfulLogin(value);
+        if (value.userData!.otpToken != null) {
+          otpToken = value.userData!.otpToken;
+          await _setApiCallProcess(false);
+          startTimer();
+          await sendOtpForCreateAccount();
+          await NavigationService.navigateTo(AppRoutes.otpScreen);
+        } else if (value.userData!.token != null) {
+          await _handleSuccessfulLogin(value);
+        }
         return null;
       } else if (value.status == 'Unverified') {
         NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
@@ -121,11 +127,11 @@ class LoginAndRegisterManager extends ChangeNotifier {
           await registerApi(registerRequestModel: registerRequestModel);
 
       if (value.status == 'success') {
+        await _setApiCallProcess(false);
         otpToken = value.userData!.otpToken;
-
-        await NavigationService.navigateTo(AppRoutes.otpScreen);
         startTimer();
         await sendOtpForCreateAccount();
+        await NavigationService.navigateTo(AppRoutes.otpScreen);
         return null;
       } else {
         return value.errorCode;
@@ -153,8 +159,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
       await _prefs!.remove(PrefKeys.userName);
 
       await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
-    } else {
-      print('Error: SharedPreferences _prefs is null.');
     }
   }
 
@@ -166,7 +170,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
       BaseModel value = await baseApi(requestModel: deleteAccountModel);
 
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         deleteAccountModel = RequestModel();
         await _prefs!.remove(PrefKeys.token);
         await _prefs!.remove(
@@ -188,7 +192,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
     await _setApiCallProcess(true);
 
     try {
-      otpRequestModel.method = ApiMethods.sedOtp;
+      otpRequestModel.method = ApiMethods.sendOtp;
       otpRequestModel.otpToken = otpToken;
 
       BaseModel value = await baseApi(requestModel: otpRequestModel);
@@ -218,7 +222,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
       LoginResponseModel value =
           await loginApi(loginRequestModel: otpRequestModel);
 
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         await _handleSuccessfulLogin(value);
         NavigationService.navigateToAndReplace(AppRoutes.congratulationsScreen);
         return null;
@@ -380,7 +384,6 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<void> saveUserData(dynamic value) async {
-    print('save data after login ${value.userData!.token}');
     await _prefs!.setString(PrefKeys.token, value.userData.token!);
     await _prefs!.setString(PrefKeys.profilImage, value.userData.image);
     await _prefs!.setString(PrefKeys.phoneNumber, value.userData.phoneNumber!);

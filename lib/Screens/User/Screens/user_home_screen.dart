@@ -26,7 +26,9 @@ class UserHomeScreen extends StatelessWidget {
         final userManager = UserManagerProvider();
 
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await userManager.fetchMyFavoriteStores();
+          if (userManager.token != null) {
+            await userManager.fetchMyFavoriteStores();
+          }
         });
 
         return userManager;
@@ -83,7 +85,8 @@ class UserHomeScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSize.heightSize(40, context)),
                         Text(
-                          'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
+                          userManager.errorMessage ??
+                              'خطأ في تحميل البيانات. يرجى التحقق من اتصال الإنترنت الخاص بك.',
                           style: AppStyles.styleMedium(16, context),
                           textAlign: TextAlign.center,
                         ),

@@ -29,13 +29,16 @@ class _MyFavoriteStoresState extends State<MyFavoriteStores> {
       builder: (context, userManager, _) {
         return Scaffold(
           appBar: _buildAppBar(context),
-          body: Padding(
-            padding: EdgeInsets.only(
-              top: AppSize.widthSize(40, context),
-              left: AppSize.widthSize(25, context),
-              right: AppSize.widthSize(25, context),
+          body: RefreshIndicator(
+            onRefresh: userManager.fetchMyFavoriteStores,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: AppSize.widthSize(40, context),
+                left: AppSize.widthSize(25, context),
+                right: AppSize.widthSize(25, context),
+              ),
+              child: _buildContent(context, userManager),
             ),
-            child: _buildContent(context, userManager),
           ),
         );
       },
@@ -45,11 +48,14 @@ class _MyFavoriteStoresState extends State<MyFavoriteStores> {
   Widget _buildContent(BuildContext context, UserManagerProvider userManager) {
     if (userManager.isApiCallProcess) {
       return const Center(child: CircularProgressIndicator());
-    } else if (userManager.errorMessage != null) {
-      return Center(child: Text(userManager.errorMessage!));
     } else if (userManager.favoriteFamiliesViewModel == null ||
         userManager.favoriteFamiliesViewModel!.stores.isEmpty) {
-      return const Center(child: Text('لم يتم العثور على المتاجر المفضلة.'));
+      return Center(
+        child: Text(
+          'لم يتم العثور على المتاجر المفضلة.',
+          style: AppStyles.styleBold(16, context),
+        ),
+      );
     } else {
       return _buildStoreList(context, userManager);
     }
@@ -78,10 +84,9 @@ class _MyFavoriteStoresState extends State<MyFavoriteStores> {
           addToFavorite: () async {
             int? result =
                 await userManager.addToFavorite(storeId: store.storeId!);
-            safeShowErrorMessage(context, result);
-            // await userManager
-            //     .addToFavorite(storeId: store.storeId!)
-            //     .then((value) => customSnackBar(context, value));
+            if (context.mounted) {
+              safeShowErrorMessage(context, result);
+            }
           },
         );
       },

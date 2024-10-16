@@ -11,10 +11,11 @@ class MyOrdersModel extends BaseModel {
   });
 
   factory MyOrdersModel.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>?;
     return MyOrdersModel(
       status: json['status'].toString(),
       errorCode: json['error_code'] ?? -1,
-      data: (json['data'] as Map<String, dynamic>?)?.map((key, value) {
+      data: data?.map((key, value) {
         return MapEntry(
           key,
           (value as List<dynamic>)
