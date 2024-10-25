@@ -13,6 +13,7 @@ import '../../../View_models/families_store_viewmodel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../Screens/store_view.dart';
+import 'store_status_indicator.dart';
 
 class PopularStoreBox extends StatelessWidget {
   final StoreItemViewModel store;
@@ -36,16 +37,26 @@ class PopularStoreBox extends StatelessWidget {
                     topLeft: Radius.circular(AppSize.widthSize(20, context)),
                     topRight: Radius.circular(AppSize.widthSize(20, context)),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: '${AppLinks.url}${store.storeImage}',
-                    width: AppSize.widthSize(220, context),
-                    height: AppSize.heightSize(130, context),
-                    fit: BoxFit.fitHeight,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: '${AppLinks.url}${store.storeImage}',
+                        width: AppSize.widthSize(220, context),
+                        height: AppSize.heightSize(130, context),
+                        fit: BoxFit.fitHeight,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                      if (!store.isActive)
+                        Container(
+                          width: AppSize.widthSize(220, context),
+                          height: AppSize.heightSize(130, context),
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -61,6 +72,12 @@ class PopularStoreBox extends StatelessWidget {
               bottom: 0,
               child: _buildBottomPanel(context),
             ),
+            if (!store.isActive)
+              Positioned(
+                top: AppSize.heightSize(50, context),
+                left: AppSize.widthSize(60, context),
+                child: StoreStatusIndicator(isActive: store.isActive),
+              ),
           ],
         );
       },

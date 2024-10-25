@@ -26,6 +26,7 @@ class StoreItemViewModel {
   double? get deliveryCost => _store.deliveryCost;
   String? get storeRating => _store.storeRating;
   bool? get favorite => _store.isFavorite ?? false;
+  bool get isActive => _store.active == 1;
 
   List<DishItemViewModel> get dishs =>
       _store.dishs!.map((dish) => DishItemViewModel(dish: dish)).toList();

@@ -32,6 +32,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   bool isVisible2 = false;
   bool isAgree = false;
 
+  bool isStoreActive = true;
   String accountType = AppStrings.user;
   OTPType otpType = OTPType.confirm;
   String? otpToken;
@@ -70,6 +71,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
   Future<void> _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
+    isStoreActive = _prefs!.getBool(PrefKeys.isStoreActive) ?? true;
     notifyListeners();
   }
 
@@ -150,13 +152,12 @@ class LoginAndRegisterManager extends ChangeNotifier {
 
     if (_prefs != null) {
       await _prefs!.remove(PrefKeys.token);
-      await _prefs!.remove(
-        PrefKeys.profilImage,
-      );
+      await _prefs!.remove(PrefKeys.profilImage);
       await _prefs!.remove(PrefKeys.phoneNumber);
       await _prefs!.remove(PrefKeys.storeName);
       await _prefs!.remove(PrefKeys.storeLocation);
       await _prefs!.remove(PrefKeys.userName);
+      await _prefs!.remove(PrefKeys.isStoreActive);
 
       await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);
     }
@@ -427,6 +428,14 @@ class LoginAndRegisterManager extends ChangeNotifier {
   Future<void> _handleSuccessfulLogin(LoginResponseModel value) async {
     isApiCallProcess = false;
     loginRequestModel = RequestModel();
+    if (value.userData!.active == 1) {
+      _prefs!.setBool(PrefKeys.isStoreActive, true);
+    } else {
+      _prefs!.setBool(PrefKeys.isStoreActive, false);
+    }
+
+    isStoreActive = _prefs!.getBool(PrefKeys.isStoreActive) ?? true;
+
     notifyListeners();
     await saveUserData(value);
     if (accountType == AppStrings.user) {

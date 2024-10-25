@@ -30,6 +30,7 @@ class Store {
   double? deliveryCost;
   String? storeRating;
   bool? isFavorite;
+  int? active;
   List<DishModel>? dishs;
 
   Store({
@@ -41,6 +42,7 @@ class Store {
     this.deliveryCost,
     this.storeRating,
     this.isFavorite,
+    this.active,
     this.dishs,
   });
 
@@ -54,6 +56,7 @@ class Store {
       deliveryCost: json['DeliveryCost'].toDouble(),
       storeRating: json['StoreRating'].toString(),
       isFavorite: json['isFavourite'],
+      active: json['active'],
       dishs: (json['Items'] as List<dynamic>)
           .map((item) => DishModel.fromJson(item as Map<String, dynamic>))
           .toList(),

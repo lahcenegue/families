@@ -14,6 +14,8 @@ import '../Screens/store_view.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'store_status_indicator.dart';
+
 class AllStoreBox extends StatelessWidget {
   final StoreItemViewModel store;
   final Function() addToFavorite;
@@ -42,6 +44,12 @@ class AllStoreBox extends StatelessWidget {
               left: 0,
               child: _buildBottomPanel(context),
             ),
+            if (!store.isActive)
+              Positioned(
+                top: AppSize.heightSize(60, context),
+                left: AppSize.widthSize(20, context),
+                child: StoreStatusIndicator(isActive: store.isActive),
+              ),
           ],
         );
       },
@@ -56,15 +64,26 @@ class AllStoreBox extends StatelessWidget {
             topLeft: Radius.circular(AppSize.widthSize(20, context)),
             topRight: Radius.circular(AppSize.widthSize(20, context)),
           ),
-          child: CachedNetworkImage(
-            imageUrl: '${AppLinks.url}${store.storeImage}',
-            width: AppSize.width(context),
-            height: AppSize.heightSize(150, context),
-            fit: BoxFit.fitHeight,
-            progressIndicatorBuilder: (context, url, progress) => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          child: Stack(
+            children: [
+              CachedNetworkImage(
+                imageUrl: '${AppLinks.url}${store.storeImage}',
+                width: AppSize.width(context),
+                height: AppSize.heightSize(150, context),
+                fit: BoxFit.fitHeight,
+                progressIndicatorBuilder: (context, url, progress) =>
+                    const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+              if (!store.isActive)
+                Container(
+                  width: AppSize.width(context),
+                  height: AppSize.heightSize(150, context),
+                  color: Colors.black.withOpacity(0.3),
+                ),
+            ],
           ),
         ),
         SizedBox(

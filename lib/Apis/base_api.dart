@@ -27,6 +27,6 @@ Future<BaseModel> baseApi({
 
     return baseResponse;
   } catch (e) {
-    throw Exception('Failed to add dish: $e');
+    throw Exception('Failed : $e');
   }
 }

@@ -52,6 +52,9 @@ class FamilyAccountScreen extends StatelessWidget {
                       SizedBox(height: AppSize.heightSize(30, context)),
                       _buildStoreStats(context, appSettings, familyManager),
                       SizedBox(height: AppSize.heightSize(30, context)),
+                      _buildStoreStatusToggle(
+                          context, appSettings, familyManager),
+                      SizedBox(height: AppSize.heightSize(20, context)),
                       _buildSettingsCard(
                           context, appSettings, deleteAccountManager),
                     ],
@@ -145,6 +148,40 @@ class FamilyAccountScreen extends StatelessWidget {
         children: [
           Text(label, style: AppStyles.styleBold(12, context)),
           Text(value, style: AppStyles.styleBold(14, context)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStoreStatusToggle(
+    BuildContext context,
+    AppSettingsProvider appSettings,
+    FamilyManagerProvider familyManager,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(AppSize.widthSize(16, context)),
+      decoration: BoxDecoration(
+        color: appSettings.isDark
+            ? AppColors.darkContainerBackground
+            : Colors.white,
+        borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
+        border: Border.all(color: const Color(0xff9DB2CE).withOpacity(0.4)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'استقبال الطلبات',
+            style: AppStyles.styleBold(14, context),
+          ),
+          Switch(
+            value: familyManager.isStoreActive,
+            onChanged: (value) async {
+              await familyManager.toggleStoreStatus();
+            },
+            activeColor: Colors.green,
+            inactiveThumbColor: Colors.red,
+          ),
         ],
       ),
     );

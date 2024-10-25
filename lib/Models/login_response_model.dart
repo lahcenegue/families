@@ -23,6 +23,7 @@ class LoginUserData {
   String? storeName;
   String? location;
   String? image;
+  int? active;
 
   LoginUserData({
     this.token,
@@ -33,6 +34,7 @@ class LoginUserData {
     this.storeName,
     this.location,
     this.image,
+    this.active,
   });
 
   factory LoginUserData.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class LoginUserData {
       storeName: json['StoreName'].toString(),
       location: json['Location'].toString(),
       image: json['Image'].toString(),
+      active: json['active'],
     );
   }
 }

@@ -13,6 +13,7 @@ class PrefKeys {
   static String accountType = 'accountType';
   static String searchHistory = 'searchHistory';
   static String onSignalID = 'oneSignalID';
+  static  String isStoreActive = 'is_store_active';
 
   //User data keys
   static String phoneNumber = 'phoneNumber';

@@ -34,6 +34,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
   String? token;
 
+  bool isStoreActive = true;
   MyOrdersViewModel? myOrders;
   MyDishsViewmodel? myDishs;
   StoreStatsViewModel? storeStatsViewModel;
@@ -60,6 +61,7 @@ class FamilyManagerProvider extends ChangeNotifier {
 
       prefs = await SharedPreferences.getInstance();
       token = prefs!.getString(PrefKeys.token);
+      isStoreActive = prefs!.getBool(PrefKeys.isStoreActive) ?? true;
 
       await fetchMyOrders();
       await fetchMyDishs();
@@ -309,5 +311,32 @@ class FamilyManagerProvider extends ChangeNotifier {
       debugPrint('error fulfill order $e');
     }
     return message;
+  }
+
+   Future<void> toggleStoreStatus() async {
+    isApiCallProcess = true;
+    notifyListeners();
+
+    try {
+      RequestModel requestModel = RequestModel(
+        method: isStoreActive ? ApiMethods.stopStore : ApiMethods.activateStore,
+        token: token,
+      );
+
+      BaseModel response = await baseApi(requestModel: requestModel);
+
+      if (response.status == 'success') {
+        isStoreActive = !isStoreActive;
+        await prefs!.setBool(PrefKeys.isStoreActive, isStoreActive);
+        notifyListeners();
+      } else {
+        debugPrint('Failed to toggle store status: ${response.errorCode}');
+      }
+    } catch (e) {
+      debugPrint('Error toggling store status: $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
+    }
   }
 }

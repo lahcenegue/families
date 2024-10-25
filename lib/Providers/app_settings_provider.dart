@@ -62,8 +62,7 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
     await OneSignal.Notifications.clearAll();
 
     OneSignal.User.pushSubscription.addObserver((state) {
-      _osUserID = state.current.id;
-      notifyListeners();
+      _updateOSUserID(state.current.id);
     });
 
     OneSignal.Notifications.addPermissionObserver((state) {
@@ -76,10 +75,30 @@ class AppSettingsProvider extends ChangeNotifier with WidgetsBindingObserver {
 
     await OneSignal.Notifications.requestPermission(true);
 
-    _osUserID = OneSignal.User.pushSubscription.id;
-    await saveData(key: PrefKeys.onSignalID, value: _osUserID.toString());
+    // Initial ID fetch
+    _updateOSUserID(OneSignal.User.pushSubscription.id);
+  }
 
-    notifyListeners();
+  void _updateOSUserID(String? newID) {
+    if (newID != null && newID.isNotEmpty && newID != _osUserID) {
+      _osUserID = newID;
+      saveData(key: PrefKeys.onSignalID, value: _osUserID!);
+      notifyListeners();
+
+      // If the user is already logged in, update the ID on your server
+      _updateServerWithNewOSUserID();
+    }
+  }
+
+  Future<void> _updateServerWithNewOSUserID() async {
+    final token = _prefs?.getString(PrefKeys.token);
+    if (token != null) {
+      debugPrint('Token or OneSignal ID is null. Skipping update.');
+      return;
+      // Implement the API call to update the OneSignal ID on your server
+      // For example:
+      // await updateUserOneSignalID(token: token, oneSignalID: _osUserID);
+    }
   }
 
   void _handleNotificationClick(OSNotificationClickEvent event) {
