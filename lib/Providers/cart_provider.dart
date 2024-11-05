@@ -21,8 +21,6 @@ class CartProvider extends ChangeNotifier {
 
   // Add TAP SDK configuration
   String? customerId; // Store customer ID after first payment
-  static const String tapScretKey = 'sk_test_OWLXy6Br4ZaIkjdV0w9JShfi';
-  static const String tapPublicKey = 'pk_test_UGiTAtakqxICDBZ27L6d45pm';
 
   CartViewModel? cartViewModel;
 
@@ -52,8 +50,8 @@ class CartProvider extends ChangeNotifier {
     try {
       GoSellSdkFlutter.configureApp(
         bundleId: "com.za3ad.macoolapp",
-        productionSecretKey: tapScretKey,
-        sandBoxSecretKey: tapScretKey,
+        productionSecretKey: AppStrings.tapScretKey,
+        sandBoxSecretKey: AppStrings.tapScretKey,
         lang: "ar",
       );
     } catch (e) {
