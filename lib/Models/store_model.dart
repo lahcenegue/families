@@ -57,9 +57,13 @@ class Store {
       storeRating: json['StoreRating'].toString(),
       isFavorite: json['isFavourite'],
       active: json['active'],
-      dishs: (json['Items'] as List<dynamic>)
-          .map((item) => DishModel.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      dishs: (json['Items'] as List<dynamic>).map((item) {
+        // Create a copy of the item with the store's active status
+        final dishJson = Map<String, dynamic>.from(item);
+        dishJson['store_active'] =
+            json['active']; // Pass store's active status to dish
+        return DishModel.fromJson(dishJson);
+      }).toList(),
     );
   }
 }
@@ -76,6 +80,7 @@ class DishModel {
   List<String>? dishImages;
   double? dishRating;
   int? preparationTime;
+  int? storeActive;
 
   DishModel({
     this.cartItemId,
@@ -89,6 +94,7 @@ class DishModel {
     this.dishImages,
     this.dishRating,
     this.preparationTime,
+    this.storeActive,
   });
 
   factory DishModel.fromJson(Map<String, dynamic> json) {
@@ -112,6 +118,8 @@ class DishModel {
       dishImages: images.isNotEmpty ? images : ['default_image_url'],
       dishRating: (json['ItemRating'] as num?)?.toDouble() ?? 0.0,
       preparationTime: json['PreparationTime'] ?? 0,
+      storeActive:
+          json['store_active'], // Get store active status from passed data
     );
   }
 }

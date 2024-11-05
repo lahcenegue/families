@@ -43,10 +43,17 @@ class DisheView extends StatelessWidget {
               CustomLoadingIndicator(
                 isVisible: cartManager.addTocartProcess,
               ),
+              if (!dish.isStoreActive)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.03),
+                  ),
+                ),
             ],
           ),
-          bottomNavigationBar:
-              _buildAddToCartButton(context, userManager, cartManager, dish),
+          bottomNavigationBar: !dish.isStoreActive
+              ? _buildInactiveStoreBar(context)
+              : _buildAddToCartButton(context, userManager, cartManager, dish),
         );
       },
     );
@@ -61,27 +68,123 @@ class DisheView extends StatelessWidget {
       padding: EdgeInsets.all(AppSize.widthSize(25, context)),
       children: [
         _buildDishImage(context, dish),
+        if (!dish.isStoreActive) _buildInactiveStoreIndicator(context),
         SizedBox(height: AppSize.heightSize(25, context)),
         _buildDishHeader(context, dish, userManager),
         SizedBox(height: AppSize.heightSize(20, context)),
         _buildRatingsContainer(context, dish, userManager),
         SizedBox(height: AppSize.heightSize(20, context)),
         _buildDishDescription(context, dish),
+        // Add extra padding at bottom if store is inactive
+        if (!dish.isStoreActive)
+          SizedBox(height: AppSize.heightSize(60, context)),
       ],
     );
   }
 
-  Widget _buildDishImage(BuildContext context, DishItemViewModel dish) {
+  Widget _buildInactiveStoreIndicator(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: AppSize.heightSize(16, context),
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSize.widthSize(16, context),
+          vertical: AppSize.heightSize(8, context),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.access_time,
+              color: Colors.white,
+              size: AppSize.iconSize(16, context),
+            ),
+            SizedBox(width: AppSize.widthSize(8, context)),
+            Text(
+              'لا يستقبل طلبات',
+              style: AppStyles.styleBold(12, context).copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInactiveStoreBar(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(AppSize.widthSize(25, context)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: AppSize.heightSize(12, context),
+          horizontal: AppSize.widthSize(16, context),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(AppSize.widthSize(12, context)),
+          border: Border.all(color: Colors.red.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.access_time,
+              color: Colors.red,
+              size: AppSize.iconSize(24, context),
+            ),
+            SizedBox(width: AppSize.widthSize(8, context)),
+            Text(
+              'المتجر لا يستقبل طلبات حالياً',
+              style: AppStyles.styleBold(14, context).copyWith(
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDishImage(
+    BuildContext context,
+    DishItemViewModel dish,
+  ) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.widthSize(20, context)),
-      child: CachedNetworkImage(
-        imageUrl: '${AppLinks.url}${dish.dishsImages!.first}',
-        width: AppSize.width(context),
-        height: AppSize.heightSize(225, context),
-        fit: BoxFit.fill,
-        progressIndicatorBuilder: (context, url, progress) =>
-            const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+      child: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: '${AppLinks.url}${dish.dishsImages!.first}',
+            width: AppSize.width(context),
+            height: AppSize.heightSize(225, context),
+            fit: BoxFit.fill,
+            progressIndicatorBuilder: (context, url, progress) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+          if (!dish.isStoreActive)
+            Container(
+              width: AppSize.width(context),
+              height: AppSize.heightSize(225, context),
+              color: Colors.black.withOpacity(0.3),
+            ),
+        ],
       ),
     );
   }

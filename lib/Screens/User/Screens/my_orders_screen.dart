@@ -171,6 +171,7 @@ class _MyOredresScreenState extends State<MyOredresScreen> {
     return Container(
       width: AppSize.width(context),
       height: AppSize.heightSize(100, context),
+      margin: EdgeInsets.only(top: AppSize.widthSize(10, context)),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSize.widthSize(10, context)),
@@ -204,7 +205,6 @@ class _MyOredresScreenState extends State<MyOredresScreen> {
   Widget _buildItemDetails(BuildContext context, ItemViewModel item) {
     return Expanded(
       child: Container(
-        // width: AppSize.width(context) - AppSize.widthSize(180, context),
         padding: EdgeInsets.symmetric(
           vertical: AppSize.widthSize(5, context),
           horizontal: AppSize.widthSize(5, context),
@@ -217,7 +217,6 @@ class _MyOredresScreenState extends State<MyOredresScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  //width: AppSize.widthSize(130, context),
                   child: Text(
                     item.itemName!,
                     overflow: TextOverflow.ellipsis,

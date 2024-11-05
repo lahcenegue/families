@@ -28,16 +28,25 @@ class StoreItemViewModel {
   bool? get favorite => _store.isFavorite ?? false;
   bool get isActive => _store.active == 1;
 
-  List<DishItemViewModel> get dishs =>
-      _store.dishs!.map((dish) => DishItemViewModel(dish: dish)).toList();
+  List<DishItemViewModel> get dishs => _store.dishs!
+      .map((dish) => DishItemViewModel(
+            dish: dish,
+            storeActive: _store
+                .active, // Pass store's active status to DishItemViewModel
+          ))
+      .toList();
 }
 
 class DishItemViewModel {
   final DishModel _dish;
+  final int? storeActive;
   int currentQuantity;
 
-  DishItemViewModel({required DishModel dish, this.currentQuantity = 1})
-      : _dish = dish;
+  DishItemViewModel({
+    required DishModel dish,
+    this.storeActive, // Accept store active status
+    this.currentQuantity = 1,
+  }) : _dish = dish;
 
   int? get cartItemId => _dish.cartItemId;
   int? get itemId => _dish.itemId;
@@ -50,6 +59,7 @@ class DishItemViewModel {
   List<String>? get dishsImages => _dish.dishImages;
   double? get dishRating => _dish.dishRating;
   int? get preparationTime => _dish.preparationTime;
+  bool get isStoreActive => storeActive == 1; // Use passed store active status
 
   void updateAmount(int newAmount) {
     _dish.amount = newAmount;

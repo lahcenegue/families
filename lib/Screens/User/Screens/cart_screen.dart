@@ -255,24 +255,24 @@ class CartScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            // Expanded(
-            //   child: ListTile(
-            //     title: Text(
-            //       'Apple Pay',
-            //       style: AppStyles.styleBold(12, context),
-            //     ),
-            //     leading: Radio<int>(
-            //       activeColor: AppColors.primaryColor,
-            //       value: 0,
-            //       groupValue: cartManager.selectedPaymentMethod,
-            //       onChanged: (int? value) {
-            //         if (value != null) {
-            //           cartManager.setSelectedPaymentMethod(value);
-            //         }
-            //       },
-            //     ),
-            //   ),
-            // ),
+            Expanded(
+              child: ListTile(
+                title: Text(
+                  'الدفع بالبطاقة',
+                  style: AppStyles.styleBold(12, context),
+                ),
+                leading: Radio<int>(
+                  activeColor: AppColors.primaryColor,
+                  value: 0,
+                  groupValue: cartManager.selectedPaymentMethod,
+                  onChanged: (int? value) {
+                    if (value != null) {
+                      cartManager.setSelectedPaymentMethod(value);
+                    }
+                  },
+                ),
+              ),
+            ),
             Expanded(
               child: ListTile(
                 title: Text(
@@ -314,7 +314,13 @@ class CartScreen extends StatelessWidget {
               ),
               InkWell(
                 onTap: () async {
-                  await cartManager.checkout();
+                  if (cartManager.selectedPaymentMethod == 0) {
+                    // TAP Payment
+                    await cartManager.startTapPayment(context, totalPrice);
+                  } else {
+                    // Cash on Delivery
+                    await cartManager.checkout();
+                  }
 
                   if (context.mounted) {
                     await Provider.of<UserManagerProvider>(context,
