@@ -273,24 +273,24 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: ListTile(
-                title: Text(
-                  'الدفع عند الاستلام',
-                  style: AppStyles.styleBold(12, context),
-                ),
-                leading: Radio<int>(
-                  activeColor: AppColors.primaryColor,
-                  value: 1,
-                  groupValue: cartManager.selectedPaymentMethod,
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      cartManager.setSelectedPaymentMethod(value);
-                    }
-                  },
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: ListTile(
+            //     title: Text(
+            //       'الدفع عند الاستلام',
+            //       style: AppStyles.styleBold(12, context),
+            //     ),
+            //     leading: Radio<int>(
+            //       activeColor: AppColors.primaryColor,
+            //       value: 1,
+            //       groupValue: cartManager.selectedPaymentMethod,
+            //       onChanged: (int? value) {
+            //         if (value != null) {
+            //           cartManager.setSelectedPaymentMethod(value);
+            //         }
+            //       },
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: AppSize.heightSize(10, context)),
@@ -313,38 +313,42 @@ class CartScreen extends StatelessWidget {
                 ],
               ),
               InkWell(
-                onTap: () async {
-                  if (cartManager.selectedPaymentMethod == 0) {
-                    // TAP Payment
-                    await cartManager.startTapPayment(context, totalPrice);
-                  } else {
-                    // Cash on Delivery
-                    await cartManager.checkout();
-                  }
-
-                  if (context.mounted) {
-                    await Provider.of<UserManagerProvider>(context,
-                            listen: false)
-                        .fetchMyOrders();
-                    await NavigationService.navigateTo(
-                        AppRoutes.myOrdersScreen);
-                  }
-                },
+                onTap: cartManager.isApiCallProcess
+                    ? null
+                    : () async {
+                        if (cartManager.selectedPaymentMethod == 0) {
+                          await cartManager.startTapPayment(
+                              context, totalPrice);
+                        } else {
+                          await cartManager.checkout();
+                          if (context.mounted) {
+                            await Provider.of<UserManagerProvider>(context,
+                                    listen: false)
+                                .fetchMyOrders();
+                            await NavigationService.navigateTo(
+                                AppRoutes.myOrdersScreen);
+                          }
+                        }
+                      },
                 child: Container(
                   width: AppSize.widthSize(100, context),
                   height: AppSize.heightSize(40, context),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
+                    color: cartManager.isApiCallProcess
+                        ? AppColors.primaryColor.withOpacity(0.5)
+                        : AppColors.primaryColor,
                     borderRadius:
                         BorderRadius.circular(AppSize.widthSize(20, context)),
                   ),
                   child: Center(
-                    child: Text(
-                      'تأكيد الدفع',
-                      style: AppStyles.styleBold(12, context).copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: cartManager.isApiCallProcess
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'تأكيد الدفع',
+                            style: AppStyles.styleBold(12, context).copyWith(
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),

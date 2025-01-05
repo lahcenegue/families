@@ -856,7 +856,4 @@ class FamilyRegisterScreen extends StatelessWidget {
 //     );
 //   }
 
-
-
-
 // }

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_sell_sdk_flutter/go_sell_sdk_flutter.dart';
 import 'package:go_sell_sdk_flutter/model/models.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Apis/base_api.dart';
 import '../Apis/get_cart_api.dart';
@@ -11,6 +13,7 @@ import '../Models/cart_model.dart';
 import '../Models/request_model.dart';
 import '../Utils/Constants/api_methods.dart';
 import '../Utils/Constants/app_strings.dart';
+import '../Utils/Helprs/navigation_service.dart';
 import '../View_models/cart_view_model.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -18,15 +21,9 @@ class CartProvider extends ChangeNotifier {
   bool isApiCallProcess = false;
   bool addTocartProcess = false;
   String? token;
-
-  // Add TAP SDK configuration
-  String? customerId; // Store customer ID after first payment
-
   CartViewModel? cartViewModel;
-
   Map<int, int> itemQuantities = {};
-
-  int _selectedPaymentMethod = 1; // 0 for TAP Payment, 1 for Cash on Delivery
+  int _selectedPaymentMethod = 0;
 
   CartProvider() {
     initial();
@@ -35,181 +32,165 @@ class CartProvider extends ChangeNotifier {
   Future<void> initial() async {
     _prefs = await SharedPreferences.getInstance();
     token = _prefs!.getString(PrefKeys.token);
-    customerId = _prefs!.getString('tap_customer_id');
 
     if (token != null) {
       await getCartItems();
-      await configureTapSDK();
     }
   }
 
   int get selectedPaymentMethod => _selectedPaymentMethod;
 
   // Payment Functions
-  Future<void> configureTapSDK() async {
+  Future<void> startTapPayment(
+    BuildContext context,
+    double totalAmount,
+  ) async {
+    if (isApiCallProcess) return;
+
     try {
+      isApiCallProcess = true;
+      notifyListeners();
+
+      // Configuration initiale TAP
       GoSellSdkFlutter.configureApp(
         bundleId: "com.za3ad.macoolapp",
-        productionSecretKey: AppStrings.tapScretKey,
-        sandBoxSecretKey: AppStrings.tapScretKey,
+        productionSecretKey: AppStrings.tapPublicKey,
+        sandBoxSecretKey: AppStrings.tapPublicKey,
         lang: "ar",
       );
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      await _setupSDKSession(totalAmount);
+
+      final response = await GoSellSdkFlutter.startPaymentSDK;
+
+      if (response["sdk_result"] == "SUCCESS" &&
+          response["status"] == "CAPTURED") {
+        await checkout();
+      }
     } catch (e) {
-      debugPrint('Error configuring TAP SDK: $e');
+      if (context.mounted) {
+        _showPaymentError(context,
+            'حدث خطأ أثناء معالجة الدفع. يرجى المحاولة مرة أخرى لاحقًا.');
+      }
+      debugPrint('Payment error: $e');
+    } finally {
+      isApiCallProcess = false;
+      notifyListeners();
     }
   }
 
-  Future<void> startTapPayment(BuildContext context, double totalAmount) async {
-    try {
-      await setupSDKSession(totalAmount);
+  Future<void> _setupSDKSession(double totalAmount) async {
+    final paymentItems = cartViewModel?.items
+            .map((item) => PaymentItem(
+                  name: item.dishName ?? '',
+                  amountPerUnit: item.dishPrice?.toDouble() ?? 0.0,
+                  quantity: Quantity(value: item.amount ?? 1),
+                  discount: {
+                    "type": "F",
+                    "value": 0,
+                    "maximum_fee": 0,
+                    "minimum_fee": 0
+                  },
+                  description: item.dishDescription ?? '',
+                  taxes: [
+                    Tax(
+                      amount: Amount(
+                          type: "F", value: 0, minimumFee: 0, maximumFee: 0),
+                      name: "VAT",
+                      description: "VAT Tax",
+                    )
+                  ],
+                  totalAmount:
+                      ((item.dishPrice ?? 0) * (item.amount ?? 1)).toInt(),
+                ))
+            .toList() ??
+        [];
 
-      var response = await GoSellSdkFlutter.startPaymentSDK;
-
-      if (response != null) {
-        debugPrint("Payment Response: $response");
-
-        if (response is Map<String, dynamic>) {
-          if (response["status"] == "SUCCESS" ||
-              response["status"] == "CAPTURED") {
-            processSuccessfulPayment(response);
-          } else {
-            handleFailedPayment(response);
-          }
-        }
-      }
-    } catch (e) {
-      debugPrint('Error starting TAP payment: $e');
-      handleFailedPayment({"error": e.toString()});
-    }
-  }
-
-  Future<void> setupSDKSession(double totalAmount) async {
-    try {
-      List<PaymentItem> paymentItems = cartViewModel?.items.map((item) {
-            return PaymentItem(
-              name: item.dishName ?? '',
-              amountPerUnit: item.dishPrice?.toDouble() ?? 0.0,
-              quantity: Quantity(value: item.amount ?? 1),
-              discount: {
-                "type": "F",
-                "value": 0,
-                "maximum_fee": 0,
-                "minimum_fee": 0
-              },
-              description: item.dishDescription ?? '',
-              taxes: [
-                Tax(
-                  amount: Amount(
-                    type: "F",
-                    value: 0,
-                    minimumFee: 0,
-                    maximumFee: 0,
-                  ),
-                  name: "VAT",
-                  description: "VAT Tax",
-                )
-              ],
-              totalAmount: ((item.dishPrice ?? 0) * (item.amount ?? 1)).toInt(),
-            );
-          }).toList() ??
-          [];
-
-      GoSellSdkFlutter.sessionConfigurations(
-        trxMode: TransactionMode.PURCHASE,
-        transactionCurrency: "SAR",
-        amount: totalAmount,
-        customer: Customer(
-          customerId: customerId ?? "",
-          email: "test@test.com", // Replace with actual customer email
-          isdNumber: "966",
-          number: "000000000", // Replace with actual customer phone
-          firstName: "Customer", // Replace with actual customer name
-          middleName: "",
-          lastName: "",
-          metaData: null,
-        ),
-        paymentItems: paymentItems,
-        taxes: [
-          Tax(
-            amount: Amount(
-              type: "F",
-              value: 0,
-              minimumFee: 0,
-              maximumFee: 0,
-            ),
-            name: "Tax",
-            description: "Tax description",
-          )
-        ],
-        shippings: [
-          Shipping(
-            name: "Delivery",
-            amount: 0.0,
-            description: "Delivery fee",
-          )
-        ],
-        postURL: "https://your-backend-url.com/payment/callback",
-        paymentDescription: "Order payment",
-        paymentMetaData: {},
-        paymentReference: Reference(
-            acquirer: "acquirer",
-            gateway: "gateway",
-            payment: "payment",
-            track: "track",
-            transaction: "trans_${DateTime.now().millisecondsSinceEpoch}",
-            order: "order_${DateTime.now().millisecondsSinceEpoch}"),
-        paymentStatementDescriptor: "Payment",
-        isUserAllowedToSaveCard: true,
-        isRequires3DSecure: true,
-        receipt: Receipt(true, false),
-        authorizeAction:
-            AuthorizeAction(type: AuthorizeActionType.CAPTURE, timeInHours: 10),
-        merchantID: "",
-        allowedCadTypes: CardType.ALL,
-        applePayMerchantID: "",
-        allowsToSaveSameCardMoreThanOnce: false,
-        cardHolderName: "",
-        allowsToEditCardHolderName: true,
-        supportedPaymentMethods: ["VISA", "MASTERCARD", "MADA", "APPLE_PAY"],
-        paymentType: PaymentType.ALL,
-        sdkMode: SDKMode.Sandbox,
-      );
-    } catch (e) {
-      debugPrint('Error setting up SDK session: $e');
-      rethrow;
-    }
-  }
-
-  Future<void> processSuccessfulPayment(
-      Map<String, dynamic> paymentData) async {
-    try {
-      if (paymentData["charge"] != null &&
-          paymentData["charge"]["customer"] != null &&
-          paymentData["charge"]["customer"]["id"] != null) {
-        customerId = paymentData["charge"]["customer"]["id"];
-        await _prefs?.setString(
-          'tap_customer_id',
-          customerId!,
-        );
-      }
-
-      RequestModel checkoutRequest = RequestModel(
-        method: ApiMethods.checkout,
-        token: token,
-        paymentMethode: 'TAP',
-      );
-
-      BaseModel value = await baseApi(requestModel: checkoutRequest);
-      if (value.status == 'Success') {
-        await getCartItems();
-      }
-    } catch (e) {
-      debugPrint('Error processing successful payment: $e');
-    }
+    GoSellSdkFlutter.sessionConfigurations(
+      trxMode: TransactionMode.PURCHASE,
+      transactionCurrency: "SAR",
+      amount: totalAmount,
+      customer: Customer(
+        customerId: "",
+        email: "test@test.com",
+        isdNumber: "966",
+        number: _prefs!.getString(PrefKeys.phoneNumber)!,
+        firstName: _prefs!.getString(PrefKeys.userName)!,
+        middleName: '',
+        lastName: '',
+        metaData: '',
+      ),
+      paymentItems: paymentItems,
+      taxes: [
+        Tax(
+          amount: Amount(type: "F", value: 0, minimumFee: 0, maximumFee: 0),
+          name: "Tax",
+          description: "Tax description",
+        )
+      ],
+      shippings: [
+        Shipping(
+          name: "Delivery",
+          amount: 0.0,
+          description: "Delivery fee",
+        )
+      ],
+      postURL: "https://za3ad.com/apps/webook.php",
+      paymentDescription: "Order payment",
+      paymentMetaData: {
+        'userID': _prefs!.getString(PrefKeys.id)!,
+        'userToken': _prefs!.getString(PrefKeys.token)!
+      },
+      paymentReference: Reference(
+        acquirer: "acquirer",
+        gateway: "gateway",
+        payment: "payment",
+        track: "track",
+        transaction: "trans_${DateTime.now().millisecondsSinceEpoch}",
+        order: "order_${DateTime.now().millisecondsSinceEpoch}",
+      ),
+      paymentStatementDescriptor: "Payment",
+      isUserAllowedToSaveCard: true,
+      isRequires3DSecure: true,
+      receipt: Receipt(true, false),
+      authorizeAction: AuthorizeAction(
+        type: AuthorizeActionType.CAPTURE,
+        timeInHours: 10,
+      ),
+      merchantID: "46827443",
+      allowedCadTypes: CardType.ALL,
+      applePayMerchantID: "",
+      allowsToSaveSameCardMoreThanOnce: false,
+      cardHolderName: "",
+      allowsToEditCardHolderName: true,
+      supportedPaymentMethods: ["VISA", "MASTERCARD", "MADA", "APPLE_PAY"],
+      paymentType: PaymentType.ALL,
+      sdkMode: SDKMode.Production,
+    );
   }
 
   void handleFailedPayment(Map<String, dynamic> errorData) {
     debugPrint('Payment failed: ${errorData.toString()}');
+
+    isApiCallProcess = false;
+    notifyListeners();
+  }
+
+  void _showPaymentError(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Payment Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: const Text('حسنا'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
   }
 
   //Cart function
@@ -333,18 +314,22 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> checkout() async {
     isApiCallProcess = true;
+    generateToken();
+
     notifyListeners();
 
     try {
       RequestModel checkoutRequest = RequestModel(
         method: ApiMethods.checkout,
         token: token,
-        paymentMethode: _selectedPaymentMethod == 1 ? 'CashOnDelivery' : '',
+        paymentMethode: 'OnlinePayment',
+        orderToken: generateToken(),
       );
 
       BaseModel value = await baseApi(requestModel: checkoutRequest);
-      if (value.status == 'Success') {
+      if (value.status == 'success') {
         await getCartItems();
+        NavigationService.navigateTo(AppRoutes.myOrdersScreen);
       } else {
         debugPrint('Failed to checkout: ${value.errorCode}');
       }
@@ -354,5 +339,13 @@ class CartProvider extends ChangeNotifier {
       isApiCallProcess = false;
       notifyListeners();
     }
+  }
+
+  String generateToken() {
+    const chars =
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    Random random = Random.secure();
+    return List.generate(16, (index) => chars[random.nextInt(chars.length)])
+        .join();
   }
 }

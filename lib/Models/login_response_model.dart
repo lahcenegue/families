@@ -15,6 +15,7 @@ class LoginResponseModel extends BaseResponseModel {
 }
 
 class LoginUserData {
+  int? id;
   String? phoneNumber;
   String? userName;
   String? token;
@@ -26,6 +27,7 @@ class LoginUserData {
   int? active;
 
   LoginUserData({
+    this.id,
     this.token,
     this.otpToken,
     this.userName,
@@ -39,6 +41,7 @@ class LoginUserData {
 
   factory LoginUserData.fromJson(Map<String, dynamic> json) {
     return LoginUserData(
+      id: json['0'],
       phoneNumber: json['PhoneNumber'].toString(),
       userName: json['UserName'].toString(),
       token: json['Token'].toString(),

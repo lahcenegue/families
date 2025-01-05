@@ -387,6 +387,7 @@ class LoginAndRegisterManager extends ChangeNotifier {
   }
 
   Future<void> saveUserData(dynamic value) async {
+    await _prefs!.setString(PrefKeys.id, value.userData.id!.toString());
     await _prefs!.setString(PrefKeys.token, value.userData.token!);
     await _prefs!.setString(PrefKeys.profilImage, value.userData.image);
     await _prefs!.setString(PrefKeys.phoneNumber, value.userData.phoneNumber!);
@@ -428,15 +429,18 @@ class LoginAndRegisterManager extends ChangeNotifier {
   Future<void> _handleSuccessfulLogin(LoginResponseModel value) async {
     isApiCallProcess = false;
     loginRequestModel = RequestModel();
-    if (value.userData!.active == 1) {
-      _prefs!.setBool(PrefKeys.isStoreActive, true);
-    } else {
-      _prefs!.setBool(PrefKeys.isStoreActive, false);
+
+    if (value.userData!.accountType == AppStrings.family) {
+      if (value.userData!.active == 1) {
+        _prefs!.setBool(PrefKeys.isStoreActive, true);
+      } else {
+        _prefs!.setBool(PrefKeys.isStoreActive, false);
+      }
+
+      isStoreActive = _prefs!.getBool(PrefKeys.isStoreActive) ?? true;
+      notifyListeners();
     }
 
-    isStoreActive = _prefs!.getBool(PrefKeys.isStoreActive) ?? true;
-
-    notifyListeners();
     await saveUserData(value);
     if (accountType == AppStrings.user) {
       await NavigationService.navigateToAndReplace(AppRoutes.userHomeScreen);

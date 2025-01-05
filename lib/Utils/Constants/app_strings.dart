@@ -3,8 +3,8 @@ class AppStrings {
   static const String family = 'Store';
   static const String onSignalID = 'fe34967e-ec5a-46c2-ad8e-62d61ed2cb12';
 
-  static const String tapScretKey = 'sk_test_OWLXy6Br4ZaIkjdV0w9JShfi';
-  static const String tapPublicKey = 'pk_test_UGiTAtakqxICDBZ27L6d45pm';
+  static const String tapScretKey = 'sk_test_UNTyJgZ2CEbOd0jqfpvuXxYG';
+  static const String tapPublicKey = 'sk_live_4HNuxLrW6coI9TaGpf0KUiDj';
 }
 
 class PrefKeys {
@@ -19,6 +19,7 @@ class PrefKeys {
   static String isStoreActive = 'is_store_active';
 
   //User data keys
+  static String id = 'id';
   static String phoneNumber = 'phoneNumber';
   static String userName = 'userName';
   static String token = 'token';

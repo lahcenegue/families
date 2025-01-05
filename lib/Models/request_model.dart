@@ -31,6 +31,7 @@ class RequestModel {
   String? image;
   String? paymentMethode;
   int? rating;
+  String? orderToken;
 
   RequestModel({
     this.method,
@@ -65,6 +66,7 @@ class RequestModel {
     this.image,
     this.paymentMethode,
     this.rating,
+    this.orderToken,
   });
 
   Map<String, dynamic> toJson() {
@@ -101,6 +103,7 @@ class RequestModel {
       if (dishImages != null) 'Images': dishImages!,
       if (paymentMethode != null) 'payment': paymentMethode!.trim(),
       if (rating != null) 'Rating': rating!,
+      if (orderToken != null) 'order_token': orderToken!.trim(),
     };
   }
 }

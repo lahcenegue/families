@@ -20,8 +20,12 @@ Future<BaseModel> baseApi({
       },
       body: convert.jsonEncode(requestModel.toJson()),
     );
+    print('+++++chikout');
+    print(convert.jsonEncode(requestModel.toJson()));
 
     var body = convert.json.decode(response.body);
+    print(body);
+    print('+++++chikout');
 
     baseResponse = BaseModel.fromJson(body);
 
