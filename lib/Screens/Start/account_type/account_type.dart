@@ -24,7 +24,7 @@ class AccountType extends StatelessWidget {
               child: CustomScrollView(
                 slivers: [
                   _buildHeader(context),
-                  _buildDescription(context),
+//_buildDescription(context),
                   _buildButtons(context, loginManager, appSettings),
                 ],
               ),
@@ -61,21 +61,21 @@ class AccountType extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          SizedBox(height: AppSize.heightSize(40, context)),
-          Text(
-            'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى،',
-            textAlign: TextAlign.center,
-            style: AppStyles.styleRegular(14, context),
-          ),
-          SizedBox(height: AppSize.heightSize(100, context)),
-        ],
-      ),
-    );
-  }
+  // Widget _buildDescription(BuildContext context) {
+  //   return SliverToBoxAdapter(
+  //     child: Column(
+  //       children: [
+  //         SizedBox(height: AppSize.heightSize(40, context)),
+  //         Text(
+  //           'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى،',
+  //           textAlign: TextAlign.center,
+  //           style: AppStyles.styleRegular(14, context),
+  //         ),
+  //         SizedBox(height: AppSize.heightSize(100, context)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildButtons(BuildContext context,
       LoginAndRegisterManager loginManager, AppSettingsProvider appSettings) {
